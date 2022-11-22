@@ -1,5 +1,4 @@
-<a href="https://goreportcard.com/report/github.com/grafana/loki"><img src="https://goreportcard.com/badge/github.com/grafana/loki" alt="Go Report Card" /></a>
-<a href="https://slack.grafana.com/"><img src="https://img.shields.io/badge/join%20slack-%23loki-brightgreen.svg" alt="Slack" /></a>
+<a href="https://goreportcard.com/report/github.com/credativ/vali"><img src="https://goreportcard.com/badge/github.com/credativ/vali" alt="Go Report Card" /></a>
 
 # Loki: like Prometheus, but for logs.
 
@@ -59,17 +58,6 @@ Commonly used sections:
 - [Troubleshooting](https://grafana.com/docs/loki/latest/getting-started/troubleshooting/) for help around frequent error messages.
 - [Loki in Grafana](https://grafana.com/docs/loki/latest/getting-started/grafana/) for how to set up a Loki datasource in Grafana and query your logs.
 
-## Getting Help
-
-If you have any questions or feedback regarding Loki:
-
-- Search existing thread in the Grafana Labs community forum for Loki: [https://community.grafana.com](https://community.grafana.com/c/grafana-loki/)
-- Ask a question on the Loki Slack channel. To invite yourself to the Grafana Slack, visit [https://slack.grafana.com/](https://slack.grafana.com/) and join the #loki channel.
-- [File an issue](https://github.com/grafana/loki/issues/new) for bugs, issues and feature suggestions.
-- Send an email to [lokiproject@googlegroups.com](mailto:lokiproject@googlegroups.com), or use the [web interface](https://groups.google.com/forum/#!forum/lokiproject).
-- UI issues should be filed directly in [Grafana](https://github.com/grafana/grafana/issues/new).
-
-Your feedback is always welcome.
 
 ## Further Reading
 

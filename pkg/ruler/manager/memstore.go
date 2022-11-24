@@ -51,15 +51,15 @@ type Metrics struct {
 func NewMetrics(r prometheus.Registerer) *Metrics {
 	return &Metrics{
 		Evaluations: promauto.With(r).NewCounterVec(prometheus.CounterOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Name:      "ruler_memory_for_state_evaluations_total",
 		}, []string{"status", "tenant"}),
 		Samples: promauto.With(r).NewGauge(prometheus.GaugeOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Name:      "ruler_memory_samples",
 		}),
 		CacheHits: promauto.With(r).NewCounterVec(prometheus.CounterOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Name:      "ruler_memory_for_state_cache_hits_total",
 		}, []string{"tenant"}),
 	}

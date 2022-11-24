@@ -1,4 +1,4 @@
-# ⚠️  DEPRECATED - Loki Helm Chart
+# ⚠️  DEPRECATED - Vali Helm Chart
 
 This chart was moved to <https://github.com/grafana/helm-charts>.
 
@@ -6,10 +6,10 @@ This chart was moved to <https://github.com/grafana/helm-charts>.
 
 Make sure you have Helm [installed](https://helm.sh/docs/using_helm/#installing-helm) and
 [deployed](https://helm.sh/docs/using_helm/#installing-tiller) to your cluster. Then add
-Loki's chart repository to Helm:
+Vali's chart repository to Helm:
 
 ```bash
-$ helm repo add loki https://grafana.github.io/loki/charts
+$ helm repo add vali https://credativ.github.io/vali/charts
 ```
 
 You can update the chart repository by running:
@@ -18,67 +18,67 @@ You can update the chart repository by running:
 $ helm repo update
 ```
 
-## Deploy Loki and Promtail to your cluster
+## Deploy Vali and Promtail to your cluster
 
 ### Deploy with default config
 
 ```bash
-$ helm upgrade --install loki loki/loki-stack
+$ helm upgrade --install vali vali/vali-stack
 ```
 
 ### Deploy in a custom namespace
 
 ```bash
-$ helm upgrade --install loki --namespace=loki-stack loki/loki-stack
+$ helm upgrade --install vali --namespace=vali-stack vali/vali-stack
 ```
 
 ### Deploy with custom config
 
 ```bash
-$ helm upgrade --install loki loki/loki-stack --set "key1=val1,key2=val2,..."
+$ helm upgrade --install vali vali/vali-stack --set "key1=val1,key2=val2,..."
 ```
 
-## Deploy Loki only
+## Deploy Vali only
 
 ```bash
-$ helm upgrade --install loki loki/loki
+$ helm upgrade --install vali vali/vali
 ```
 
 ## Deploy Promtail only
 
-We recommend Promtail to ship your logs to Loki as the configuration is very similar to Prometheus.
+We recommend Promtail to ship your logs to Vali as the configuration is very similar to Prometheus.
 This allows you to ensure that labels for metrics and logs are equivalent by re-using the same `scrape_configs` and `relabeling` configuration.
 When using Grafana having the same labels will allows you to pivot from Metrics to Logs verify easily by simply switching datasource.
 
 To only install Promtail use the following command:
 
 ```bash
-$ helm upgrade --install promtail loki/promtail --set "loki.serviceName=loki"
+$ helm upgrade --install promtail vali/promtail --set "vali.serviceName=vali"
 ```
 
 If you're not familiar with Prometheus and you don't want to migrate your current agent configs from the start,
  you can use our output plugins specified below.
 
-## Deploy Loki and Fluent Bit to your cluster
+## Deploy Vali and Fluent Bit to your cluster
 
 ```bash
-$ helm upgrade --install loki loki/loki-stack \
+$ helm upgrade --install vali vali/vali-stack \
     --set fluent-bit.enabled=true,promtail.enabled=false
 ```
 
 ## Deploy Fluent Bit only
 
 ```bash
-$ helm upgrade --install fluent-bit loki/fluent-bit \
-    --set "loki.serviceName=loki.svc.cluster.local"
+$ helm upgrade --install fluent-bit vali/fluent-bit \
+    --set "vali.serviceName=vali.svc.cluster.local"
 ```
 
-## Deploy Loki and Filebeat and logstash to your cluster
+## Deploy Vali and Filebeat and logstash to your cluster
 
 ```bash
-$ helm upgrade --install loki loki/loki-stack \
+$ helm upgrade --install vali vali/vali-stack \
     --set filebeat.enabled=true,logstash.enabled=true,promtail.enabled=false \
-    --set loki.fullnameOverride=loki,logstash.fullnameOverride=logstash-loki
+    --set vali.fullnameOverride=vali,logstash.fullnameOverride=logstash-vali
 ```
 
 ## Deploy Grafana to your cluster
@@ -87,38 +87,38 @@ To install Grafana on your cluster with helm, use the following command:
 
 ```bash
 # with Helm 2
-$ helm install stable/grafana -n loki-grafana --namespace <YOUR-NAMESPACE>
+$ helm install stable/grafana -n vali-grafana --namespace <YOUR-NAMESPACE>
 
 # with Helm 3
-$ helm install loki-grafana stable/grafana -n <YOUR-NAMESPACE>
+$ helm install vali-grafana stable/grafana -n <YOUR-NAMESPACE>
 ```
 
-> The chart loki-stack contains a pre-configured Grafana, simply use `--set grafana.enabled=true`
+> The chart vali-stack contains a pre-configured Grafana, simply use `--set grafana.enabled=true`
 
 To get the admin password for the Grafana pod, run the following command:
 
 ```bash
-$ kubectl get secret --namespace <YOUR-NAMESPACE> loki-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+$ kubectl get secret --namespace <YOUR-NAMESPACE> vali-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
 To access the Grafana UI, run the following command:
 
 ```bash
-$ kubectl port-forward --namespace <YOUR-NAMESPACE> service/loki-grafana 3000:80
+$ kubectl port-forward --namespace <YOUR-NAMESPACE> service/vali-grafana 3000:80
 ```
 
 Navigate to http://localhost:3000 and login with `admin` and the password output above.
-Then follow the [instructions for adding the loki datasource](/docs/getting-started/grafana.md), using the URL `http://loki:3100/`.
+Then follow the [instructions for adding the vali datasource](/docs/getting-started/grafana.md), using the URL `http://vali:3100/`.
 
-## Run Loki behind https ingress
+## Run Vali behind https ingress
 
-If Loki and Promtail are deployed on different clusters you can add an Ingress in front of Loki.
+If Vali and Promtail are deployed on different clusters you can add an Ingress in front of Vali.
 By adding a certificate you create an https endpoint. For extra security enable basic authentication on the Ingress.
 
 In Promtail set the following values to communicate with https and basic auth
 
 ```
-loki:
+vali:
   serviceScheme: https
   user: user
   password: pass
@@ -133,14 +133,14 @@ annotations:
     kubernetes.io/ingress.class: {{ .Values.ingress.class }}
     ingress.kubernetes.io/auth-type: "basic"
     ingress.kubernetes.io/auth-secret: {{ .Values.ingress.basic.secret }}
-name: loki
+name: vali
 spec:
 rules:
 - host: {{ .Values.ingress.host }}
     http:
     paths:
     - backend:
-        serviceName: loki
+        serviceName: vali
         servicePort: 3100
 tls:
 - secretName: {{ .Values.ingress.cert }}
@@ -213,13 +213,13 @@ After adding your new feature to the appropriate chart, you can build and deploy
 
 ```bash
 $ make helm
-$ helm upgrade --install loki ./loki-stack-*.tgz
+$ helm upgrade --install vali ./vali-stack-*.tgz
 ```
 
 After verifying your changes, you need to bump the chart version following [semantic versioning](https://semver.org) rules.
-For example, if you update the loki chart, you need to bump the versions as follows:
+For example, if you update the vali chart, you need to bump the versions as follows:
 
-- Update version loki/Chart.yaml
-- Update version loki-stack/Chart.yaml
+- Update version vali/Chart.yaml
+- Update version vali-stack/Chart.yaml
 
 You can use the `make helm-debug` to test and print out all chart templates. If you want to install helm (tiller) in your cluster use `make helm-install`, to install the current build in your Kubernetes cluster run `make helm-upgrade`.

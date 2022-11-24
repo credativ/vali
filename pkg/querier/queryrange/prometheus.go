@@ -11,7 +11,7 @@ import (
 	"github.com/opentracing/opentracing-go"
 	otlog "github.com/opentracing/opentracing-go/log"
 
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 var (
@@ -24,22 +24,22 @@ type PrometheusExtractor struct{}
 
 // Extract wraps the original prometheus cache extractor
 func (PrometheusExtractor) Extract(start, end int64, from queryrange.Response) queryrange.Response {
-	response := extractor.Extract(start, end, from.(*LokiPromResponse).Response)
-	return &LokiPromResponse{
+	response := extractor.Extract(start, end, from.(*ValiPromResponse).Response)
+	return &ValiPromResponse{
 		Response: response.(*queryrange.PrometheusResponse),
 	}
 }
 
 // ResponseWithoutHeaders wraps the original prometheus caching without headers
 func (PrometheusExtractor) ResponseWithoutHeaders(resp queryrange.Response) queryrange.Response {
-	response := extractor.ResponseWithoutHeaders(resp.(*LokiPromResponse).Response)
-	return &LokiPromResponse{
+	response := extractor.ResponseWithoutHeaders(resp.(*ValiPromResponse).Response)
+	return &ValiPromResponse{
 		Response: response.(*queryrange.PrometheusResponse),
 	}
 }
 
-// encode encodes a Prometheus response and injects Loki stats.
-func (p *LokiPromResponse) encode(ctx context.Context) (*http.Response, error) {
+// encode encodes a Prometheus response and injects Vali stats.
+func (p *ValiPromResponse) encode(ctx context.Context) (*http.Response, error) {
 	sp := opentracing.SpanFromContext(ctx)
 	// embed response and add statistics.
 	b, err := jsonStd.Marshal(struct {

@@ -43,7 +43,7 @@ pipeline_stages:
 
 var testRegexLogLineWithMissingKey = `
 {
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level": "WARN"
 }

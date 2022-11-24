@@ -1,4 +1,4 @@
-package loki
+package vali
 
 import (
 	"io"
@@ -7,11 +7,11 @@ import (
 	"github.com/cortexproject/cortex/pkg/util/runtimeconfig"
 	"gopkg.in/yaml.v2"
 
-	"github.com/grafana/loki/pkg/util/runtime"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/util/runtime"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
-// runtimeConfigValues are values that can be reloaded from configuration file while Loki is running.
+// runtimeConfigValues are values that can be reloaded from configuration file while Vali is running.
 // Reloading is done by runtimeconfig.Manager, which also keeps the currently loaded config.
 // These values are then pushed to the components that are interested in them.
 type runtimeConfigValues struct {

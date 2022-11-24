@@ -23,22 +23,22 @@ import (
 	"github.com/weaveworks/common/user"
 	"google.golang.org/grpc/health/grpc_health_v1"
 
-	"github.com/grafana/loki/pkg/ingester/client"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/util"
-	"github.com/grafana/loki/pkg/util/runtime"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/ingester/client"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/util"
+	"github.com/credativ/vali/pkg/util/runtime"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 var (
 	ingesterAppends = promauto.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "distributor_ingester_appends_total",
 		Help:      "The total number of batch appends sent to ingesters.",
 	}, []string{"ingester"})
 	ingesterAppendFailures = promauto.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "distributor_ingester_append_failures_total",
 		Help:      "The total number of failed batch appends sent to ingesters.",
 	}, []string{"ingester"})

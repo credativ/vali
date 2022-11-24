@@ -11,7 +11,7 @@ func Test_buildURL(t *testing.T) {
 	}{
 		{"err", "8://2", "/bar", "", "", true},
 		{"strip /", "http://localhost//", "//bar", "a=b", "http://localhost/bar?a=b", false},
-		{"sub path", "https://localhost/loki/", "/bar/foo", "c=d&e=f", "https://localhost/loki/bar/foo?c=d&e=f", false},
+		{"sub path", "https://localhost/vali/", "/bar/foo", "c=d&e=f", "https://localhost/vali/bar/foo?c=d&e=f", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

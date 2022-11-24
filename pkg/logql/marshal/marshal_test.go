@@ -12,13 +12,13 @@ import (
 	"github.com/prometheus/prometheus/promql/parser"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/loghttp"
-	legacy "github.com/grafana/loki/pkg/loghttp/legacy"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
+	"github.com/credativ/vali/pkg/loghttp"
+	legacy "github.com/credativ/vali/pkg/loghttp/legacy"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
 )
 
-// covers responses from /loki/api/v1/query_range and /loki/api/v1/query
+// covers responses from /vali/api/v1/query_range and /vali/api/v1/query
 var queryTests = []struct {
 	actual   parser.Value
 	expected string
@@ -296,7 +296,7 @@ var queryTests = []struct {
 	},
 }
 
-// covers responses from /loki/api/v1/labels and /loki/api/v1/label/{name}/values
+// covers responses from /vali/api/v1/labels and /vali/api/v1/label/{name}/values
 var labelTests = []struct {
 	actual   logproto.LabelResponse
 	expected string
@@ -313,7 +313,7 @@ var labelTests = []struct {
 	},
 }
 
-// covers responses from /loki/api/v1/tail
+// covers responses from /vali/api/v1/tail
 var tailTests = []struct {
 	actual   legacy.TailResponse
 	expected string

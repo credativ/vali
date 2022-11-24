@@ -1,4 +1,4 @@
-package loki
+package vali
 
 import (
 	"fmt"

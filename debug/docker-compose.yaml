@@ -1,20 +1,20 @@
 version: "3"
 
 networks:
-  loki:
+  vali:
 
 services:
-  loki:
+  vali:
     # this is required according to https://github.com/Microsoft/vscode-go/wiki/Debugging-Go-code-using-VS-Code#linuxdocker
     security_opt:
       - seccomp:unconfined
-    image: grafana/loki-debug:latest
+    image: grafana/vali-debug:latest
     ports:
       - "40000:40000"
       - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
+    command: -config.file=/etc/vali/local-config.yaml
     networks:
-      - loki
+      - vali
 
   promtail:
     # this is required according to https://github.com/Microsoft/vscode-go/wiki/Debugging-Go-code-using-VS-Code#linuxdocker
@@ -27,11 +27,11 @@ services:
       - /var/log:/var/log
     command: -config.file=/etc/promtail/docker-config.yaml
     networks:
-      - loki
+      - vali
 
   grafana:
     image: grafana/grafana:master
     ports:
       - "3000:3000"
     networks:
-      - loki
+      - vali

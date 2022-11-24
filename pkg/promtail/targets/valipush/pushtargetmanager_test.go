@@ -1,11 +1,11 @@
-package lokipush
+package valipush
 
 import (
 	"testing"
 
 	"github.com/weaveworks/common/server"
 
-	"github.com/grafana/loki/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
 )
 
 func Test_validateJobName(t *testing.T) {

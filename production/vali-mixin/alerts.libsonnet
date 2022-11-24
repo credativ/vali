@@ -2,14 +2,14 @@
   prometheusAlerts+:: {
     groups+: [
       {
-        name: 'loki_alerts',
+        name: 'vali_alerts',
         rules: [
           {
-            alert: 'LokiRequestErrors',
+            alert: 'ValiRequestErrors',
             expr: |||
-              100 * sum(rate(loki_request_duration_seconds_count{status_code=~"5.."}[1m])) by (namespace, job, route)
+              100 * sum(rate(vali_request_duration_seconds_count{status_code=~"5.."}[1m])) by (namespace, job, route)
                 /
-              sum(rate(loki_request_duration_seconds_count[1m])) by (namespace, job, route)
+              sum(rate(vali_request_duration_seconds_count[1m])) by (namespace, job, route)
                 > 10
             |||,
             'for': '15m',
@@ -23,9 +23,9 @@
             },
           },
           {
-            alert: 'LokiRequestPanics',
+            alert: 'ValiRequestPanics',
             expr: |||
-              sum(increase(loki_panic_total[10m])) by (namespace, job) > 0
+              sum(increase(vali_panic_total[10m])) by (namespace, job) > 0
             |||,
             labels: {
               severity: 'critical',
@@ -37,9 +37,9 @@
             },
           },
           {
-            alert: 'LokiRequestLatency',
+            alert: 'ValiRequestLatency',
             expr: |||
-              namespace_job_route:loki_request_duration_seconds:99quantile{route!~"(?i).*tail.*"} > 1
+              namespace_job_route:vali_request_duration_seconds:99quantile{route!~"(?i).*tail.*"} > 1
             |||,
             'for': '15m',
             labels: {

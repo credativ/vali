@@ -16,9 +16,9 @@ import (
 	"github.com/prometheus/common/model"
 	"github.com/weaveworks/common/logging"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/promtail/client"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/client"
 )
 
 var (
@@ -26,26 +26,26 @@ var (
 	keyReplacer  = strings.NewReplacer("/", "_", ".", "_", "-", "_")
 )
 
-type loki struct {
+type vali struct {
 	cfg    *config
 	client client.Client
 	logger log.Logger
 }
 
-func newPlugin(cfg *config, logger log.Logger) (*loki, error) {
+func newPlugin(cfg *config, logger log.Logger) (*vali, error) {
 	client, err := NewClient(cfg, logger)
 	if err != nil {
 		return nil, err
 	}
-	return &loki{
+	return &vali{
 		cfg:    cfg,
 		client: client,
 		logger: logger,
 	}, nil
 }
 
-// sendRecord send fluentbit records to loki as an entry.
-func (l *loki) sendRecord(r map[interface{}]interface{}, ts time.Time) error {
+// sendRecord send fluentbit records to vali as an entry.
+func (l *vali) sendRecord(r map[interface{}]interface{}, ts time.Time) error {
 	records := toStringMap(r)
 	level.Debug(l.logger).Log("msg", "processing records", "records", fmt.Sprintf("%+v", records))
 	lbs := model.LabelSet{}

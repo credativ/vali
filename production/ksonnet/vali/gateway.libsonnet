@@ -59,17 +59,17 @@
               proxy_pass       http://query-frontend.%(namespace)s.svc.cluster.local:%(http_listen_port)s$request_uri;
             }
 
-            location = /loki/api/v1/push {
+            location = /vali/api/v1/push {
               proxy_pass       http://distributor.%(namespace)s.svc.cluster.local:%(http_listen_port)s$request_uri;
             }
 
-            location = /loki/api/v1/tail {
+            location = /vali/api/v1/tail {
               proxy_pass       http://querier.%(namespace)s.svc.cluster.local:%(http_listen_port)s$request_uri;
               proxy_set_header Upgrade $http_upgrade;
               proxy_set_header Connection "upgrade";
             }
 
-            location ~ /loki/api/.* {
+            location ~ /vali/api/.* {
               proxy_pass       http://query-frontend.%(namespace)s.svc.cluster.local:%(http_listen_port)s$request_uri;
             }
           }

@@ -17,12 +17,12 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/prometheus/prometheus/promql"
 
-	"github.com/grafana/loki/pkg/chunkenc"
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/log"
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/chunkenc"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/log"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 type ChunkMetrics struct {
@@ -45,25 +45,25 @@ func NewChunkMetrics(r prometheus.Registerer, maxBatchSize int) *ChunkMetrics {
 
 	return &ChunkMetrics{
 		refs: promauto.With(r).NewCounterVec(prometheus.CounterOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Subsystem: "index",
 			Name:      "chunk_refs_total",
 			Help:      "Number of chunks refs downloaded, partitioned by whether they intersect the query bounds.",
 		}, []string{"status"}),
 		series: promauto.With(r).NewCounterVec(prometheus.CounterOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Subsystem: "store",
 			Name:      "series_total",
 			Help:      "Number of series referenced by a query, partitioned by whether they satisfy matchers.",
 		}, []string{"status"}),
 		chunks: promauto.With(r).NewCounterVec(prometheus.CounterOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Subsystem: "store",
 			Name:      "chunks_downloaded_total",
 			Help:      "Number of chunks referenced or downloaded, partitioned by if they satisfy matchers.",
 		}, []string{"status"}),
 		batches: promauto.With(r).NewHistogramVec(prometheus.HistogramOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Subsystem: "store",
 			Name:      "chunks_per_batch",
 			Help:      "The chunk batch size, partitioned by if they satisfy matchers.",
@@ -102,7 +102,7 @@ func newBatchChunkIterator(
 	metrics *ChunkMetrics,
 	matchers []*labels.Matcher,
 ) *batchChunkIterator {
-	// __name__ is not something we filter by because it's a constant in loki
+	// __name__ is not something we filter by because it's a constant in vali
 	// and only used for upstream compatibility; therefore remove it.
 	// The same applies to the sharding label which is injected by the cortex storage code.
 	matchers = removeMatchersByName(matchers, labels.MetricName, astmapper.ShardLabel)
@@ -625,7 +625,7 @@ outer:
 }
 
 func fetchLazyChunks(ctx context.Context, chunks []*LazyChunk) error {
-	log, ctx := spanlogger.New(ctx, "LokiStore.fetchLazyChunks")
+	log, ctx := spanlogger.New(ctx, "ValiStore.fetchLazyChunks")
 	defer log.Finish()
 	start := time.Now()
 	storeStats := stats.GetStoreData(ctx)

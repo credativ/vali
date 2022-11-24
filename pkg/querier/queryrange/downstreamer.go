@@ -12,7 +12,7 @@ import (
 	"github.com/prometheus/prometheus/promql"
 	"github.com/prometheus/prometheus/promql/parser"
 
-	"github.com/grafana/loki/pkg/logql"
+	"github.com/credativ/vali/pkg/logql"
 )
 
 const (
@@ -23,15 +23,15 @@ type DownstreamHandler struct {
 	next queryrange.Handler
 }
 
-func ParamsToLokiRequest(params logql.Params) *LokiRequest {
-	return &LokiRequest{
+func ParamsToValiRequest(params logql.Params) *ValiRequest {
+	return &ValiRequest{
 		Query:     params.Query(),
 		Limit:     params.Limit(),
 		Step:      int64(params.Step() / time.Millisecond),
 		StartTs:   params.Start(),
 		EndTs:     params.End(),
 		Direction: params.Direction(),
-		Path:      "/loki/api/v1/query_range", // TODO(owen-d): make this derivable
+		Path:      "/vali/api/v1/query_range", // TODO(owen-d): make this derivable
 	}
 }
 
@@ -57,7 +57,7 @@ type instance struct {
 
 func (in instance) Downstream(ctx context.Context, queries []logql.DownstreamQuery) ([]logql.Result, error) {
 	return in.For(ctx, queries, func(qry logql.DownstreamQuery) (logql.Result, error) {
-		req := ParamsToLokiRequest(qry.Params).WithShards(qry.Shards).WithQuery(qry.Expr.String()).(*LokiRequest)
+		req := ParamsToValiRequest(qry.Params).WithShards(qry.Shards).WithQuery(qry.Expr.String()).(*ValiRequest)
 		logger, ctx := spanlogger.New(ctx, "DownstreamHandler.instance")
 		defer logger.Finish()
 		level.Debug(logger).Log("shards", fmt.Sprintf("%+v", req.Shards), "query", req.Query, "step", req.GetStep())
@@ -152,7 +152,7 @@ func sampleStreamToMatrix(streams []queryrange.SampleStream) parser.Value {
 
 func ResponseToResult(resp queryrange.Response) (logql.Result, error) {
 	switch r := resp.(type) {
-	case *LokiResponse:
+	case *ValiResponse:
 		if r.Error != "" {
 			return logql.Result{}, fmt.Errorf("%s: %s", r.ErrorType, r.Error)
 		}
@@ -168,7 +168,7 @@ func ResponseToResult(resp queryrange.Response) (logql.Result, error) {
 			Data:       streams,
 		}, nil
 
-	case *LokiPromResponse:
+	case *ValiPromResponse:
 		if r.Response.Error != "" {
 			return logql.Result{}, fmt.Errorf("%s: %s", r.Response.ErrorType, r.Response.Error)
 		}

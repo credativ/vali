@@ -12,7 +12,7 @@ import (
 	util_log "github.com/cortexproject/cortex/pkg/util/log"
 	"github.com/cortexproject/cortex/tools/querytee"
 
-	"github.com/grafana/loki/pkg/loghttp"
+	"github.com/credativ/vali/pkg/loghttp"
 )
 
 type Config struct {
@@ -44,7 +44,7 @@ func main() {
 	}
 
 	// Run the proxy.
-	proxy, err := querytee.NewProxy(cfg.ProxyConfig, util_log.Logger, lokiReadRoutes(cfg), registry)
+	proxy, err := querytee.NewProxy(cfg.ProxyConfig, util_log.Logger, valiReadRoutes(cfg), registry)
 	if err != nil {
 		level.Error(util_log.Logger).Log("msg", "Unable to initialize the proxy", "err", err.Error())
 		os.Exit(1)
@@ -58,17 +58,17 @@ func main() {
 	proxy.Await()
 }
 
-func lokiReadRoutes(cfg Config) []querytee.Route {
+func valiReadRoutes(cfg Config) []querytee.Route {
 	samplesComparator := querytee.NewSamplesComparator(cfg.ProxyConfig.ValueComparisonTolerance)
 	samplesComparator.RegisterSamplesType(loghttp.ResultTypeStream, compareStreams)
 
 	return []querytee.Route{
-		{Path: "/loki/api/v1/query_range", RouteName: "api_v1_query_range", Methods: []string{"GET"}, ResponseComparator: samplesComparator},
-		{Path: "/loki/api/v1/query", RouteName: "api_v1_query", Methods: []string{"GET"}, ResponseComparator: samplesComparator},
-		{Path: "/loki/api/v1/label", RouteName: "api_v1_label", Methods: []string{"GET"}, ResponseComparator: nil},
-		{Path: "/loki/api/v1/labels", RouteName: "api_v1_labels", Methods: []string{"GET"}, ResponseComparator: nil},
-		{Path: "/loki/api/v1/label/{name}/values", RouteName: "api_v1_label_name_values", Methods: []string{"GET"}, ResponseComparator: nil},
-		{Path: "/loki/api/v1/series", RouteName: "api_v1_series", Methods: []string{"GET"}, ResponseComparator: nil},
+		{Path: "/vali/api/v1/query_range", RouteName: "api_v1_query_range", Methods: []string{"GET"}, ResponseComparator: samplesComparator},
+		{Path: "/vali/api/v1/query", RouteName: "api_v1_query", Methods: []string{"GET"}, ResponseComparator: samplesComparator},
+		{Path: "/vali/api/v1/label", RouteName: "api_v1_label", Methods: []string{"GET"}, ResponseComparator: nil},
+		{Path: "/vali/api/v1/labels", RouteName: "api_v1_labels", Methods: []string{"GET"}, ResponseComparator: nil},
+		{Path: "/vali/api/v1/label/{name}/values", RouteName: "api_v1_label_name_values", Methods: []string{"GET"}, ResponseComparator: nil},
+		{Path: "/vali/api/v1/series", RouteName: "api_v1_series", Methods: []string{"GET"}, ResponseComparator: nil},
 		{Path: "/api/prom/query", RouteName: "api_prom_query", Methods: []string{"GET"}, ResponseComparator: samplesComparator},
 		{Path: "/api/prom/label", RouteName: "api_prom_label", Methods: []string{"GET"}, ResponseComparator: nil},
 		{Path: "/api/prom/label/{name}/values", RouteName: "api_prom_label_name_values", Methods: []string{"GET"}, ResponseComparator: nil},

@@ -23,19 +23,19 @@ import (
 	"github.com/weaveworks/common/user"
 	"google.golang.org/grpc/health/grpc_health_v1"
 
-	"github.com/grafana/loki/pkg/chunkenc"
-	"github.com/grafana/loki/pkg/helpers"
-	"github.com/grafana/loki/pkg/ingester/client"
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/stats"
-	"github.com/grafana/loki/pkg/storage"
-	"github.com/grafana/loki/pkg/storage/stores/shipper"
-	errUtil "github.com/grafana/loki/pkg/util"
-	listutil "github.com/grafana/loki/pkg/util"
-	"github.com/grafana/loki/pkg/util/runtime"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/chunkenc"
+	"github.com/credativ/vali/pkg/helpers"
+	"github.com/credativ/vali/pkg/ingester/client"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/storage"
+	"github.com/credativ/vali/pkg/storage/stores/shipper"
+	errUtil "github.com/credativ/vali/pkg/util"
+	listutil "github.com/credativ/vali/pkg/util"
+	"github.com/credativ/vali/pkg/util/runtime"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 // ErrReadOnly is returned when the ingester is shutting down and a push was
@@ -250,7 +250,7 @@ func (i *Ingester) starting(ctx context.Context) error {
 			i.metrics.walCorruptionsTotal.WithLabelValues(walTypeCheckpoint).Inc()
 			level.Error(util_log.Logger).Log(
 				"msg",
-				`Recovered from checkpoint with errors. Some streams were likely not recovered due to WAL checkpoint file corruptions (or WAL file deletions while Loki is running). No administrator action is needed and data loss is only a possibility if more than (replication factor / 2 + 1) ingesters suffer from this.`,
+				`Recovered from checkpoint with errors. Some streams were likely not recovered due to WAL checkpoint file corruptions (or WAL file deletions while Vali is running). No administrator action is needed and data loss is only a possibility if more than (replication factor / 2 + 1) ingesters suffer from this.`,
 				"elapsed", time.Since(start).String(),
 			)
 		}
@@ -272,7 +272,7 @@ func (i *Ingester) starting(ctx context.Context) error {
 			i.metrics.walCorruptionsTotal.WithLabelValues(walTypeSegment).Inc()
 			level.Error(util_log.Logger).Log(
 				"msg",
-				"Recovered from WAL segments with errors. Some streams and/or entries were likely not recovered due to WAL segment file corruptions (or WAL file deletions while Loki is running). No administrator action is needed and data loss is only a possibility if more than (replication factor / 2 + 1) ingesters suffer from this.",
+				"Recovered from WAL segments with errors. Some streams and/or entries were likely not recovered due to WAL segment file corruptions (or WAL file deletions while Vali is running). No administrator action is needed and data loss is only a possibility if more than (replication factor / 2 + 1) ingesters suffer from this.",
 				"elapsed", time.Since(start).String(),
 			)
 		}

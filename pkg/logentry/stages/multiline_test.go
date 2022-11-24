@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/require"
 	ww "github.com/weaveworks/common/server"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
 )
 
 func Test_multilineStage_Process(t *testing.T) {

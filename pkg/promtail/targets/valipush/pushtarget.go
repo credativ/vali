@@ -1,4 +1,4 @@
-package lokipush
+package valipush
 
 import (
 	"flag"
@@ -16,12 +16,12 @@ import (
 	"github.com/weaveworks/common/server"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/distributor"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/promtail/scrapeconfig"
-	"github.com/grafana/loki/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/distributor"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/promtail/targets/target"
 )
 
 type PushTarget struct {
@@ -90,12 +90,12 @@ func (t *PushTarget) run() error {
 	}
 
 	t.server = srv
-	t.server.HTTP.Handle("/loki/api/v1/push", http.HandlerFunc(t.handle))
+	t.server.HTTP.Handle("/vali/api/v1/push", http.HandlerFunc(t.handle))
 
 	go func() {
 		err := srv.Run()
 		if err != nil {
-			level.Error(t.logger).Log("msg", "Loki push server shutdown with error", "err", err)
+			level.Error(t.logger).Log("msg", "Vali push server shutdown with error", "err", err)
 		}
 	}()
 

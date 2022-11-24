@@ -25,7 +25,7 @@ pipeline_stages:
 var testOutputLogLine = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level" : "WARN",
 	"nested" : {"child":"value"},
@@ -35,7 +35,7 @@ var testOutputLogLine = `
 var testOutputLogLineWithMissingKey = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level" : "WARN",
 	"nested" : {"child":"value"}

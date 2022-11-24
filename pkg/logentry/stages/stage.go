@@ -8,7 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/model"
 
-	"github.com/grafana/loki/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/api"
 )
 
 const (

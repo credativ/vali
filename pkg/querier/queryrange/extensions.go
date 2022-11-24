@@ -13,28 +13,28 @@ import "github.com/cortexproject/cortex/pkg/querier/queryrange"
 // It also has issue of generating slices without pointer to the custom type for Repeated customtype fields, see https://github.com/gogo/protobuf/issues/478
 // which is why we also have to do conversion from non-pointer to pointer type.
 
-func (m *LokiLabelNamesResponse) GetHeaders() []*queryrange.PrometheusResponseHeader {
+func (m *ValiLabelNamesResponse) GetHeaders() []*queryrange.PrometheusResponseHeader {
 	if m != nil {
 		return convertPrometheusResponseHeadersToPointers(m.Headers)
 	}
 	return nil
 }
 
-func (m *LokiSeriesResponse) GetHeaders() []*queryrange.PrometheusResponseHeader {
+func (m *ValiSeriesResponse) GetHeaders() []*queryrange.PrometheusResponseHeader {
 	if m != nil {
 		return convertPrometheusResponseHeadersToPointers(m.Headers)
 	}
 	return nil
 }
 
-func (m *LokiPromResponse) GetHeaders() []*queryrange.PrometheusResponseHeader {
+func (m *ValiPromResponse) GetHeaders() []*queryrange.PrometheusResponseHeader {
 	if m != nil {
 		return m.Response.GetHeaders()
 	}
 	return nil
 }
 
-func (m *LokiResponse) GetHeaders() []*queryrange.PrometheusResponseHeader {
+func (m *ValiResponse) GetHeaders() []*queryrange.PrometheusResponseHeader {
 	if m != nil {
 		return convertPrometheusResponseHeadersToPointers(m.Headers)
 	}

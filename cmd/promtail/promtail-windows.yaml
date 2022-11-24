@@ -3,7 +3,7 @@ server:
   grpc_listen_port: 0
 
 clients:
-  - url: http://localhost:3100/loki/api/v1/push
+  - url: http://localhost:3100/vali/api/v1/push
 
 scrape_configs:
 - job_name: windows

@@ -5,7 +5,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
   grafanaDashboards+: {
     local dashboards = self,
 
-    'loki-writes.json': {
+    'vali-writes.json': {
       local cfg = self,
 
       showMultiCluster:: true,
@@ -19,9 +19,9 @@ local utils = import 'mixin-utils/utils.libsonnet';
       namespaceType:: 'query',
       namespaceQuery::
         if cfg.showMultiCluster then
-          'kube_pod_container_info{cluster="$cluster", image=~".*loki.*"}'
+          'kube_pod_container_info{cluster="$cluster", image=~".*vali.*"}'
         else
-          'kube_pod_container_info{image=~".*loki.*"}',
+          'kube_pod_container_info{image=~".*vali.*"}',
 
       assert (cfg.namespaceType == 'custom' || cfg.namespaceType == 'query') : "Only types 'query' and 'custom' are allowed for dashboard variable 'namespace'",
 
@@ -46,7 +46,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
           {
             variable:: 'cluster',
             label:: cfg.clusterLabel,
-            query:: 'kube_pod_container_info{image=~".*loki.*"}',
+            query:: 'kube_pod_container_info{image=~".*vali.*"}',
             type:: 'query',
           },
         ] else []
@@ -59,19 +59,19 @@ local utils = import 'mixin-utils/utils.libsonnet';
         },
       ],
     } +
-    g.dashboard('Loki / Writes')
+    g.dashboard('Vali / Writes')
     .addRow(
       g.row('Frontend (cortex_gw)')
       .addPanel(
         g.panel('QPS') +
-        g.qpsPanel('loki_request_duration_seconds_count{%s route=~"api_prom_push|loki_api_v1_push"}' % dashboards['loki-writes.json'].cortexGwSelector)
+        g.qpsPanel('vali_request_duration_seconds_count{%s route=~"api_prom_push|vali_api_v1_push"}' % dashboards['vali-writes.json'].cortexGwSelector)
       )
       .addPanel(
         g.panel('Latency') +
         utils.latencyRecordingRulePanel(
-          'loki_request_duration_seconds',
-          dashboards['loki-writes.json'].matchers.cortexgateway + [utils.selector.re('route', 'api_prom_push|loki_api_v1_push')],
-          extra_selectors=dashboards['loki-writes.json'].clusterMatchers
+          'vali_request_duration_seconds',
+          dashboards['vali-writes.json'].matchers.cortexgateway + [utils.selector.re('route', 'api_prom_push|vali_api_v1_push')],
+          extra_selectors=dashboards['vali-writes.json'].clusterMatchers
         )
       )
     )
@@ -79,14 +79,14 @@ local utils = import 'mixin-utils/utils.libsonnet';
       g.row('Distributor')
       .addPanel(
         g.panel('QPS') +
-        g.qpsPanel('loki_request_duration_seconds_count{%s}' % std.rstripChars(dashboards['loki-writes.json'].distributorSelector, ','))
+        g.qpsPanel('vali_request_duration_seconds_count{%s}' % std.rstripChars(dashboards['vali-writes.json'].distributorSelector, ','))
       )
       .addPanel(
         g.panel('Latency') +
         utils.latencyRecordingRulePanel(
-          'loki_request_duration_seconds',
-          dashboards['loki-writes.json'].matchers.distributor,
-          extra_selectors=dashboards['loki-writes.json'].clusterMatchers
+          'vali_request_duration_seconds',
+          dashboards['vali-writes.json'].matchers.distributor,
+          extra_selectors=dashboards['vali-writes.json'].clusterMatchers
         )
       )
     )
@@ -94,14 +94,14 @@ local utils = import 'mixin-utils/utils.libsonnet';
       g.row('Ingester')
       .addPanel(
         g.panel('QPS') +
-        g.qpsPanel('loki_request_duration_seconds_count{%s route="/logproto.Pusher/Push"}' % dashboards['loki-writes.json'].ingesterSelector)
+        g.qpsPanel('vali_request_duration_seconds_count{%s route="/logproto.Pusher/Push"}' % dashboards['vali-writes.json'].ingesterSelector)
       )
       .addPanel(
         g.panel('Latency') +
         utils.latencyRecordingRulePanel(
-          'loki_request_duration_seconds',
-          dashboards['loki-writes.json'].matchers.ingester + [utils.selector.eq('route', '/logproto.Pusher/Push')],
-          extra_selectors=dashboards['loki-writes.json'].clusterMatchers
+          'vali_request_duration_seconds',
+          dashboards['vali-writes.json'].matchers.ingester + [utils.selector.eq('route', '/logproto.Pusher/Push')],
+          extra_selectors=dashboards['vali-writes.json'].clusterMatchers
         )
       )
     )
@@ -109,13 +109,13 @@ local utils = import 'mixin-utils/utils.libsonnet';
       g.row('BigTable')
       .addPanel(
         g.panel('QPS') +
-        g.qpsPanel('cortex_bigtable_request_duration_seconds_count{%s operation="/google.bigtable.v2.Bigtable/MutateRows"}' % dashboards['loki-writes.json'].ingesterSelector)
+        g.qpsPanel('cortex_bigtable_request_duration_seconds_count{%s operation="/google.bigtable.v2.Bigtable/MutateRows"}' % dashboards['vali-writes.json'].ingesterSelector)
       )
       .addPanel(
         g.panel('Latency') +
         utils.latencyRecordingRulePanel(
           'cortex_bigtable_request_duration_seconds',
-          dashboards['loki-writes.json'].clusterMatchers + dashboards['loki-writes.json'].matchers.ingester + [utils.selector.eq('operation', '/google.bigtable.v2.Bigtable/MutateRows')]
+          dashboards['vali-writes.json'].clusterMatchers + dashboards['vali-writes.json'].matchers.ingester + [utils.selector.eq('operation', '/google.bigtable.v2.Bigtable/MutateRows')]
         )
       )
     )
@@ -123,11 +123,11 @@ local utils = import 'mixin-utils/utils.libsonnet';
       g.row('BoltDB Shipper')
       .addPanel(
         g.panel('QPS') +
-        g.qpsPanel('loki_boltdb_shipper_request_duration_seconds_count{%s operation="WRITE"}' % dashboards['loki-writes.json'].ingesterSelector)
+        g.qpsPanel('vali_boltdb_shipper_request_duration_seconds_count{%s operation="WRITE"}' % dashboards['vali-writes.json'].ingesterSelector)
       )
       .addPanel(
         g.panel('Latency') +
-        g.latencyPanel('loki_boltdb_shipper_request_duration_seconds', '{%s operation="WRITE"}' % dashboards['loki-writes.json'].ingesterSelector)
+        g.latencyPanel('vali_boltdb_shipper_request_duration_seconds', '{%s operation="WRITE"}' % dashboards['vali-writes.json'].ingesterSelector)
       )
     ){
       templating+: {
@@ -160,7 +160,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
             type: l.type,
             useTags: false,
           }
-          for l in dashboards['loki-writes.json'].templateLabels
+          for l in dashboards['vali-writes.json'].templateLabels
         ],
       },
     },

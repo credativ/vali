@@ -14,11 +14,11 @@ import (
 	"github.com/weaveworks/common/server"
 	"golang.org/x/sys/windows/svc/eventlog"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/promtail/client/fake"
-	"github.com/grafana/loki/pkg/promtail/scrapeconfig"
-	"github.com/grafana/loki/pkg/promtail/targets/windows/win_eventlog"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/client/fake"
+	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/promtail/targets/windows/win_eventlog"
 )
 
 func init() {

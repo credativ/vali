@@ -1,6 +1,6 @@
-# Tools for inspecting Loki chunks
+# Tools for inspecting Vali chunks
 
-This tool can parse Loki chunks and print details from them. Useful for Loki developers.
+This tool can parse Vali chunks and print details from them. Useful for Vali developers.
 
 To build the tool, simply run `go build` in this directory. Running resulting program with chunks file name gives you some basic chunks information:
 

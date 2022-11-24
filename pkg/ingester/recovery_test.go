@@ -15,10 +15,10 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/ingester/client"
-	"github.com/grafana/loki/pkg/logproto"
-	loki_runtime "github.com/grafana/loki/pkg/util/runtime"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/ingester/client"
+	"github.com/credativ/vali/pkg/logproto"
+	vali_runtime "github.com/credativ/vali/pkg/util/runtime"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 type MemoryWALReader struct {
@@ -206,7 +206,7 @@ func TestSeriesRecoveryNoDuplicates(t *testing.T) {
 		chunks: map[string][]chunk.Chunk{},
 	}
 
-	i, err := New(ingesterConfig, client.Config{}, store, limits, loki_runtime.DefaultTenantConfigs(), nil)
+	i, err := New(ingesterConfig, client.Config{}, store, limits, vali_runtime.DefaultTenantConfigs(), nil)
 	require.NoError(t, err)
 
 	mkSample := func(i int) *logproto.PushRequest {
@@ -240,7 +240,7 @@ func TestSeriesRecoveryNoDuplicates(t *testing.T) {
 	require.Equal(t, false, iter.Next())
 
 	// create a new ingester now
-	i, err = New(ingesterConfig, client.Config{}, store, limits, loki_runtime.DefaultTenantConfigs(), nil)
+	i, err = New(ingesterConfig, client.Config{}, store, limits, vali_runtime.DefaultTenantConfigs(), nil)
 	require.NoError(t, err)
 
 	// recover the checkpointed series

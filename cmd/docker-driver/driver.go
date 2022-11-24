@@ -32,7 +32,7 @@ type driver struct {
 
 type logPair struct {
 	jsonl  logger.Logger
-	lokil  logger.Logger
+	valil  logger.Logger
 	stream io.ReadCloser
 	info   logger.Info
 	logger log.Logger
@@ -46,8 +46,8 @@ func (l *logPair) Close() {
 	if err := l.stream.Close(); err != nil {
 		level.Error(l.logger).Log("msg", "error while closing fifo stream", "err", err)
 	}
-	if err := l.lokil.Close(); err != nil {
-		level.Error(l.logger).Log("msg", "error while closing loki logger", "err", err)
+	if err := l.valil.Close(); err != nil {
+		level.Error(l.logger).Log("msg", "error while closing vali logger", "err", err)
 	}
 	if l.jsonl == nil {
 		return
@@ -98,9 +98,9 @@ func (d *driver) StartLogging(file string, logCtx logger.Info) error {
 		}
 	}
 
-	lokil, err := New(logCtx, d.logger)
+	valil, err := New(logCtx, d.logger)
 	if err != nil {
-		return errors.Wrap(err, "error creating loki logger")
+		return errors.Wrap(err, "error creating vali logger")
 	}
 	f, err := fifo.OpenFifo(context.Background(), file, syscall.O_RDONLY, 0700)
 	if err != nil {
@@ -108,7 +108,7 @@ func (d *driver) StartLogging(file string, logCtx logger.Info) error {
 	}
 
 	d.mu.Lock()
-	lf := &logPair{jsonl, lokil, f, logCtx, d.logger, folder, keepFile}
+	lf := &logPair{jsonl, valil, f, logCtx, d.logger, folder, keepFile}
 	d.logs[file] = lf
 	d.idx[logCtx.ContainerID] = lf
 	d.mu.Unlock()
@@ -161,9 +161,9 @@ func consumeLog(lf *logPair) {
 		}
 		msg.Timestamp = time.Unix(0, buf.TimeNano)
 
-		// loki goes first as the json logger reset the message on completion.
-		if err := lf.lokil.Log(&msg); err != nil {
-			level.Error(lf.logger).Log("msg", "error pushing message to loki", "id", lf.info.ContainerID, "err", err, "message", msg)
+		// vali goes first as the json logger reset the message on completion.
+		if err := lf.valil.Log(&msg); err != nil {
+			level.Error(lf.logger).Log("msg", "error pushing message to vali", "id", lf.info.ContainerID, "err", err, "message", msg)
 		}
 		if lf.jsonl != nil {
 			if err := lf.jsonl.Log(&msg); err != nil {

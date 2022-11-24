@@ -1,8 +1,8 @@
-# Loki Migrate Tool
+# Vali Migrate Tool
 
 **WARNING: THIS TOOL IS NOT WELL TESTED, ALWAYS MAKE BACKUPS AND TEST ON LESS IMPORTANT DATA FIRST!**
 
-This is sort of a bare minimum code hooked directly into the store interfaces within Loki.
+This is sort of a bare minimum code hooked directly into the store interfaces within Vali.
 
 Two stores are created, a source store and destination (abbreviated dest) store.
 
@@ -46,11 +46,11 @@ The docker image currently runs and doesn't do anything, it's intended you exec 
 Migrate between clusters
 
 ```
-migrate -source.config.file=/etc/loki-us-west1/config/config.yaml -dest.config.file=/etc/loki-us-central1/config/config.yaml -source.tenant=2289 -dest.tenant=2289 -from=2020-06-16T14:00:00-00:00 -to=2020-07-01T00:00:00-00:00
+migrate -source.config.file=/etc/vali-us-west1/config/config.yaml -dest.config.file=/etc/vali-us-central1/config/config.yaml -source.tenant=2289 -dest.tenant=2289 -from=2020-06-16T14:00:00-00:00 -to=2020-07-01T00:00:00-00:00
 ```
 
 Migrate tenant ID within a cluster
 
 ```
-migrate -source.config.file=/etc/loki-us-west1/config/config.yaml -dest.config.file=/etc/loki-us-west1/config/config.yaml -source.tenant=fake -dest.tenant=1 -from=2020-06-16T14:00:00-00:00 -to=2020-07-01T00:00:00-00:00
+migrate -source.config.file=/etc/vali-us-west1/config/config.yaml -dest.config.file=/etc/vali-us-west1/config/config.yaml -source.tenant=fake -dest.tenant=1 -from=2020-06-16T14:00:00-00:00 -to=2020-07-01T00:00:00-00:00
 ```

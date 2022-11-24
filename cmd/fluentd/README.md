@@ -1,6 +1,6 @@
 # Fluentd output plugin
 
-[Fluentd](https://fluentd.org/) is a data collector for unified logging layer, it can be configured with the Loki output plugin, provided in this folder, to ship logs to Loki.
+[Fluentd](https://fluentd.org/) is a data collector for unified logging layer, it can be configured with the Vali output plugin, provided in this folder, to ship logs to Vali.
 
 See [docs/client/fluentd/README.md](../../docs/sources/clients/fluentd/_index.md) for detailed information.
 
@@ -8,26 +8,26 @@ See [docs/client/fluentd/README.md](../../docs/sources/clients/fluentd/_index.md
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bundle exec rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `fluent-plugin-grafana-loki.gemspec`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `fluent-plugin-grafana-vali.gemspec`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-To create the gem: `gem build fluent-plugin-grafana-loki.gemspec`
+To create the gem: `gem build fluent-plugin-grafana-vali.gemspec`
 
 Useful additions:
   `gem install rubocop`
 
 ## Testing
 
-Start Loki using:
+Start Vali using:
 
 ```bash
-docker run -it -p 3100:3100 grafana/loki:latest
+docker run -it -p 3100:3100 grafana/vali:latest
 ```
 
-Verify that Loki accept and stores logs:
+Verify that Vali accept and stores logs:
 
 ```bash
-curl -H "Content-Type: application/json" -XPOST -s "http://localhost:3100/loki/api/v1/push" --data-raw "{\"streams\": [{\"stream\": {\"job\": \"test\"}, \"values\": [[\"$(date +%s)000000000\", \"fizzbuzz\"]]}]}"
-curl "http://localhost:3100/loki/api/v1/query_range" --data-urlencode 'query={job="test"}' --data-urlencode 'step=300' | jq .data.result
+curl -H "Content-Type: application/json" -XPOST -s "http://localhost:3100/vali/api/v1/push" --data-raw "{\"streams\": [{\"stream\": {\"job\": \"test\"}, \"values\": [[\"$(date +%s)000000000\", \"fizzbuzz\"]]}]}"
+curl "http://localhost:3100/vali/api/v1/query_range" --data-urlencode 'query={job="test"}' --data-urlencode 'step=300' | jq .data.result
 ```
 
 The expected output is:
@@ -51,13 +51,13 @@ The expected output is:
 Start and send test logs with Fluentd using:
 
 ```bash
-LOKI_URL=http://{{ IP }}:3100 make fluentd-test
+VALI_URL=http://{{ IP }}:3100 make fluentd-test
 ```
 
-Verify that syslogs are being feeded into Loki:
+Verify that syslogs are being feeded into Vali:
 
 ```bash
-curl "http://localhost:3100/loki/api/v1/query_range" --data-urlencode 'query={job="fluentd"}' --data-urlencode 'step=300' | jq .data.result
+curl "http://localhost:3100/vali/api/v1/query_range" --data-urlencode 'query={job="fluentd"}' --data-urlencode 'step=300' | jq .data.result
 ```
 
 The expected output is:

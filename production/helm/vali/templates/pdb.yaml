@@ -2,16 +2,16 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ template "loki.fullname" . }}
+  name: {{ template "vali.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "loki.name" . }}
+    app: {{ template "vali.name" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-    chart: {{ template "loki.chart" . }}
+    chart: {{ template "vali.chart" . }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "loki.name" . }}
+      app: {{ template "vali.name" . }}
 {{ toYaml .Values.podDisruptionBudget | indent 2 }}
 {{- end }}

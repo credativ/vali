@@ -19,7 +19,7 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/grafana/loki/pkg/storage/stores/shipper/util"
+	"github.com/credativ/vali/pkg/storage/stores/shipper/util"
 )
 
 type Config struct {

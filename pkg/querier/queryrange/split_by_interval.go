@@ -13,10 +13,10 @@ import (
 	"github.com/weaveworks/common/httpgrpc"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/logproto"
+	"github.com/credativ/vali/pkg/logproto"
 )
 
-type lokiResult struct {
+type valiResult struct {
 	req queryrange.Request
 	ch  chan *packedResp
 }
@@ -33,7 +33,7 @@ type SplitByMetrics struct {
 func NewSplitByMetrics(r prometheus.Registerer) *SplitByMetrics {
 	return &SplitByMetrics{
 		splits: promauto.With(r).NewHistogram(prometheus.HistogramOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Name:      "query_frontend_partitions",
 			Help:      "Number of time-based partitions (sub-requests) per request",
 			Buckets:   prometheus.ExponentialBuckets(1, 4, 5), // 1 -> 1024
@@ -64,8 +64,8 @@ func SplitByIntervalMiddleware(limits Limits, merger queryrange.Merger, splitter
 	})
 }
 
-func (h *splitByInterval) Feed(ctx context.Context, input []*lokiResult) chan *lokiResult {
-	ch := make(chan *lokiResult)
+func (h *splitByInterval) Feed(ctx context.Context, input []*valiResult) chan *valiResult {
+	ch := make(chan *valiResult)
 
 	go func() {
 		defer close(ch)
@@ -86,7 +86,7 @@ func (h *splitByInterval) Process(
 	ctx context.Context,
 	parallelism int,
 	threshold int64,
-	input []*lokiResult,
+	input []*valiResult,
 	userID string,
 ) ([]queryrange.Response, error) {
 	var responses []queryrange.Response
@@ -125,7 +125,7 @@ func (h *splitByInterval) Process(
 			responses = append(responses, data.resp)
 
 			// see if we can exit early if a limit has been reached
-			if casted, ok := data.resp.(*LokiResponse); !unlimited && ok {
+			if casted, ok := data.resp.(*ValiResponse); !unlimited && ok {
 				threshold -= casted.Count()
 
 				if threshold <= 0 {
@@ -140,7 +140,7 @@ func (h *splitByInterval) Process(
 	return responses, nil
 }
 
-func (h *splitByInterval) loop(ctx context.Context, ch <-chan *lokiResult, next queryrange.Handler) {
+func (h *splitByInterval) loop(ctx context.Context, ch <-chan *valiResult, next queryrange.Handler) {
 	for data := range ch {
 
 		sp, ctx := opentracing.StartSpanFromContext(ctx, "interval")
@@ -184,23 +184,23 @@ func (h *splitByInterval) Do(ctx context.Context, r queryrange.Request) (queryra
 
 	var limit int64
 	switch req := r.(type) {
-	case *LokiRequest:
+	case *ValiRequest:
 		limit = int64(req.Limit)
 		if req.Direction == logproto.BACKWARD {
 			for i, j := 0, len(intervals)-1; i < j; i, j = i+1, j-1 {
 				intervals[i], intervals[j] = intervals[j], intervals[i]
 			}
 		}
-	case *LokiSeriesRequest, *LokiLabelNamesRequest:
+	case *ValiSeriesRequest, *ValiLabelNamesRequest:
 		// Set this to 0 since this is not used in Series/Labels Request.
 		limit = 0
 	default:
 		return nil, httpgrpc.Errorf(http.StatusBadRequest, "unknown request type")
 	}
 
-	input := make([]*lokiResult, 0, len(intervals))
+	input := make([]*valiResult, 0, len(intervals))
 	for _, interval := range intervals {
-		input = append(input, &lokiResult{
+		input = append(input, &valiResult{
 			req: interval,
 			ch:  make(chan *packedResp),
 		})
@@ -217,9 +217,9 @@ func splitByTime(req queryrange.Request, interval time.Duration) []queryrange.Re
 	var reqs []queryrange.Request
 
 	switch r := req.(type) {
-	case *LokiRequest:
+	case *ValiRequest:
 		forInterval(interval, r.StartTs, r.EndTs, func(start, end time.Time) {
-			reqs = append(reqs, &LokiRequest{
+			reqs = append(reqs, &ValiRequest{
 				Query:     r.Query,
 				Limit:     r.Limit,
 				Step:      r.Step,
@@ -229,18 +229,18 @@ func splitByTime(req queryrange.Request, interval time.Duration) []queryrange.Re
 				EndTs:     end,
 			})
 		})
-	case *LokiSeriesRequest:
+	case *ValiSeriesRequest:
 		forInterval(interval, r.StartTs, r.EndTs, func(start, end time.Time) {
-			reqs = append(reqs, &LokiSeriesRequest{
+			reqs = append(reqs, &ValiSeriesRequest{
 				Match:   r.Match,
 				Path:    r.Path,
 				StartTs: start,
 				EndTs:   end,
 			})
 		})
-	case *LokiLabelNamesRequest:
+	case *ValiLabelNamesRequest:
 		forInterval(interval, r.StartTs, r.EndTs, func(start, end time.Time) {
-			reqs = append(reqs, &LokiLabelNamesRequest{
+			reqs = append(reqs, &ValiLabelNamesRequest{
 				Path:    r.Path,
 				StartTs: start,
 				EndTs:   end,
@@ -264,18 +264,18 @@ func forInterval(interval time.Duration, start, end time.Time, callback func(sta
 
 func splitMetricByTime(r queryrange.Request, interval time.Duration) []queryrange.Request {
 	var reqs []queryrange.Request
-	lokiReq := r.(*LokiRequest)
-	for start := lokiReq.StartTs; start.Before(lokiReq.EndTs); start = nextIntervalBoundary(start, r.GetStep(), interval).Add(time.Duration(r.GetStep()) * time.Millisecond) {
+	valiReq := r.(*ValiRequest)
+	for start := valiReq.StartTs; start.Before(valiReq.EndTs); start = nextIntervalBoundary(start, r.GetStep(), interval).Add(time.Duration(r.GetStep()) * time.Millisecond) {
 		end := nextIntervalBoundary(start, r.GetStep(), interval)
-		if end.Add(time.Duration(r.GetStep())*time.Millisecond).After(lokiReq.EndTs) || end.Add(time.Duration(r.GetStep())*time.Millisecond) == lokiReq.EndTs {
-			end = lokiReq.EndTs
+		if end.Add(time.Duration(r.GetStep())*time.Millisecond).After(valiReq.EndTs) || end.Add(time.Duration(r.GetStep())*time.Millisecond) == valiReq.EndTs {
+			end = valiReq.EndTs
 		}
-		reqs = append(reqs, &LokiRequest{
-			Query:     lokiReq.Query,
-			Limit:     lokiReq.Limit,
-			Step:      lokiReq.Step,
-			Direction: lokiReq.Direction,
-			Path:      lokiReq.Path,
+		reqs = append(reqs, &ValiRequest{
+			Query:     valiReq.Query,
+			Limit:     valiReq.Limit,
+			Step:      valiReq.Step,
+			Direction: valiReq.Direction,
+			Path:      valiReq.Path,
 			StartTs:   start,
 			EndTs:     end,
 		})

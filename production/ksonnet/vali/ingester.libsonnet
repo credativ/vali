@@ -36,8 +36,8 @@
   ingester_deployment: if !$._config.stateful_ingesters then
     deployment.new(name, 3, [$.ingester_container]) +
     $.config_hash_mixin +
-    $.util.configVolumeMount('loki', '/etc/loki/config') +
-    $.util.configVolumeMount('overrides', '/etc/loki/overrides') +
+    $.util.configVolumeMount('vali', '/etc/vali/config') +
+    $.util.configVolumeMount('overrides', '/etc/vali/overrides') +
     $.util.antiAffinity +
     deployment.mixin.spec.withMinReadySeconds(60) +
     deployment.mixin.spec.strategy.rollingUpdate.withMaxSurge(0) +
@@ -57,11 +57,11 @@
     statefulSet.mixin.spec.withServiceName('ingester') +
     statefulSet.mixin.spec.withPodManagementPolicy('Parallel') +
     $.config_hash_mixin +
-    $.util.configVolumeMount('loki', '/etc/loki/config') +
-    $.util.configVolumeMount('overrides', '/etc/loki/overrides') +
+    $.util.configVolumeMount('vali', '/etc/vali/config') +
+    $.util.configVolumeMount('overrides', '/etc/vali/overrides') +
     $.util.antiAffinity +
     statefulSet.mixin.spec.updateStrategy.withType('RollingUpdate') +
-    statefulSet.mixin.spec.template.spec.securityContext.withFsGroup(10001) +  // 10001 is the group ID assigned to Loki in the Dockerfile
+    statefulSet.mixin.spec.template.spec.securityContext.withFsGroup(10001) +  // 10001 is the group ID assigned to Vali in the Dockerfile
     statefulSet.mixin.spec.template.spec.withTerminationGracePeriodSeconds(4800)
   else {},
 
@@ -75,8 +75,8 @@
 
   ingester_pdb:
     podDisruptionBudget.new() +
-    podDisruptionBudget.mixin.metadata.withName('loki-ingester-pdb') +
-    podDisruptionBudget.mixin.metadata.withLabels({ name: 'loki-ingester-pdb' }) +
+    podDisruptionBudget.mixin.metadata.withName('vali-ingester-pdb') +
+    podDisruptionBudget.mixin.metadata.withLabels({ name: 'vali-ingester-pdb' }) +
     podDisruptionBudget.mixin.spec.selector.withMatchLabels({ name: name }) +
     podDisruptionBudget.mixin.spec.withMaxUnavailable(1),
 }

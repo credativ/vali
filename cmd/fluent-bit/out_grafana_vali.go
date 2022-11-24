@@ -12,12 +12,12 @@ import (
 	"github.com/prometheus/common/version"
 	"github.com/weaveworks/common/logging"
 
-	_ "github.com/grafana/loki/pkg/build"
+	_ "github.com/credativ/vali/pkg/build"
 )
 
 var (
-	// registered loki plugin instances, required for disposal during shutdown
-	plugins []*loki
+	// registered vali plugin instances, required for disposal during shutdown
+	plugins []*vali
 	logger  log.Logger
 )
 
@@ -37,7 +37,7 @@ func (c *pluginConfig) Get(key string) string {
 
 //export FLBPluginRegister
 func FLBPluginRegister(ctx unsafe.Pointer) int {
-	return output.FLBPluginRegister(ctx, "grafana-loki", "Ship fluent-bit logs to Grafana Loki")
+	return output.FLBPluginRegister(ctx, "grafana-vali", "Ship fluent-bit logs to Grafana Vali")
 }
 
 //export FLBPluginInit
@@ -54,7 +54,7 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 	id := len(plugins)
 	logger := log.With(newLogger(conf.logLevel), "id", id)
 
-	level.Info(logger).Log("[flb-go]", "Starting fluent-bit-go-loki", "version", version.Info())
+	level.Info(logger).Log("[flb-go]", "Starting fluent-bit-go-vali", "version", version.Info())
 	paramLogger := log.With(logger, "[flb-go]", "provided parameter")
 	level.Info(paramLogger).Log("URL", conf.clientConfig.URL)
 	level.Info(paramLogger).Log("TenantID", conf.clientConfig.TenantID)
@@ -98,7 +98,7 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 
 //export FLBPluginFlushCtx
 func FLBPluginFlushCtx(ctx, data unsafe.Pointer, length C.int, _ *C.char) int {
-	plugin := output.FLBPluginGetContext(ctx).(*loki)
+	plugin := output.FLBPluginGetContext(ctx).(*vali)
 	if plugin == nil {
 		level.Error(logger).Log("[flb-go]", "plugin not initialized")
 		return output.FLB_ERROR
@@ -130,7 +130,7 @@ func FLBPluginFlushCtx(ctx, data unsafe.Pointer, length C.int, _ *C.char) int {
 
 		err := plugin.sendRecord(record, timestamp)
 		if err != nil {
-			level.Error(plugin.logger).Log("msg", "error sending record to Loki", "error", err)
+			level.Error(plugin.logger).Log("msg", "error sending record to Vali", "error", err)
 			return output.FLB_ERROR
 		}
 	}

@@ -1,4 +1,4 @@
-package loki
+package vali
 
 import (
 	"bytes"
@@ -11,8 +11,8 @@ import (
 	"github.com/cortexproject/cortex/pkg/querier/worker"
 	"github.com/felixge/fgprof"
 
-	"github.com/grafana/loki/pkg/storage/stores/shipper/compactor"
-	"github.com/grafana/loki/pkg/util/runtime"
+	"github.com/credativ/vali/pkg/storage/stores/shipper/compactor"
+	"github.com/credativ/vali/pkg/util/runtime"
 
 	"github.com/cortexproject/cortex/pkg/util/flagext"
 	"github.com/cortexproject/cortex/pkg/util/modules"
@@ -36,20 +36,20 @@ import (
 	"github.com/weaveworks/common/server"
 	"google.golang.org/grpc"
 
-	"github.com/grafana/loki/pkg/distributor"
-	"github.com/grafana/loki/pkg/ingester"
-	"github.com/grafana/loki/pkg/ingester/client"
-	"github.com/grafana/loki/pkg/lokifrontend"
-	"github.com/grafana/loki/pkg/querier"
-	"github.com/grafana/loki/pkg/querier/queryrange"
-	"github.com/grafana/loki/pkg/ruler"
-	"github.com/grafana/loki/pkg/storage"
-	"github.com/grafana/loki/pkg/tracing"
-	serverutil "github.com/grafana/loki/pkg/util/server"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/distributor"
+	"github.com/credativ/vali/pkg/ingester"
+	"github.com/credativ/vali/pkg/ingester/client"
+	"github.com/credativ/vali/pkg/valifrontend"
+	"github.com/credativ/vali/pkg/querier"
+	"github.com/credativ/vali/pkg/querier/queryrange"
+	"github.com/credativ/vali/pkg/ruler"
+	"github.com/credativ/vali/pkg/storage"
+	"github.com/credativ/vali/pkg/tracing"
+	serverutil "github.com/credativ/vali/pkg/util/server"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
-// Config is the root config for Loki.
+// Config is the root config for Vali.
 type Config struct {
 	Target      string `yaml:"target,omitempty"`
 	AuthEnabled bool   `yaml:"auth_enabled,omitempty"`
@@ -66,7 +66,7 @@ type Config struct {
 	LimitsConfig     validation.Limits           `yaml:"limits_config,omitempty"`
 	TableManager     chunk.TableManagerConfig    `yaml:"table_manager,omitempty"`
 	Worker           worker.Config               `yaml:"frontend_worker,omitempty"`
-	Frontend         lokifrontend.Config         `yaml:"frontend,omitempty"`
+	Frontend         valifrontend.Config         `yaml:"frontend,omitempty"`
 	Ruler            ruler.Config                `yaml:"ruler,omitempty"`
 	QueryRange       queryrange.Config           `yaml:"query_range,omitempty"`
 	RuntimeConfig    runtimeconfig.ManagerConfig `yaml:"runtime_config,omitempty"`
@@ -77,7 +77,7 @@ type Config struct {
 
 // RegisterFlags registers flag.
 func (c *Config) RegisterFlags(f *flag.FlagSet) {
-	c.Server.MetricsNamespace = "loki"
+	c.Server.MetricsNamespace = "vali"
 	c.Server.ExcludeRequestInLog = true
 
 	f.StringVar(&c.Target, "target", All, "target module (default All)")
@@ -135,8 +135,8 @@ func (c *Config) Validate(log log.Logger) error {
 	return nil
 }
 
-// Loki is the root datastructure for Loki.
-type Loki struct {
+// Vali is the root datastructure for Vali.
+type Vali struct {
 	cfg Config
 
 	// set during initialization
@@ -165,22 +165,22 @@ type Loki struct {
 	HTTPAuthMiddleware middleware.Interface
 }
 
-// New makes a new Loki.
-func New(cfg Config) (*Loki, error) {
-	loki := &Loki{
+// New makes a new Vali.
+func New(cfg Config) (*Vali, error) {
+	vali := &Vali{
 		cfg: cfg,
 	}
 
-	loki.setupAuthMiddleware()
-	if err := loki.setupModuleManager(); err != nil {
+	vali.setupAuthMiddleware()
+	if err := vali.setupModuleManager(); err != nil {
 		return nil, err
 	}
-	storage.RegisterCustomIndexClients(&loki.cfg.StorageConfig, prometheus.DefaultRegisterer)
+	storage.RegisterCustomIndexClients(&vali.cfg.StorageConfig, prometheus.DefaultRegisterer)
 
-	return loki, nil
+	return vali, nil
 }
 
-func (t *Loki) setupAuthMiddleware() {
+func (t *Vali) setupAuthMiddleware() {
 	t.cfg.Server.GRPCMiddleware = []grpc.UnaryServerInterceptor{serverutil.RecoveryGRPCUnaryInterceptor}
 	t.cfg.Server.GRPCStreamMiddleware = []grpc.StreamServerInterceptor{serverutil.RecoveryGRPCStreamInterceptor}
 	if t.cfg.AuthEnabled {
@@ -215,8 +215,8 @@ func newDefaultConfig() *Config {
 	return defaultConfig
 }
 
-// Run starts Loki running, and blocks until a Loki stops.
-func (t *Loki) Run() error {
+// Run starts Vali running, and blocks until a Vali stops.
+func (t *Vali) Run() error {
 	serviceMap, err := t.ModuleManager.InitModuleServices(t.cfg.Target)
 	if err != nil {
 		return err
@@ -236,7 +236,7 @@ func (t *Loki) Run() error {
 		return err
 	}
 
-	// before starting servers, register /ready handler. It should reflect entire Loki.
+	// before starting servers, register /ready handler. It should reflect entire Vali.
 	t.Server.HTTP.Path("/ready").Handler(t.readyHandler(sm))
 
 	// This adds a way to see the config and the changes compared to the defaults
@@ -245,10 +245,10 @@ func (t *Loki) Run() error {
 	t.Server.HTTP.Path("/debug/fgprof").Handler(fgprof.Handler())
 
 	// Let's listen for events from this manager, and log them.
-	healthy := func() { level.Info(util_log.Logger).Log("msg", "Loki started") }
-	stopped := func() { level.Info(util_log.Logger).Log("msg", "Loki stopped") }
+	healthy := func() { level.Info(util_log.Logger).Log("msg", "Vali started") }
+	stopped := func() { level.Info(util_log.Logger).Log("msg", "Vali stopped") }
 	serviceFailed := func(service services.Service) {
-		// if any service fails, stop entire Loki
+		// if any service fails, stop entire Vali
 		sm.StopAsync()
 
 		// let's find out which module failed
@@ -301,7 +301,7 @@ func (t *Loki) Run() error {
 	return err
 }
 
-func (t *Loki) readyHandler(sm *services.Manager) http.HandlerFunc {
+func (t *Vali) readyHandler(sm *services.Manager) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if !sm.IsHealthy() {
 			msg := bytes.Buffer{}
@@ -338,7 +338,7 @@ func (t *Loki) readyHandler(sm *services.Manager) http.HandlerFunc {
 	}
 }
 
-func (t *Loki) setupModuleManager() error {
+func (t *Vali) setupModuleManager() error {
 	mm := modules.NewManager()
 
 	mm.RegisterModule(Server, t.initServer)
@@ -381,7 +381,7 @@ func (t *Loki) setupModuleManager() error {
 		deps[Store] = append(deps[Store], IngesterQuerier)
 	}
 
-	// If we are running Loki with boltdb-shipper as a single binary, without clustered mode(which should always be the case when using inmemory ring),
+	// If we are running Vali with boltdb-shipper as a single binary, without clustered mode(which should always be the case when using inmemory ring),
 	// we should start compactor as well for better user experience.
 	if storage.UsingBoltdbShipper(t.cfg.SchemaConfig.Configs) && t.cfg.Ingester.LifecyclerConfig.RingConfig.KVStore.Store == "inmemory" {
 		deps[All] = append(deps[All], Compactor)

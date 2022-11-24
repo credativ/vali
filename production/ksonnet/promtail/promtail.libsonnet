@@ -22,9 +22,9 @@ k + config + scrape_config {
   promtail_config+:: {
     local service_url(client) =
       if std.objectHasAll(client, 'username') then
-        '%(scheme)s://%(username)s:%(password)s@%(hostname)s/loki/api/v1/push' % client
+        '%(scheme)s://%(username)s:%(password)s@%(hostname)s/vali/api/v1/push' % client
       else
-        '%(scheme)s://%(hostname)s/loki/api/v1/push' % client,
+        '%(scheme)s://%(hostname)s/vali/api/v1/push' % client,
 
     local client_config(client) = client {
       url: service_url(client),

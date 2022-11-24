@@ -15,8 +15,8 @@ import (
 	promql_parser "github.com/prometheus/prometheus/promql/parser"
 	"github.com/weaveworks/common/middleware"
 
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 type ctxKeyType string
@@ -90,10 +90,10 @@ func StatsCollectorMiddleware() queryrange.Middleware {
 			var res promql_parser.Value
 			if resp != nil {
 				switch r := resp.(type) {
-				case *LokiResponse:
+				case *ValiResponse:
 					statistics = &r.Statistics
 					res = logql.Streams(r.Data.Result)
-				case *LokiPromResponse:
+				case *ValiPromResponse:
 					statistics = &r.Statistics
 				default:
 					level.Warn(logger).Log("msg", fmt.Sprintf("cannot compute stats, unexpected type: %T", resp))

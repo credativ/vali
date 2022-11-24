@@ -3,7 +3,7 @@
 
   _config+:: {
     stateful_ingesters: if $._config.wal_enabled then true else super.stateful_ingesters,
-    loki+:with({
+    vali+:with({
       ingester+:{
         // disables transfers when running as statefulsets.
         // pod rolling stragety will always fail transfers
@@ -11,7 +11,7 @@
         max_transfer_retries: 0,
         wal+: {
           enabled: true,
-          dir: '/loki/wal',
+          dir: '/vali/wal',
           replay_memory_ceiling: '9GB', // between the requests & limits
         },
       },
@@ -34,7 +34,7 @@
     $.util.resourcesRequests('1', '7Gi') +
     $.util.resourcesLimits('2', '14Gi') +
     container.withVolumeMountsMixin([
-      volumeMount.new('ingester-wal', $._config.loki.ingester.wal.dir),
+      volumeMount.new('ingester-wal', $._config.vali.ingester.wal.dir),
     ]),
   ),
 

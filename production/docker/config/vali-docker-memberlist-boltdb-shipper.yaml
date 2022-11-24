@@ -10,7 +10,7 @@ server:
   log_level: debug
 
 memberlist:
-  join_members: ["loki-1", "loki-2", "loki-3"]
+  join_members: ["vali-1", "vali-2", "vali-3"]
   dead_node_reclaim_time: 30s
   gossip_to_dead_nodes_time: 15s
   left_ingesters_timeout: 30s
@@ -54,8 +54,8 @@ storage_config:
   boltdb_shipper:
     # shared_store: s3
     shared_store: filesystem
-    active_index_directory: /tmp/loki/index
-    cache_location: /tmp/loki/boltdb-cache
+    active_index_directory: /tmp/vali/index
+    cache_location: /tmp/vali/boltdb-cache
 
   #aws:
   #  s3: s3://us-east-1/mybucket
@@ -63,7 +63,7 @@ storage_config:
   #  insecure: false
   #  s3forcepathstyle: true
   filesystem:
-    directory: /loki/chunks
+    directory: /vali/chunks
 
 
 limits_config:
@@ -100,8 +100,8 @@ query_range:
 
 frontend:
   log_queries_longer_than: 5s
-  # downstream_url: http://loki-1:3100
-  downstream_url: http://loki-gateway:3100
+  # downstream_url: http://vali-1:3100
+  downstream_url: http://vali-gateway:3100
   compress_responses: true
 
 querier:

@@ -11,10 +11,10 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/prometheus/prometheus/promql"
 
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/log"
-	"github.com/grafana/loki/pkg/util"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/log"
+	"github.com/credativ/vali/pkg/util"
 )
 
 type QueryRangeType string
@@ -24,7 +24,7 @@ var (
 	RangeType   QueryRangeType = "range"
 )
 
-// Params details the parameters associated with a loki request
+// Params details the parameters associated with a vali request
 type Params interface {
 	Query() string
 	Start() time.Time

@@ -14,9 +14,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/weaveworks/common/httpgrpc"
 
-	"github.com/grafana/loki/pkg/chunkenc"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/log"
+	"github.com/credativ/vali/pkg/chunkenc"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/log"
 )
 
 func TestMaxReturnedStreamsErrors(t *testing.T) {
@@ -144,13 +144,13 @@ func TestStreamIterator(t *testing.T) {
 
 func Benchmark_PushStream(b *testing.B) {
 	ls := labels.Labels{
-		labels.Label{Name: "namespace", Value: "loki-dev"},
+		labels.Label{Name: "namespace", Value: "vali-dev"},
 		labels.Label{Name: "cluster", Value: "dev-us-central1"},
-		labels.Label{Name: "job", Value: "loki-dev/ingester"},
+		labels.Label{Name: "job", Value: "vali-dev/ingester"},
 		labels.Label{Name: "container", Value: "ingester"},
 	}
 	s := newStream(&Config{}, model.Fingerprint(0), ls, NilMetrics)
-	t, err := newTailer("foo", `{namespace="loki-dev"}`, &fakeTailServer{})
+	t, err := newTailer("foo", `{namespace="vali-dev"}`, &fakeTailServer{})
 	require.NoError(b, err)
 
 	go t.loop()

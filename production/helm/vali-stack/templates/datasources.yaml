@@ -2,23 +2,23 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "loki-stack.fullname" . }}
+  name: {{ template "vali-stack.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "loki-stack.name" . }}
-    chart: {{ template "loki-stack.chart" . }}
+    app: {{ template "vali-stack.name" . }}
+    chart: {{ template "vali-stack.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     grafana_datasource: "1"
 data:
-  loki-stack-datasource.yaml: |-
+  vali-stack-datasource.yaml: |-
     apiVersion: 1
     datasources:
-{{- if .Values.loki.enabled }}
-    - name: Loki
-      type: loki
+{{- if .Values.vali.enabled }}
+    - name: Vali
+      type: vali
       access: proxy
-      url: http://{{(include "loki.serviceName" .)}}:{{ .Values.loki.service.port }}
+      url: http://{{(include "vali.serviceName" .)}}:{{ .Values.vali.service.port }}
       version: 1
 {{- end }}
 {{- if .Values.prometheus.enabled }}

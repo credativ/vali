@@ -229,7 +229,7 @@ def main():
     parser.add_argument("--temp-prefix", required=True,
                         help="Path and filename prefix for writing temporary files. ex: gs://MyBucket/tmp")
     parser.add_argument("--periodic-table-duration", required=True, type=valid_duration,
-                        help="Periodic config set for loki tables in hours")
+                        help="Periodic config set for vali tables in hours")
     parser.add_argument("--prom-push-gateway-endpoint", default="localhost:9091", help="Endpoint where metrics are to be pushed")
     parser.add_argument("--namespace", default="default", help="namespace while reporting metrics")
 

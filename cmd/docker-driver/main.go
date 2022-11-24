@@ -14,10 +14,10 @@ import (
 	"github.com/prometheus/common/version"
 	"github.com/weaveworks/common/logging"
 
-	_ "github.com/grafana/loki/pkg/build"
+	_ "github.com/credativ/vali/pkg/build"
 )
 
-const socketAddress = "/run/docker/plugins/loki.sock"
+const socketAddress = "/run/docker/plugins/vali.sock"
 
 var logLevel logging.Level
 

@@ -12,9 +12,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/model"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/promtail/client"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/client"
 )
 
 type dqueConfig struct {
@@ -25,7 +25,7 @@ type dqueConfig struct {
 }
 
 var defaultDqueConfig = dqueConfig{
-	queueDir:         "/tmp/flb-storage/loki",
+	queueDir:         "/tmp/flb-storage/vali",
 	queueSegmentSize: 500,
 	queueSync:        false,
 	queueName:        "dque",
@@ -44,13 +44,13 @@ func dqueEntryBuilder() interface{} {
 type dqueClient struct {
 	logger  log.Logger
 	queue   *dque.DQue
-	loki    client.Client
+	vali    client.Client
 	once    sync.Once
 	wg      sync.WaitGroup
 	entries chan api.Entry
 }
 
-// New makes a new dque loki client
+// New makes a new dque vali client
 func newDque(cfg *config, logger log.Logger) (client.Client, error) {
 	var err error
 
@@ -72,7 +72,7 @@ func newDque(cfg *config, logger log.Logger) (client.Client, error) {
 		_ = q.queue.TurboOn()
 	}
 
-	q.loki, err = client.New(prometheus.DefaultRegisterer, cfg.clientConfig, logger)
+	q.vali, err = client.New(prometheus.DefaultRegisterer, cfg.clientConfig, logger)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +107,7 @@ func (c *dqueClient) dequeuer() {
 			continue
 		}
 
-		c.loki.Chan() <- api.Entry{
+		c.vali.Chan() <- api.Entry{
 			Labels: record.Lbs,
 			Entry: logproto.Entry{
 				Timestamp: record.Ts,
@@ -122,7 +122,7 @@ func (c *dqueClient) Stop() {
 	c.once.Do(func() {
 		close(c.entries)
 		c.queue.Close()
-		c.loki.Stop()
+		c.vali.Stop()
 		c.wg.Wait()
 	})
 
@@ -137,7 +137,7 @@ func (c *dqueClient) StopNow() {
 	c.once.Do(func() {
 		close(c.entries)
 		c.queue.Close()
-		c.loki.StopNow()
+		c.vali.StopNow()
 		c.wg.Wait()
 	})
 }

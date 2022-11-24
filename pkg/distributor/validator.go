@@ -9,8 +9,8 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/weaveworks/common/httpgrpc"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 type Validator struct {

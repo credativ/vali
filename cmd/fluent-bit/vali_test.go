@@ -9,14 +9,14 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"github.com/prometheus/common/model"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/promtail/client/fake"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/client/fake"
 )
 
 var now = time.Now()
 
-func Test_loki_sendRecord(t *testing.T) {
+func Test_vali_sendRecord(t *testing.T) {
 	var simpleRecordFixture = map[interface{}]interface{}{
 		"foo":   "bar",
 		"bar":   500,
@@ -85,7 +85,7 @@ func Test_loki_sendRecord(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			rec := fake.New(func() {})
-			l := &loki{
+			l := &vali{
 				cfg:    tt.cfg,
 				client: rec,
 				logger: logger,

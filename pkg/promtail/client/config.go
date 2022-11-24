@@ -8,7 +8,7 @@ import (
 	"github.com/cortexproject/cortex/pkg/util/flagext"
 	"github.com/prometheus/common/config"
 
-	lokiflag "github.com/grafana/loki/pkg/util/flagext"
+	valiflag "github.com/credativ/vali/pkg/util/flagext"
 )
 
 // NOTE the helm chart for promtail and fluent-bit also have defaults for these values, please update to match if you make changes here.
@@ -30,11 +30,11 @@ type Config struct {
 	Client config.HTTPClientConfig `yaml:",inline"`
 
 	BackoffConfig util.BackoffConfig `yaml:"backoff_config"`
-	// The labels to add to any time series or alerts when communicating with loki
-	ExternalLabels lokiflag.LabelSet `yaml:"external_labels,omitempty"`
+	// The labels to add to any time series or alerts when communicating with vali
+	ExternalLabels valiflag.LabelSet `yaml:"external_labels,omitempty"`
 	Timeout        time.Duration     `yaml:"timeout"`
 
-	// The tenant ID to use when pushing logs to Loki (empty string means
+	// The tenant ID to use when pushing logs to Vali (empty string means
 	// single tenant mode)
 	TenantID string `yaml:"tenant_id"`
 }
@@ -52,7 +52,7 @@ func (c *Config) RegisterFlagsWithPrefix(prefix string, f *flag.FlagSet) {
 	f.DurationVar(&c.Timeout, prefix+"client.timeout", Timeout, "Maximum time to wait for server to respond to a request")
 	f.Var(&c.ExternalLabels, prefix+"client.external-labels", "list of external labels to add to each log (e.g: --client.external-labels=lb1=v1,lb2=v2)")
 
-	f.StringVar(&c.TenantID, prefix+"client.tenant-id", "", "Tenant ID to use when pushing logs to Loki.")
+	f.StringVar(&c.TenantID, prefix+"client.tenant-id", "", "Tenant ID to use when pushing logs to Vali.")
 }
 
 // RegisterFlags registers flags.

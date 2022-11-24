@@ -17,8 +17,8 @@ import (
 	"github.com/weaveworks/common/httpgrpc"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logql"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logql"
 )
 
 // Config is the configuration for the queryrange tripperware
@@ -54,25 +54,25 @@ func NewTripperware(
 	shardingMetrics := logql.NewShardingMetrics(registerer)
 	splitByMetrics := NewSplitByMetrics(registerer)
 
-	metricsTripperware, cache, err := NewMetricTripperware(cfg, log, limits, schema, minShardingLookback, lokiCodec,
+	metricsTripperware, cache, err := NewMetricTripperware(cfg, log, limits, schema, minShardingLookback, valiCodec,
 		PrometheusExtractor{}, instrumentMetrics, retryMetrics, shardingMetrics, splitByMetrics, registerer)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	// NOTE: When we would start caching response from non-metric queries we would have to consider cache gen headers as well in
-	// MergeResponse implementation for Loki codecs same as it is done in Cortex at https://github.com/cortexproject/cortex/blob/21bad57b346c730d684d6d0205efef133422ab28/pkg/querier/queryrange/query_range.go#L170
-	logFilterTripperware, err := NewLogFilterTripperware(cfg, log, limits, schema, minShardingLookback, lokiCodec, instrumentMetrics, retryMetrics, shardingMetrics, splitByMetrics)
+	// MergeResponse implementation for Vali codecs same as it is done in Cortex at https://github.com/cortexproject/cortex/blob/21bad57b346c730d684d6d0205efef133422ab28/pkg/querier/queryrange/query_range.go#L170
+	logFilterTripperware, err := NewLogFilterTripperware(cfg, log, limits, schema, minShardingLookback, valiCodec, instrumentMetrics, retryMetrics, shardingMetrics, splitByMetrics)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	seriesTripperware, err := NewSeriesTripperware(cfg, log, limits, lokiCodec, instrumentMetrics, retryMetrics, splitByMetrics)
+	seriesTripperware, err := NewSeriesTripperware(cfg, log, limits, valiCodec, instrumentMetrics, retryMetrics, splitByMetrics)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	labelsTripperware, err := NewLabelsTripperware(cfg, log, limits, lokiCodec, instrumentMetrics, retryMetrics, splitByMetrics)
+	labelsTripperware, err := NewLabelsTripperware(cfg, log, limits, valiCodec, instrumentMetrics, retryMetrics, splitByMetrics)
 	if err != nil {
 		return nil, nil, err
 	}

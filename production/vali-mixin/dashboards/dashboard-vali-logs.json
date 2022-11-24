@@ -856,7 +856,7 @@
         "multi": false,
         "name": "logs",
         "options": [],
-        "query": "loki",
+        "query": "vali",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,

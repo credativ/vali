@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
 )
 
 func TestFormat(t *testing.T) {
@@ -54,8 +54,8 @@ func TestFormat(t *testing.T) {
 				Labels: model.LabelSet{
 					"jobname":              "pubsub-test",
 					"resource_type":        "gcs",
-					"backend_service_name": "http-loki",
-					"bucket_name":          "loki-bucket",
+					"backend_service_name": "http-vali",
+					"bucket_name":          "vali-bucket",
 				},
 				Entry: logproto.Entry{
 					Timestamp: mustTime(t, "2020-12-22T15:01:23.045123456Z"),
@@ -132,5 +132,5 @@ func mustTime(t *testing.T, v string) time.Time {
 }
 
 const (
-	withAllFields = `{"logName": "https://project/gcs", "resource": {"type": "gcs", "labels": {"backendServiceName": "http-loki", "bucketName": "loki-bucket", "instanceId": "344555"}}, "timestamp": "2020-12-22T15:01:23.045123456Z"}`
+	withAllFields = `{"logName": "https://project/gcs", "resource": {"type": "gcs", "labels": {"backendServiceName": "http-vali", "bucketName": "vali-bucket", "instanceId": "344555"}}, "timestamp": "2020-12-22T15:01:23.045123456Z"}`
 )

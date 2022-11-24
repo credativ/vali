@@ -2,18 +2,18 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ template "loki.fullname" . }}
+  name: {{ template "vali.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "loki.name" . }}
-    chart: {{ template "loki.chart" . }}
+    app: {{ template "vali.name" . }}
+    chart: {{ template "vali.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   podSelector:
     matchLabels:
-      name: {{ template "loki.fullname" . }}
-      app: {{ template "loki.name" . }}
+      name: {{ template "vali.fullname" . }}
+      app: {{ template "vali.name" . }}
       release: {{ .Release.Name }}
   ingress:
     - from:

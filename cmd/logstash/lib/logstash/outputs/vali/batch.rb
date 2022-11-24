@@ -1,6 +1,6 @@
 require 'time'
 
-module Loki
+module Vali
     class Batch
         attr_reader :streams
         def initialize(e)

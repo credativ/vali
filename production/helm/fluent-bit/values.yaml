@@ -1,6 +1,6 @@
 ---
-loki:
-  serviceName: ""  # Defaults to "${RELEASE}-loki" if not set
+vali:
+  serviceName: ""  # Defaults to "${RELEASE}-vali" if not set
   servicePort: 3100
   serviceScheme: http
   servicePath: /api/prom/push
@@ -49,7 +49,7 @@ annotations: {}
 deploymentStrategy: RollingUpdate
 
 image:
-  repository: grafana/fluent-bit-plugin-loki
+  repository: grafana/fluent-bit-plugin-vali
   tag: 1.6.0-amd64
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -58,7 +58,7 @@ image:
   # pullSecrets:
   #   - myRegistrKeySecretName
 
-nameOverride: fluent-bit-loki
+nameOverride: fluent-bit-vali
 
 ## Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/

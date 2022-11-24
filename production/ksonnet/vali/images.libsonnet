@@ -4,14 +4,14 @@
     memcached: 'memcached:1.5.17-alpine',
     memcachedExporter: 'prom/memcached-exporter:v0.6.0',
 
-    loki: 'grafana/loki:2.1.0',
+    vali: 'grafana/vali:2.1.0',
 
-    distributor: self.loki,
-    ingester: self.loki,
-    querier: self.loki,
-    tableManager: self.loki,
-    query_frontend: self.loki,
-    ruler: self.loki,
-    compactor: self.loki,
+    distributor: self.vali,
+    ingester: self.vali,
+    querier: self.vali,
+    tableManager: self.vali,
+    query_frontend: self.vali,
+    ruler: self.vali,
+    compactor: self.vali,
   },
 }

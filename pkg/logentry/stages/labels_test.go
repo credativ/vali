@@ -29,7 +29,7 @@ pipeline_stages:
 var testLabelsLogLine = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level" : "WARN"
 }
@@ -37,7 +37,7 @@ var testLabelsLogLine = `
 var testLabelsLogLineWithMissingKey = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"]
 }
 `
@@ -49,7 +49,7 @@ func TestLabelsPipeline_Labels(t *testing.T) {
 	}
 	expectedLbls := model.LabelSet{
 		"level": "WARN",
-		"app":   "loki",
+		"app":   "vali",
 	}
 
 	out := processEntries(pl, newEntry(nil, nil, testLabelsLogLine, time.Now()))[0]

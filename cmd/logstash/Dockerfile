@@ -16,9 +16,9 @@ RUN bundle install --path=/usr/share/logstash/vendor/bundle && \
     bundle exec rake vendor && \
     bundle exec rspec
 
-RUN cat logstash-output-loki.gemspec | grep s.version | awk '{print $3}' |  cut -d "'" -f 2 > VERSION
+RUN cat logstash-output-vali.gemspec | grep s.version | awk '{print $3}' |  cut -d "'" -f 2 > VERSION
 
-RUN gem build logstash-output-loki.gemspec && \
-    PLUGIN_VERSION=$(cat VERSION); /usr/share/logstash/bin/logstash-plugin install logstash-output-loki-${PLUGIN_VERSION}.gem
+RUN gem build logstash-output-vali.gemspec && \
+    PLUGIN_VERSION=$(cat VERSION); /usr/share/logstash/bin/logstash-plugin install logstash-output-vali-${PLUGIN_VERSION}.gem
 
 EXPOSE 5044

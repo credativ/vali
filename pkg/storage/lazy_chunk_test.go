@@ -10,11 +10,11 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/chunkenc"
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/log"
-	"github.com/grafana/loki/pkg/util"
+	"github.com/credativ/vali/pkg/chunkenc"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/log"
+	"github.com/credativ/vali/pkg/util"
 )
 
 func TestLazyChunkIterator(t *testing.T) {
@@ -156,7 +156,7 @@ func TestIsOverlapping(t *testing.T) {
 }
 
 func lazyChunkWithBounds(from, through time.Time) *LazyChunk {
-	// In loki chunks are rounded when flushed fro nanoseconds to milliseconds.
+	// In vali chunks are rounded when flushed fro nanoseconds to milliseconds.
 	fromM, throughM := util.RoundToMilliseconds(from, through)
 	return &LazyChunk{
 		Chunk: chunk.Chunk{

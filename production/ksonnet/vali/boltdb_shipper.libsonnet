@@ -15,7 +15,7 @@
     compactor_pvc_size: '10Gi',
     compactor_pvc_class: 'fast',
     index_period_hours: if self.using_boltdb_shipper then 24 else super.index_period_hours,
-    loki+: if self.using_boltdb_shipper then {
+    vali+: if self.using_boltdb_shipper then {
       chunk_store_config+: {
         write_dedupe_cache_config:: {},
       },
@@ -41,7 +41,7 @@
   else {},
 
   compactor_args:: if $._config.using_boltdb_shipper then {
-    'config.file': '/etc/loki/config/config.yaml',
+    'config.file': '/etc/vali/config/config.yaml',
     'boltdb.shipper.compactor.working-directory': '/data/compactor',
     'boltdb.shipper.compactor.shared-store': $._config.boltdb_shipper_shared_store,
     target: 'compactor',
@@ -67,8 +67,8 @@
     statefulSet.new('compactor', 1, [$.compactor_container], $.compactor_data_pvc) +
     statefulSet.mixin.spec.withServiceName('compactor') +
     $.config_hash_mixin +
-    $.util.configVolumeMount('loki', '/etc/loki/config') +
+    $.util.configVolumeMount('vali', '/etc/vali/config') +
     statefulSet.mixin.spec.updateStrategy.withType('RollingUpdate') +
-    statefulSet.mixin.spec.template.spec.securityContext.withFsGroup(10001)  // 10001 is the group ID assigned to Loki in the Dockerfile
+    statefulSet.mixin.spec.template.spec.securityContext.withFsGroup(10001)  // 10001 is the group ID assigned to Vali in the Dockerfile
   else {},
 }

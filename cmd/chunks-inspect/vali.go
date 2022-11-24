@@ -62,16 +62,16 @@ const (
 	chunkFormatV3
 )
 
-type LokiChunk struct {
+type ValiChunk struct {
 	encoding Encoding
 
-	blocks []LokiBlock
+	blocks []ValiBlock
 
 	metadataChecksum         uint32
 	computedMetadataChecksum uint32
 }
 
-type LokiBlock struct {
+type ValiBlock struct {
 	numEntries uint64 // number of log lines in this block
 	minT       int64  // minimum timestamp, unix nanoseconds
 	maxT       int64  // max timestamp, unix nanoseconds
@@ -84,19 +84,19 @@ type LokiBlock struct {
 	originalData []byte // data uncompressed from rawData
 
 	// parsed rawData
-	entries          []LokiEntry
+	entries          []ValiEntry
 	storedChecksum   uint32
 	computedChecksum uint32
 }
 
-type LokiEntry struct {
+type ValiEntry struct {
 	timestamp int64
 	line      string
 }
 
-func parseLokiChunk(chunkHeader *ChunkHeader, r io.Reader) (*LokiChunk, error) {
+func parseValiChunk(chunkHeader *ChunkHeader, r io.Reader) (*ValiChunk, error) {
 
-	/* Loki Chunk Format
+	/* Vali Chunk Format
 
 	4B magic number
 	1B version
@@ -116,10 +116,10 @@ func parseLokiChunk(chunkHeader *ChunkHeader, r io.Reader) (*LokiChunk, error) {
 	4B Meta offset ----------------------------> A
 	*/
 
-	// Loki chunks need to be loaded into memory, because some offsets are actually stored at the end.
+	// Vali chunks need to be loaded into memory, because some offsets are actually stored at the end.
 	data := make([]byte, chunkHeader.DataLength)
 	if _, err := io.ReadFull(r, data); err != nil {
-		return nil, fmt.Errorf("failed to read rawData for Loki chunk into memory: %w", err)
+		return nil, fmt.Errorf("failed to read rawData for Vali chunk into memory: %w", err)
 	}
 
 	if num := binary.BigEndian.Uint32(data[0:4]); num != 0x012EE56A {
@@ -134,7 +134,7 @@ func parseLokiChunk(chunkHeader *ChunkHeader, r io.Reader) (*LokiChunk, error) {
 		return nil, fmt.Errorf("failed to read compression: %w", err)
 	}
 
-	// return &LokiChunk{encoding: compression}, nil
+	// return &ValiChunk{encoding: compression}, nil
 
 	metasOffset := binary.BigEndian.Uint64(data[len(data)-8:])
 
@@ -149,14 +149,14 @@ func parseLokiChunk(chunkHeader *ChunkHeader, r io.Reader) (*LokiChunk, error) {
 	}
 	metadata = metadata[n:]
 
-	lokiChunk := &LokiChunk{
+	valiChunk := &ValiChunk{
 		encoding:                 compression,
 		metadataChecksum:         metaChecksum,
 		computedMetadataChecksum: computedMetaChecksum,
 	}
 
 	for ix := 0; ix < int(blocks); ix++ {
-		block := LokiBlock{}
+		block := ValiBlock{}
 		block.numEntries, metadata, err = readUvarint(err, metadata)
 		block.minT, metadata, err = readVarint(err, metadata)
 		block.maxT, metadata, err = readVarint(err, metadata)
@@ -174,14 +174,14 @@ func parseLokiChunk(chunkHeader *ChunkHeader, r io.Reader) (*LokiChunk, error) {
 		block.rawData = data[block.dataOffset : block.dataOffset+dataLength]
 		block.storedChecksum = binary.BigEndian.Uint32(data[block.dataOffset+dataLength : block.dataOffset+dataLength+4])
 		block.computedChecksum = crc32.Checksum(block.rawData, castagnoliTable)
-		block.originalData, block.entries, err = parseLokiBlock(compression, block.rawData)
-		lokiChunk.blocks = append(lokiChunk.blocks, block)
+		block.originalData, block.entries, err = parseValiBlock(compression, block.rawData)
+		valiChunk.blocks = append(valiChunk.blocks, block)
 	}
 
-	return lokiChunk, nil
+	return valiChunk, nil
 }
 
-func parseLokiBlock(compression Encoding, data []byte) ([]byte, []LokiEntry, error) {
+func parseValiBlock(compression Encoding, data []byte) ([]byte, []ValiEntry, error) {
 	r, err := compression.readerFn(bytes.NewReader(data))
 	if err != nil {
 		return nil, nil, err
@@ -193,7 +193,7 @@ func parseLokiBlock(compression Encoding, data []byte) ([]byte, []LokiEntry, err
 		return nil, nil, err
 	}
 
-	entries := []LokiEntry(nil)
+	entries := []ValiEntry(nil)
 	for len(decompressed) > 0 {
 		var timestamp int64
 		var lineLength uint64
@@ -208,7 +208,7 @@ func parseLokiBlock(compression Encoding, data []byte) ([]byte, []LokiEntry, err
 			return origDecompressed, nil, fmt.Errorf("not enough line data, need %d, got %d", lineLength, len(decompressed))
 		}
 
-		entries = append(entries, LokiEntry{
+		entries = append(entries, ValiEntry{
 			timestamp: timestamp,
 			line:      string(decompressed[0:lineLength]),
 		})

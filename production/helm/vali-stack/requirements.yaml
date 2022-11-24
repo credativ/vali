@@ -1,7 +1,7 @@
 dependencies:
-- name: "loki"
-  condition: loki.enabled
-  repository: "file://../loki"
+- name: "vali"
+  condition: vali.enabled
+  repository: "file://../vali"
   version: "^2.0.0"
 - name: "promtail"
   condition: promtail.enabled
@@ -14,7 +14,7 @@ dependencies:
 - name: "grafana"
   condition: grafana.enabled
   version: "~5.7.0"
-  repository:  "https://grafana.github.io/helm-charts"
+  repository:  "https://credativ.github.io/helm-charts"
 - name: "prometheus"
   condition: prometheus.enabled
   version: "~11.16.0"

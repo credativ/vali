@@ -12,8 +12,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"gopkg.in/yaml.v2"
 
-	"github.com/grafana/loki/pkg/promtail/api"
-	lokiflag "github.com/grafana/loki/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/promtail/api"
+	valiflag "github.com/credativ/vali/pkg/util/flagext"
 )
 
 var (
@@ -37,7 +37,7 @@ type logger struct {
 }
 
 // NewLogger creates a new client logger that logs entries instead of sending them.
-func NewLogger(reg prometheus.Registerer, log log.Logger, externalLabels lokiflag.LabelSet, cfgs ...Config) (Client, error) {
+func NewLogger(reg prometheus.Registerer, log log.Logger, externalLabels valiflag.LabelSet, cfgs ...Config) (Client, error) {
 	// make sure the clients config is valid
 	c, err := NewMulti(reg, log, externalLabels, cfgs...)
 	if err != nil {

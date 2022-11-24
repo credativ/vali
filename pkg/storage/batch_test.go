@@ -14,12 +14,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/chunkenc"
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/log"
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/chunkenc"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/log"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 var NilMetrics = NewChunkMetrics(nil, 0)
@@ -1472,7 +1472,7 @@ func Test_IsInvalidChunkError(t *testing.T) {
 			true,
 		},
 		{
-			"invalid chunk cheksum error from loki",
+			"invalid chunk cheksum error from vali",
 			promql.ErrStorage{Err: chunkenc.ErrInvalidChecksum},
 			true,
 		},
@@ -1482,7 +1482,7 @@ func Test_IsInvalidChunkError(t *testing.T) {
 			false,
 		},
 		{
-			"no error from cortex or loki",
+			"no error from cortex or vali",
 			nil,
 			false,
 		},

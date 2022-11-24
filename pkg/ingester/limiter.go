@@ -5,7 +5,7 @@ import (
 	"math"
 	"sync"
 
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 const (

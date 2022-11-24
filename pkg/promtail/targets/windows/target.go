@@ -16,10 +16,10 @@ import (
 	"github.com/spf13/afero"
 	"golang.org/x/sys/windows"
 
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/promtail/scrapeconfig"
-	"github.com/grafana/loki/pkg/promtail/targets/target"
-	"github.com/grafana/loki/pkg/promtail/targets/windows/win_eventlog"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/promtail/targets/windows/win_eventlog"
 	"github.com/prometheus/prometheus/pkg/labels"
 )
 
@@ -41,7 +41,7 @@ type Target struct {
 	err   error
 }
 
-// New create a new windows targets, that will fetch windows event logs and send them to Loki.
+// New create a new windows targets, that will fetch windows event logs and send them to Vali.
 func New(
 	logger log.Logger,
 	handler api.EntryHandler,
@@ -92,7 +92,7 @@ func New(
 	return t, nil
 }
 
-// loop fetches new events and send them to via the Loki client.
+// loop fetches new events and send them to via the Vali client.
 func (t *Target) loop() {
 	t.ready = true
 	t.wg.Add(1)
@@ -137,7 +137,7 @@ func (t *Target) loop() {
 	}
 }
 
-// renderEntries renders Loki entries from windows event logs
+// renderEntries renders Vali entries from windows event logs
 func (t *Target) renderEntries(events []win_eventlog.Event) []api.Entry {
 	res := make([]api.Entry, 0, len(events))
 	lbs := labels.NewBuilder(nil)

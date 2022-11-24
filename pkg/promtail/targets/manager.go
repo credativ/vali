@@ -6,17 +6,17 @@ import (
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/promtail/positions"
-	"github.com/grafana/loki/pkg/promtail/scrapeconfig"
-	"github.com/grafana/loki/pkg/promtail/targets/file"
-	"github.com/grafana/loki/pkg/promtail/targets/gcplog"
-	"github.com/grafana/loki/pkg/promtail/targets/journal"
-	"github.com/grafana/loki/pkg/promtail/targets/lokipush"
-	"github.com/grafana/loki/pkg/promtail/targets/stdin"
-	"github.com/grafana/loki/pkg/promtail/targets/syslog"
-	"github.com/grafana/loki/pkg/promtail/targets/target"
-	"github.com/grafana/loki/pkg/promtail/targets/windows"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/positions"
+	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/promtail/targets/file"
+	"github.com/credativ/vali/pkg/promtail/targets/gcplog"
+	"github.com/credativ/vali/pkg/promtail/targets/journal"
+	"github.com/credativ/vali/pkg/promtail/targets/valipush"
+	"github.com/credativ/vali/pkg/promtail/targets/stdin"
+	"github.com/credativ/vali/pkg/promtail/targets/syslog"
+	"github.com/credativ/vali/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/promtail/targets/windows"
 )
 
 const (
@@ -171,14 +171,14 @@ func NewTargetManagers(
 			}
 			targetManagers = append(targetManagers, pubsubTargetManager)
 		case PushScrapeConfigs:
-			pushTargetManager, err := lokipush.NewPushTargetManager(
+			pushTargetManager, err := valipush.NewPushTargetManager(
 				reg,
 				logger,
 				client,
 				scrapeConfigs,
 			)
 			if err != nil {
-				return nil, errors.Wrap(err, "failed to make Loki Push API target manager")
+				return nil, errors.Wrap(err, "failed to make Vali Push API target manager")
 			}
 			targetManagers = append(targetManagers, pushTargetManager)
 		case WindowsEventsConfigs:

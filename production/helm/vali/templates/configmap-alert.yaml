@@ -3,15 +3,15 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "loki.fullname" . }}-alerting-rules
+  name: {{ template "vali.fullname" . }}-alerting-rules
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "loki.name" . }}
-    chart: {{ template "loki.chart" . }}
+    app: {{ template "vali.name" . }}
+    chart: {{ template "vali.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  {{ template "loki.fullname" . }}-alerting-rules.yaml: |-
+  {{ template "vali.fullname" . }}-alerting-rules.yaml: |-
     groups:
     {{- toYaml .Values.alerting_groups | nindent 6 }}
 {{- end }}

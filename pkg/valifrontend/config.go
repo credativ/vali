@@ -1,4 +1,4 @@
-package lokifrontend
+package valifrontend
 
 import (
 	"flag"

@@ -14,15 +14,15 @@ import (
 	"github.com/prometheus/common/model"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
-	lokiflag "github.com/grafana/loki/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
+	valiflag "github.com/credativ/vali/pkg/util/flagext"
 
-	"github.com/grafana/loki/pkg/promtail/client/fake"
+	"github.com/credativ/vali/pkg/promtail/client/fake"
 )
 
 func TestNewMulti(t *testing.T) {
-	_, err := NewMulti(nil, util_log.Logger, lokiflag.LabelSet{}, []Config{}...)
+	_, err := NewMulti(nil, util_log.Logger, valiflag.LabelSet{}, []Config{}...)
 	if err == nil {
 		t.Fatal("expected err but got nil")
 	}
@@ -32,16 +32,16 @@ func TestNewMulti(t *testing.T) {
 		BatchSize:      20,
 		BatchWait:      1 * time.Second,
 		URL:            flagext.URLValue{URL: host1},
-		ExternalLabels: lokiflag.LabelSet{LabelSet: model.LabelSet{"order": "yaml"}},
+		ExternalLabels: valiflag.LabelSet{LabelSet: model.LabelSet{"order": "yaml"}},
 	}
 	cc2 := Config{
 		BatchSize:      10,
 		BatchWait:      1 * time.Second,
 		URL:            flagext.URLValue{URL: host2},
-		ExternalLabels: lokiflag.LabelSet{LabelSet: model.LabelSet{"hi": "there"}},
+		ExternalLabels: valiflag.LabelSet{LabelSet: model.LabelSet{"hi": "there"}},
 	}
 
-	clients, err := NewMulti(prometheus.DefaultRegisterer, util_log.Logger, lokiflag.LabelSet{LabelSet: model.LabelSet{"order": "command"}}, cc1, cc2)
+	clients, err := NewMulti(prometheus.DefaultRegisterer, util_log.Logger, valiflag.LabelSet{LabelSet: model.LabelSet{"order": "command"}}, cc1, cc2)
 	if err != nil {
 		t.Fatalf("expected err: nil got:%v", err)
 	}
@@ -55,7 +55,7 @@ func TestNewMulti(t *testing.T) {
 		BatchSize:      20,
 		BatchWait:      1 * time.Second,
 		URL:            flagext.URLValue{URL: host1},
-		ExternalLabels: lokiflag.LabelSet{LabelSet: model.LabelSet{"order": "yaml"}},
+		ExternalLabels: valiflag.LabelSet{LabelSet: model.LabelSet{"order": "yaml"}},
 	}
 
 	if !reflect.DeepEqual(actualCfg1, expectedCfg1) {
@@ -68,7 +68,7 @@ func TestNewMulti(t *testing.T) {
 		BatchSize: 10,
 		BatchWait: 1 * time.Second,
 		URL:       flagext.URLValue{URL: host2},
-		ExternalLabels: lokiflag.LabelSet{
+		ExternalLabels: valiflag.LabelSet{
 			LabelSet: model.LabelSet{
 				"order": "command",
 				"hi":    "there",

@@ -6,7 +6,7 @@
 (import 'overrides.libsonnet') +
 (import 'consul/consul.libsonnet') +
 
-// Loki services
+// Vali services
 (import 'distributor.libsonnet') +
 (import 'ingester.libsonnet') +
 (import 'querier.libsonnet') +

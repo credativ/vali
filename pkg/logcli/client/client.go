@@ -15,24 +15,24 @@ import (
 	json "github.com/json-iterator/go"
 	"github.com/prometheus/common/config"
 
-	"github.com/grafana/loki/pkg/build"
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/util"
+	"github.com/credativ/vali/pkg/build"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/util"
 )
 
 const (
-	queryPath       = "/loki/api/v1/query"
-	queryRangePath  = "/loki/api/v1/query_range"
-	labelsPath      = "/loki/api/v1/labels"
-	labelValuesPath = "/loki/api/v1/label/%s/values"
-	seriesPath      = "/loki/api/v1/series"
-	tailPath        = "/loki/api/v1/tail"
+	queryPath       = "/vali/api/v1/query"
+	queryRangePath  = "/vali/api/v1/query_range"
+	labelsPath      = "/vali/api/v1/labels"
+	labelValuesPath = "/vali/api/v1/label/%s/values"
+	seriesPath      = "/vali/api/v1/series"
+	tailPath        = "/vali/api/v1/tail"
 )
 
-var userAgent = fmt.Sprintf("loki-logcli/%s", build.Version)
+var userAgent = fmt.Sprintf("vali-logcli/%s", build.Version)
 
-// Client contains all the methods to query a Loki instance, it's an interface to allow multiple implementations.
+// Client contains all the methods to query a Vali instance, it's an interface to allow multiple implementations.
 type Client interface {
 	Query(queryStr string, limit int, time time.Time, direction logproto.Direction, quiet bool) (*loghttp.QueryResponse, error)
 	QueryRange(queryStr string, limit int, start, end time.Time, direction logproto.Direction, step, interval time.Duration, quiet bool) (*loghttp.QueryResponse, error)
@@ -43,7 +43,7 @@ type Client interface {
 	GetOrgID() string
 }
 
-// Client contains fields necessary to query a Loki instance
+// Client contains fields necessary to query a Vali instance
 type DefaultClient struct {
 	TLSConfig config.TLSConfig
 	Username  string

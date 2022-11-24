@@ -24,7 +24,7 @@ require (
 	github.com/go-kit/kit v0.10.0
 	github.com/go-logfmt/logfmt v0.5.0
 	github.com/gofrs/flock v0.7.1 // indirect
-	github.com/gogo/protobuf v1.3.1 // remember to update loki-build-image/Dockerfile too
+	github.com/gogo/protobuf v1.3.1 // remember to update vali-build-image/Dockerfile too
 	github.com/golang/snappy v0.0.3-0.20201103224600-674baa8c7fc3
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/websocket v1.4.2

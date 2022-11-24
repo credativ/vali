@@ -4,27 +4,27 @@ metadata:
   annotations:
     "helm.sh/hook": test-success
   labels:
-    app: {{ template "loki-stack.name" . }}
-    chart: {{ template "loki-stack.chart" . }}
+    app: {{ template "vali-stack.name" . }}
+    chart: {{ template "vali-stack.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-  name: {{ template "loki-stack.fullname" . }}-test
+  name: {{ template "vali-stack.fullname" . }}-test
 spec:
   containers:
   - name: test
     image: bats/bats:v1.1.0
     args:
-    - /var/lib/loki/test.sh
+    - /var/lib/vali/test.sh
     env:
-    - name: LOKI_SERVICE
-      value: {{ template "loki.serviceName" . }}
-    - name: LOKI_PORT
-      value: "{{ .Values.loki.service.port }}"
+    - name: VALI_SERVICE
+      value: {{ template "vali.serviceName" . }}
+    - name: VALI_PORT
+      value: "{{ .Values.vali.service.port }}"
     volumeMounts:
     - name: tests
-      mountPath: /var/lib/loki
+      mountPath: /var/lib/vali
   restartPolicy: Never
   volumes:
   - name: tests
     configMap:
-      name: {{ template "loki-stack.fullname" . }}-test
+      name: {{ template "vali-stack.fullname" . }}-test

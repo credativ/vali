@@ -2,10 +2,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "loki.fullname" . }}
+  name: {{ template "vali.fullname" . }}
   labels:
-    app: {{ template "loki.name" . }}
-    chart: {{ template "loki.chart" . }}
+    app: {{ template "vali.name" . }}
+    chart: {{ template "vali.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     {{- if .Values.serviceMonitor.additionalLabels }}
@@ -18,7 +18,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ template "loki.name" . }}
+      app: {{ template "vali.name" . }}
       release: {{ .Release.Name | quote }}
       variant: headless
   namespaceSelector:

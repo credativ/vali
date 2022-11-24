@@ -9,15 +9,15 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/model"
 
-	"github.com/grafana/loki/pkg/logentry/stages"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/promtail/client"
+	"github.com/credativ/vali/pkg/logentry/stages"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/client"
 )
 
 var jobName = "docker"
 
-type loki struct {
+type vali struct {
 	client  client.Client
 	handler api.EntryHandler
 	labels  model.LabelSet
@@ -26,7 +26,7 @@ type loki struct {
 	stop func()
 }
 
-// New create a new Loki logger that forward logs to Loki instance
+// New create a new Vali logger that forward logs to Vali instance
 func New(logCtx logger.Info, logger log.Logger) (logger.Logger, error) {
 	logger = log.With(logger, "container_id", logCtx.ContainerID)
 	cfg, err := parseConfig(logCtx)
@@ -47,7 +47,7 @@ func New(logCtx logger.Info, logger log.Logger) (logger.Logger, error) {
 		handler = pipeline.Wrap(c)
 		stop = handler.Stop
 	}
-	return &loki{
+	return &vali{
 		client:  c,
 		labels:  cfg.labels,
 		logger:  logger,
@@ -57,7 +57,7 @@ func New(logCtx logger.Info, logger log.Logger) (logger.Logger, error) {
 }
 
 // Log implements `logger.Logger`
-func (l *loki) Log(m *logger.Message) error {
+func (l *vali) Log(m *logger.Message) error {
 	if len(bytes.Fields(m.Line)) == 0 {
 		level.Debug(l.logger).Log("msg", "ignoring empty line", "line", string(m.Line))
 		return nil
@@ -77,12 +77,12 @@ func (l *loki) Log(m *logger.Message) error {
 }
 
 // Log implements `logger.Logger`
-func (l *loki) Name() string {
+func (l *vali) Name() string {
 	return driverName
 }
 
 // Log implements `logger.Logger`
-func (l *loki) Close() error {
+func (l *vali) Close() error {
 	l.stop()
 	l.client.StopNow()
 	return nil

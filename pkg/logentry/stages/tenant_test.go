@@ -13,8 +13,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/promtail/client"
-	lokiutil "github.com/grafana/loki/pkg/util"
+	"github.com/credativ/vali/pkg/promtail/client"
+	valiutil "github.com/credativ/vali/pkg/util"
 )
 
 var testTenantYaml = `
@@ -29,7 +29,7 @@ pipeline_stages:
 var testTenantLogLineWithMissingKey = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level" : "WARN"
 }
@@ -73,26 +73,26 @@ func TestTenantStage_Validation(t *testing.T) {
 		},
 		"should fail on missing source and value": {
 			config:      &TenantConfig{},
-			expectedErr: lokiutil.StringRef(ErrTenantStageEmptySourceOrValue),
+			expectedErr: valiutil.StringRef(ErrTenantStageEmptySourceOrValue),
 		},
 		"should fail on empty source": {
 			config: &TenantConfig{
 				Source: "",
 			},
-			expectedErr: lokiutil.StringRef(ErrTenantStageEmptySourceOrValue),
+			expectedErr: valiutil.StringRef(ErrTenantStageEmptySourceOrValue),
 		},
 		"should fail on empty value": {
 			config: &TenantConfig{
 				Value: "",
 			},
-			expectedErr: lokiutil.StringRef(ErrTenantStageEmptySourceOrValue),
+			expectedErr: valiutil.StringRef(ErrTenantStageEmptySourceOrValue),
 		},
 		"should fail on both source and value set": {
 			config: &TenantConfig{
 				Source: "tenant",
 				Value:  "team-a",
 			},
-			expectedErr: lokiutil.StringRef(ErrTenantStageConflictingSourceAndValue),
+			expectedErr: valiutil.StringRef(ErrTenantStageConflictingSourceAndValue),
 		},
 	}
 
@@ -132,19 +132,19 @@ func TestTenantStage_Process(t *testing.T) {
 			config:         &TenantConfig{Source: "tenant_id"},
 			inputLabels:    model.LabelSet{client.ReservedLabelTenantID: "foo"},
 			inputExtracted: map[string]interface{}{},
-			expectedTenant: lokiutil.StringRef("foo"),
+			expectedTenant: valiutil.StringRef("foo"),
 		},
 		"should set the tenant if the source field is defined in the extracted map": {
 			config:         &TenantConfig{Source: "tenant_id"},
 			inputLabels:    model.LabelSet{},
 			inputExtracted: map[string]interface{}{"tenant_id": "bar"},
-			expectedTenant: lokiutil.StringRef("bar"),
+			expectedTenant: valiutil.StringRef("bar"),
 		},
 		"should override the tenant if the source field is defined in the extracted map": {
 			config:         &TenantConfig{Source: "tenant_id"},
 			inputLabels:    model.LabelSet{client.ReservedLabelTenantID: "foo"},
 			inputExtracted: map[string]interface{}{"tenant_id": "bar"},
-			expectedTenant: lokiutil.StringRef("bar"),
+			expectedTenant: valiutil.StringRef("bar"),
 		},
 		"should not set the tenant if the source field data type can't be converted to string": {
 			config:         &TenantConfig{Source: "tenant_id"},
@@ -156,13 +156,13 @@ func TestTenantStage_Process(t *testing.T) {
 			config:         &TenantConfig{Value: "bar"},
 			inputLabels:    model.LabelSet{},
 			inputExtracted: map[string]interface{}{},
-			expectedTenant: lokiutil.StringRef("bar"),
+			expectedTenant: valiutil.StringRef("bar"),
 		},
 		"should override the tenant with the configured static value": {
 			config:         &TenantConfig{Value: "bar"},
 			inputLabels:    model.LabelSet{client.ReservedLabelTenantID: "foo"},
 			inputExtracted: map[string]interface{}{},
-			expectedTenant: lokiutil.StringRef("bar"),
+			expectedTenant: valiutil.StringRef("bar"),
 		},
 	}
 

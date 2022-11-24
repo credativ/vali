@@ -4,7 +4,7 @@ import (
 	"flag"
 	"time"
 
-	"github.com/grafana/loki/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/util/flagext"
 )
 
 const (
@@ -278,7 +278,7 @@ func (o *Overrides) EvaluationDelay(userID string) time.Duration {
 }
 
 // RulerTenantShardSize returns shard size (number of rulers) used by this tenant when using shuffle-sharding strategy.
-// Not used in Loki.
+// Not used in Vali.
 func (o *Overrides) RulerTenantShardSize(userID string) int {
 	return 0
 }

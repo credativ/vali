@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/grafana/loki/pkg/loghttp"
+	"github.com/credativ/vali/pkg/loghttp"
 )
 
 // JSONLOutput prints logs and metadata as JSON Lines, suitable for scripts

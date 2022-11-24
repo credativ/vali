@@ -1,5 +1,5 @@
-(import 'dashboards/loki-chunks.libsonnet') +
-(import 'dashboards/loki-logs.libsonnet') +
-(import 'dashboards/loki-operational.libsonnet') +
-(import 'dashboards/loki-reads.libsonnet') +
-(import 'dashboards/loki-writes.libsonnet')
+(import 'dashboards/vali-chunks.libsonnet') +
+(import 'dashboards/vali-logs.libsonnet') +
+(import 'dashboards/vali-operational.libsonnet') +
+(import 'dashboards/vali-reads.libsonnet') +
+(import 'dashboards/vali-writes.libsonnet')

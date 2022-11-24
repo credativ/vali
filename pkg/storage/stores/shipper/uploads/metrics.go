@@ -17,7 +17,7 @@ type metrics struct {
 func newMetrics(r prometheus.Registerer) *metrics {
 	return &metrics{
 		tablesUploadOperationTotal: promauto.With(r).NewCounterVec(prometheus.CounterOpts{
-			Namespace: "loki_boltdb_shipper",
+			Namespace: "vali_boltdb_shipper",
 			Name:      "tables_upload_operation_total",
 			Help:      "Total number of upload operations done by status",
 		}, []string{"status"}),

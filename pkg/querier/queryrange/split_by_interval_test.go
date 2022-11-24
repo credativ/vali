@@ -13,8 +13,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logproto"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logproto"
 )
 
 var nilMetrics = NewSplitByMetrics(nil)
@@ -28,13 +28,13 @@ func Test_splitQuery(t *testing.T) {
 	}{
 		{
 			"smaller request than interval",
-			&LokiRequest{
+			&ValiRequest{
 				StartTs: time.Date(2019, 12, 9, 12, 0, 0, 1, time.UTC),
 				EndTs:   time.Date(2019, 12, 9, 12, 30, 0, 0, time.UTC),
 			},
 			time.Hour,
 			[]queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Date(2019, 12, 9, 12, 0, 0, 1, time.UTC),
 					EndTs:   time.Date(2019, 12, 9, 12, 30, 0, 0, time.UTC),
 				},
@@ -42,13 +42,13 @@ func Test_splitQuery(t *testing.T) {
 		},
 		{
 			"exactly 1 interval",
-			&LokiRequest{
+			&ValiRequest{
 				StartTs: time.Date(2019, 12, 9, 12, 1, 0, 0, time.UTC),
 				EndTs:   time.Date(2019, 12, 9, 13, 1, 0, 0, time.UTC),
 			},
 			time.Hour,
 			[]queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Date(2019, 12, 9, 12, 1, 0, 0, time.UTC),
 					EndTs:   time.Date(2019, 12, 9, 13, 1, 0, 0, time.UTC),
 				},
@@ -56,17 +56,17 @@ func Test_splitQuery(t *testing.T) {
 		},
 		{
 			"2 intervals",
-			&LokiRequest{
+			&ValiRequest{
 				StartTs: time.Date(2019, 12, 9, 12, 0, 0, 1, time.UTC),
 				EndTs:   time.Date(2019, 12, 9, 13, 0, 0, 2, time.UTC),
 			},
 			time.Hour,
 			[]queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Date(2019, 12, 9, 12, 0, 0, 1, time.UTC),
 					EndTs:   time.Date(2019, 12, 9, 13, 0, 0, 1, time.UTC),
 				},
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Date(2019, 12, 9, 13, 0, 0, 1, time.UTC),
 					EndTs:   time.Date(2019, 12, 9, 13, 0, 0, 2, time.UTC),
 				},
@@ -74,21 +74,21 @@ func Test_splitQuery(t *testing.T) {
 		},
 		{
 			"3 intervals series",
-			&LokiSeriesRequest{
+			&ValiSeriesRequest{
 				StartTs: time.Date(2019, 12, 9, 12, 0, 0, 1, time.UTC),
 				EndTs:   time.Date(2019, 12, 9, 16, 0, 0, 2, time.UTC),
 			},
 			2 * time.Hour,
 			[]queryrange.Request{
-				&LokiSeriesRequest{
+				&ValiSeriesRequest{
 					StartTs: time.Date(2019, 12, 9, 12, 0, 0, 1, time.UTC),
 					EndTs:   time.Date(2019, 12, 9, 14, 0, 0, 1, time.UTC),
 				},
-				&LokiSeriesRequest{
+				&ValiSeriesRequest{
 					StartTs: time.Date(2019, 12, 9, 14, 0, 0, 1, time.UTC),
 					EndTs:   time.Date(2019, 12, 9, 16, 0, 0, 1, time.UTC),
 				},
-				&LokiSeriesRequest{
+				&ValiSeriesRequest{
 					StartTs: time.Date(2019, 12, 9, 16, 0, 0, 1, time.UTC),
 					EndTs:   time.Date(2019, 12, 9, 16, 0, 0, 2, time.UTC),
 				},
@@ -112,13 +112,13 @@ func Test_splitMetricQuery(t *testing.T) {
 	}{
 		// the step is lower than the interval therefore we should split only once.
 		{
-			input: &LokiRequest{
+			input: &ValiRequest{
 				StartTs: time.Unix(0, 0),
 				EndTs:   time.Unix(0, 60*time.Minute.Nanoseconds()),
 				Step:    15 * seconds,
 			},
 			expected: []queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(0, 0),
 					EndTs:   time.Unix(0, 60*time.Minute.Nanoseconds()),
 					Step:    15 * seconds,
@@ -127,13 +127,13 @@ func Test_splitMetricQuery(t *testing.T) {
 			interval: 24 * time.Hour,
 		},
 		{
-			input: &LokiRequest{
+			input: &ValiRequest{
 				StartTs: time.Unix(0, 0),
 				EndTs:   time.Unix(60*60, 0),
 				Step:    15 * seconds,
 			},
 			expected: []queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(0, 0),
 					EndTs:   time.Unix(60*60, 0),
 					Step:    15 * seconds,
@@ -142,13 +142,13 @@ func Test_splitMetricQuery(t *testing.T) {
 			interval: 3 * time.Hour,
 		},
 		{
-			input: &LokiRequest{
+			input: &ValiRequest{
 				StartTs: time.Unix(0, 0),
 				EndTs:   time.Unix(24*3600, 0),
 				Step:    15 * seconds,
 			},
 			expected: []queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(0, 0),
 					EndTs:   time.Unix(24*3600, 0),
 					Step:    15 * seconds,
@@ -157,13 +157,13 @@ func Test_splitMetricQuery(t *testing.T) {
 			interval: 24 * time.Hour,
 		},
 		{
-			input: &LokiRequest{
+			input: &ValiRequest{
 				StartTs: time.Unix(0, 0),
 				EndTs:   time.Unix(3*3600, 0),
 				Step:    15 * seconds,
 			},
 			expected: []queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(0, 0),
 					EndTs:   time.Unix(3*3600, 0),
 					Step:    15 * seconds,
@@ -172,18 +172,18 @@ func Test_splitMetricQuery(t *testing.T) {
 			interval: 3 * time.Hour,
 		},
 		{
-			input: &LokiRequest{
+			input: &ValiRequest{
 				StartTs: time.Unix(0, 0),
 				EndTs:   time.Unix(2*24*3600, 0),
 				Step:    15 * seconds,
 			},
 			expected: []queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(0, 0),
 					EndTs:   time.Unix((24*3600)-15, 0),
 					Step:    15 * seconds,
 				},
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix((24 * 3600), 0),
 					EndTs:   time.Unix((2 * 24 * 3600), 0),
 					Step:    15 * seconds,
@@ -192,18 +192,18 @@ func Test_splitMetricQuery(t *testing.T) {
 			interval: 24 * time.Hour,
 		},
 		{
-			input: &LokiRequest{
+			input: &ValiRequest{
 				StartTs: time.Unix(0, 0),
 				EndTs:   time.Unix(2*3*3600, 0),
 				Step:    15 * seconds,
 			},
 			expected: []queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(0, 0),
 					EndTs:   time.Unix((3*3600)-15, 0),
 					Step:    15 * seconds,
 				},
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix((3 * 3600), 0),
 					EndTs:   time.Unix((2 * 3 * 3600), 0),
 					Step:    15 * seconds,
@@ -212,23 +212,23 @@ func Test_splitMetricQuery(t *testing.T) {
 			interval: 3 * time.Hour,
 		},
 		{
-			input: &LokiRequest{
+			input: &ValiRequest{
 				StartTs: time.Unix(3*3600, 0),
 				EndTs:   time.Unix(3*24*3600, 0),
 				Step:    15 * seconds,
 			},
 			expected: []queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(3*3600, 0),
 					EndTs:   time.Unix((24*3600)-15, 0),
 					Step:    15 * seconds,
 				},
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(24*3600, 0),
 					EndTs:   time.Unix((2*24*3600)-15, 0),
 					Step:    15 * seconds,
 				},
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(2*24*3600, 0),
 					EndTs:   time.Unix(3*24*3600, 0),
 					Step:    15 * seconds,
@@ -237,23 +237,23 @@ func Test_splitMetricQuery(t *testing.T) {
 			interval: 24 * time.Hour,
 		},
 		{
-			input: &LokiRequest{
+			input: &ValiRequest{
 				StartTs: time.Unix(2*3600, 0),
 				EndTs:   time.Unix(3*3*3600, 0),
 				Step:    15 * seconds,
 			},
 			expected: []queryrange.Request{
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(2*3600, 0),
 					EndTs:   time.Unix((3*3600)-15, 0),
 					Step:    15 * seconds,
 				},
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(3*3600, 0),
 					EndTs:   time.Unix((2*3*3600)-15, 0),
 					Step:    15 * seconds,
 				},
-				&LokiRequest{
+				&ValiRequest{
 					StartTs: time.Unix(2*3*3600, 0),
 					EndTs:   time.Unix(3*3*3600, 0),
 					Step:    15 * seconds,
@@ -272,19 +272,19 @@ func Test_splitMetricQuery(t *testing.T) {
 func Test_splitByInterval_Do(t *testing.T) {
 	ctx := user.InjectOrgID(context.Background(), "1")
 	next := queryrange.HandlerFunc(func(_ context.Context, r queryrange.Request) (queryrange.Response, error) {
-		return &LokiResponse{
+		return &ValiResponse{
 			Status:    loghttp.QueryStatusSuccess,
-			Direction: r.(*LokiRequest).Direction,
-			Limit:     r.(*LokiRequest).Limit,
+			Direction: r.(*ValiRequest).Direction,
+			Limit:     r.(*ValiRequest).Limit,
 			Version:   uint32(loghttp.VersionV1),
-			Data: LokiData{
+			Data: ValiData{
 				ResultType: loghttp.ResultTypeStream,
 				Result: []logproto.Stream{
 					{
 						Labels: `{foo="bar", level="debug"}`,
 						Entries: []logproto.Entry{
 
-							{Timestamp: time.Unix(0, r.(*LokiRequest).StartTs.UnixNano()), Line: fmt.Sprintf("%d", r.(*LokiRequest).StartTs.UnixNano())},
+							{Timestamp: time.Unix(0, r.(*ValiRequest).StartTs.UnixNano()), Line: fmt.Sprintf("%d", r.(*ValiRequest).StartTs.UnixNano())},
 						},
 					},
 				},
@@ -295,19 +295,19 @@ func Test_splitByInterval_Do(t *testing.T) {
 	l := WithDefaultLimits(fakeLimits{}, queryrange.Config{SplitQueriesByInterval: time.Hour})
 	split := SplitByIntervalMiddleware(
 		l,
-		lokiCodec,
+		valiCodec,
 		splitByTime,
 		nilMetrics,
 	).Wrap(next)
 
 	tests := []struct {
 		name string
-		req  *LokiRequest
-		want *LokiResponse
+		req  *ValiRequest
+		want *ValiResponse
 	}{
 		{
 			"backward",
-			&LokiRequest{
+			&ValiRequest{
 				StartTs:   time.Unix(0, 0),
 				EndTs:     time.Unix(0, (4 * time.Hour).Nanoseconds()),
 				Query:     "",
@@ -316,12 +316,12 @@ func Test_splitByInterval_Do(t *testing.T) {
 				Direction: logproto.BACKWARD,
 				Path:      "/api/prom/query_range",
 			},
-			&LokiResponse{
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.BACKWARD,
 				Limit:     1000,
 				Version:   1,
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result: []logproto.Stream{
 						{
@@ -339,7 +339,7 @@ func Test_splitByInterval_Do(t *testing.T) {
 		},
 		{
 			"forward",
-			&LokiRequest{
+			&ValiRequest{
 				StartTs:   time.Unix(0, 0),
 				EndTs:     time.Unix(0, (4 * time.Hour).Nanoseconds()),
 				Query:     "",
@@ -348,12 +348,12 @@ func Test_splitByInterval_Do(t *testing.T) {
 				Direction: logproto.FORWARD,
 				Path:      "/api/prom/query_range",
 			},
-			&LokiResponse{
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.FORWARD,
 				Limit:     1000,
 				Version:   1,
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result: []logproto.Stream{
 						{
@@ -371,7 +371,7 @@ func Test_splitByInterval_Do(t *testing.T) {
 		},
 		{
 			"forward limited",
-			&LokiRequest{
+			&ValiRequest{
 				StartTs:   time.Unix(0, 0),
 				EndTs:     time.Unix(0, (4 * time.Hour).Nanoseconds()),
 				Query:     "",
@@ -380,12 +380,12 @@ func Test_splitByInterval_Do(t *testing.T) {
 				Direction: logproto.FORWARD,
 				Path:      "/api/prom/query_range",
 			},
-			&LokiResponse{
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.FORWARD,
 				Limit:     2,
 				Version:   1,
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result: []logproto.Stream{
 						{
@@ -401,7 +401,7 @@ func Test_splitByInterval_Do(t *testing.T) {
 		},
 		{
 			"backward limited",
-			&LokiRequest{
+			&ValiRequest{
 				StartTs:   time.Unix(0, 0),
 				EndTs:     time.Unix(0, (4 * time.Hour).Nanoseconds()),
 				Query:     "",
@@ -410,12 +410,12 @@ func Test_splitByInterval_Do(t *testing.T) {
 				Direction: logproto.BACKWARD,
 				Path:      "/api/prom/query_range",
 			},
-			&LokiResponse{
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.BACKWARD,
 				Limit:     2,
 				Version:   1,
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result: []logproto.Stream{
 						{
@@ -443,7 +443,7 @@ func Test_splitByInterval_Do(t *testing.T) {
 func Test_series_splitByInterval_Do(t *testing.T) {
 	ctx := user.InjectOrgID(context.Background(), "1")
 	next := queryrange.HandlerFunc(func(_ context.Context, r queryrange.Request) (queryrange.Response, error) {
-		return &LokiSeriesResponse{
+		return &ValiSeriesResponse{
 			Status:  "success",
 			Version: uint32(loghttp.VersionV1),
 			Data: []logproto.SeriesIdentifier{
@@ -463,25 +463,25 @@ func Test_series_splitByInterval_Do(t *testing.T) {
 	l := WithDefaultLimits(fakeLimits{}, queryrange.Config{SplitQueriesByInterval: time.Hour})
 	split := SplitByIntervalMiddleware(
 		l,
-		lokiCodec,
+		valiCodec,
 		splitByTime,
 		nilMetrics,
 	).Wrap(next)
 
 	tests := []struct {
 		name string
-		req  *LokiSeriesRequest
-		want *LokiSeriesResponse
+		req  *ValiSeriesRequest
+		want *ValiSeriesResponse
 	}{
 		{
 			"backward",
-			&LokiSeriesRequest{
+			&ValiSeriesRequest{
 				StartTs: time.Unix(0, 0),
 				EndTs:   time.Unix(0, (4 * time.Hour).Nanoseconds()),
 				Match:   []string{`{job="varlogs"}`},
-				Path:    "/loki/api/v1/series",
+				Path:    "/vali/api/v1/series",
 			},
-			&LokiSeriesResponse{
+			&ValiSeriesResponse{
 				Status:  "success",
 				Version: 1,
 				Data: []logproto.SeriesIdentifier{
@@ -518,12 +518,12 @@ func Test_ExitEarly(t *testing.T) {
 		defer mtx.Unlock()
 		callCt++
 
-		return &LokiResponse{
+		return &ValiResponse{
 			Status:    loghttp.QueryStatusSuccess,
-			Direction: r.(*LokiRequest).Direction,
-			Limit:     r.(*LokiRequest).Limit,
+			Direction: r.(*ValiRequest).Direction,
+			Limit:     r.(*ValiRequest).Limit,
 			Version:   uint32(loghttp.VersionV1),
-			Data: LokiData{
+			Data: ValiData{
 				ResultType: loghttp.ResultTypeStream,
 				Result: []logproto.Stream{
 					{
@@ -531,8 +531,8 @@ func Test_ExitEarly(t *testing.T) {
 						Entries: []logproto.Entry{
 
 							{
-								Timestamp: time.Unix(0, r.(*LokiRequest).StartTs.UnixNano()),
-								Line:      fmt.Sprintf("%d", r.(*LokiRequest).StartTs.UnixNano()),
+								Timestamp: time.Unix(0, r.(*ValiRequest).StartTs.UnixNano()),
+								Line:      fmt.Sprintf("%d", r.(*ValiRequest).StartTs.UnixNano()),
 							},
 						},
 					},
@@ -544,12 +544,12 @@ func Test_ExitEarly(t *testing.T) {
 	l := WithDefaultLimits(fakeLimits{}, queryrange.Config{SplitQueriesByInterval: time.Hour})
 	split := SplitByIntervalMiddleware(
 		l,
-		lokiCodec,
+		valiCodec,
 		splitByTime,
 		nilMetrics,
 	).Wrap(next)
 
-	req := &LokiRequest{
+	req := &ValiRequest{
 		StartTs:   time.Unix(0, 0),
 		EndTs:     time.Unix(0, (4 * time.Hour).Nanoseconds()),
 		Query:     "",
@@ -559,12 +559,12 @@ func Test_ExitEarly(t *testing.T) {
 		Path:      "/api/prom/query_range",
 	}
 
-	expected := &LokiResponse{
+	expected := &ValiResponse{
 		Status:    loghttp.QueryStatusSuccess,
 		Direction: logproto.FORWARD,
 		Limit:     2,
 		Version:   1,
-		Data: LokiData{
+		Data: ValiData{
 			ResultType: loghttp.ResultTypeStream,
 			Result: []logproto.Stream{
 				{
@@ -595,12 +595,12 @@ func Test_DoesntDeadlock(t *testing.T) {
 	n := 10
 
 	next := queryrange.HandlerFunc(func(_ context.Context, r queryrange.Request) (queryrange.Response, error) {
-		return &LokiResponse{
+		return &ValiResponse{
 			Status:    loghttp.QueryStatusSuccess,
-			Direction: r.(*LokiRequest).Direction,
-			Limit:     r.(*LokiRequest).Limit,
+			Direction: r.(*ValiRequest).Direction,
+			Limit:     r.(*ValiRequest).Limit,
 			Version:   uint32(loghttp.VersionV1),
-			Data: LokiData{
+			Data: ValiData{
 				ResultType: loghttp.ResultTypeStream,
 				Result: []logproto.Stream{
 					{
@@ -608,8 +608,8 @@ func Test_DoesntDeadlock(t *testing.T) {
 						Entries: []logproto.Entry{
 
 							{
-								Timestamp: time.Unix(0, r.(*LokiRequest).StartTs.UnixNano()),
-								Line:      fmt.Sprintf("%d", r.(*LokiRequest).StartTs.UnixNano()),
+								Timestamp: time.Unix(0, r.(*ValiRequest).StartTs.UnixNano()),
+								Line:      fmt.Sprintf("%d", r.(*ValiRequest).StartTs.UnixNano()),
 							},
 						},
 					},
@@ -623,13 +623,13 @@ func Test_DoesntDeadlock(t *testing.T) {
 	}, queryrange.Config{SplitQueriesByInterval: time.Hour})
 	split := SplitByIntervalMiddleware(
 		l,
-		lokiCodec,
+		valiCodec,
 		splitByTime,
 		nilMetrics,
 	).Wrap(next)
 
 	// split into n requests w/ n/2 limit, ensuring unused responses are cleaned up properly
-	req := &LokiRequest{
+	req := &ValiRequest{
 		StartTs:   time.Unix(0, 0),
 		EndTs:     time.Unix(0, (time.Duration(n) * time.Hour).Nanoseconds()),
 		Query:     "",
@@ -647,8 +647,8 @@ func Test_DoesntDeadlock(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		res, err := split.Do(ctx, req)
 		require.NoError(t, err)
-		require.Equal(t, 1, len(res.(*LokiResponse).Data.Result))
-		require.Equal(t, n/2, len(res.(*LokiResponse).Data.Result[0].Entries))
+		require.Equal(t, 1, len(res.(*ValiResponse).Data.Result))
+		require.Equal(t, n/2, len(res.(*ValiResponse).Data.Result[0].Entries))
 
 	}
 	runtime.GC()

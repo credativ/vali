@@ -17,12 +17,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/chunkenc"
-	"github.com/grafana/loki/pkg/ingester/client"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/log"
-	"github.com/grafana/loki/pkg/util/runtime"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/chunkenc"
+	"github.com/credativ/vali/pkg/ingester/client"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/log"
+	"github.com/credativ/vali/pkg/util/runtime"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 // small util for ensuring data exists as we expect
@@ -56,7 +56,7 @@ func defaultIngesterTestConfigWithWAL(t *testing.T, walDir string) Config {
 }
 
 func TestIngesterWAL(t *testing.T) {
-	walDir, err := ioutil.TempDir(os.TempDir(), "loki-wal")
+	walDir, err := ioutil.TempDir(os.TempDir(), "vali-wal")
 	require.Nil(t, err)
 	defer os.RemoveAll(walDir)
 
@@ -138,7 +138,7 @@ func TestIngesterWAL(t *testing.T) {
 }
 
 func TestIngesterWALIgnoresStreamLimits(t *testing.T) {
-	walDir, err := ioutil.TempDir(os.TempDir(), "loki-wal")
+	walDir, err := ioutil.TempDir(os.TempDir(), "vali-wal")
 	require.Nil(t, err)
 	defer os.RemoveAll(walDir)
 
@@ -243,7 +243,7 @@ func TestUnflushedChunks(t *testing.T) {
 
 func TestIngesterWALBackpressureSegments(t *testing.T) {
 
-	walDir, err := ioutil.TempDir(os.TempDir(), "loki-wal")
+	walDir, err := ioutil.TempDir(os.TempDir(), "vali-wal")
 	require.Nil(t, err)
 	defer os.RemoveAll(walDir)
 
@@ -288,7 +288,7 @@ func TestIngesterWALBackpressureSegments(t *testing.T) {
 
 func TestIngesterWALBackpressureCheckpoint(t *testing.T) {
 
-	walDir, err := ioutil.TempDir(os.TempDir(), "loki-wal")
+	walDir, err := ioutil.TempDir(os.TempDir(), "vali-wal")
 	require.Nil(t, err)
 	defer os.RemoveAll(walDir)
 

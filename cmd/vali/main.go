@@ -13,22 +13,22 @@ import (
 	"github.com/weaveworks/common/logging"
 	"github.com/weaveworks/common/tracing"
 
-	_ "github.com/grafana/loki/pkg/build"
-	"github.com/grafana/loki/pkg/cfg"
-	"github.com/grafana/loki/pkg/loki"
-	logutil "github.com/grafana/loki/pkg/util"
+	_ "github.com/credativ/vali/pkg/build"
+	"github.com/credativ/vali/pkg/cfg"
+	"github.com/credativ/vali/pkg/vali"
+	logutil "github.com/credativ/vali/pkg/util"
 
 	util_log "github.com/cortexproject/cortex/pkg/util/log"
 
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 func init() {
-	prometheus.MustRegister(version.NewCollector("loki"))
+	prometheus.MustRegister(version.NewCollector("vali"))
 }
 
 type Config struct {
-	loki.Config     `yaml:",inline"`
+	vali.Config     `yaml:",inline"`
 	printVersion    bool
 	verifyConfig    bool
 	printConfig     bool
@@ -40,8 +40,8 @@ type Config struct {
 func (c *Config) RegisterFlags(f *flag.FlagSet) {
 	f.BoolVar(&c.printVersion, "version", false, "Print this builds version information")
 	f.BoolVar(&c.verifyConfig, "verify-config", false, "Verify config file and exits")
-	f.BoolVar(&c.printConfig, "print-config-stderr", false, "Dump the entire Loki config object to stderr")
-	f.BoolVar(&c.logConfig, "log-config-reverse-order", false, "Dump the entire Loki config object at Info log "+
+	f.BoolVar(&c.printConfig, "print-config-stderr", false, "Dump the entire Vali config object to stderr")
+	f.BoolVar(&c.logConfig, "log-config-reverse-order", false, "Dump the entire Vali config object at Info log "+
 		"level with the order reversed, reversing the order makes viewing the entries easier in Grafana.")
 	f.StringVar(&c.configFile, "config.file", "", "yaml file to load")
 	f.BoolVar(&c.configExpandEnv, "config.expand-env", false, "Expands ${var} in config according to the values of the environment variables.")
@@ -64,7 +64,7 @@ func main() {
 		os.Exit(1)
 	}
 	if config.printVersion {
-		fmt.Println(version.Print("loki"))
+		fmt.Println(version.Print("vali"))
 		os.Exit(0)
 	}
 
@@ -109,7 +109,7 @@ func main() {
 
 	if config.Tracing.Enabled {
 		// Setting the environment variable JAEGER_AGENT_HOST enables tracing
-		trace, err := tracing.NewFromEnv(fmt.Sprintf("loki-%s", config.Target))
+		trace, err := tracing.NewFromEnv(fmt.Sprintf("vali-%s", config.Target))
 		if err != nil {
 			level.Error(util_log.Logger).Log("msg", "error in initializing tracing. tracing will not be enabled", "err", err)
 		}
@@ -123,12 +123,12 @@ func main() {
 		}()
 	}
 
-	// Start Loki
-	t, err := loki.New(config.Config)
-	util_log.CheckFatal("initialising loki", err)
+	// Start Vali
+	t, err := vali.New(config.Config)
+	util_log.CheckFatal("initialising vali", err)
 
-	level.Info(util_log.Logger).Log("msg", "Starting Loki", "version", version.Info())
+	level.Info(util_log.Logger).Log("msg", "Starting Vali", "version", version.Info())
 
 	err = t.Run()
-	util_log.CheckFatal("running loki", err)
+	util_log.CheckFatal("running vali", err)
 }

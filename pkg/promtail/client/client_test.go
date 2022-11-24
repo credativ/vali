@@ -19,9 +19,9 @@ import (
 	"github.com/prometheus/common/config"
 	"github.com/prometheus/common/model"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
-	lokiflag "github.com/grafana/loki/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
+	valiflag "github.com/credativ/vali/pkg/util/flagext"
 )
 
 var logEntries = []api.Entry{
@@ -258,7 +258,7 @@ func TestClient_Handle(t *testing.T) {
 				BatchSize:      testData.clientBatchSize,
 				Client:         config.HTTPClientConfig{},
 				BackoffConfig:  util.BackoffConfig{MinBackoff: 1 * time.Millisecond, MaxBackoff: 2 * time.Millisecond, MaxRetries: testData.clientMaxRetries},
-				ExternalLabels: lokiflag.LabelSet{},
+				ExternalLabels: valiflag.LabelSet{},
 				Timeout:        1 * time.Second,
 				TenantID:       testData.clientTenantID,
 			}
@@ -390,7 +390,7 @@ func TestClient_StopNow(t *testing.T) {
 				BatchSize:      c.clientBatchSize,
 				Client:         config.HTTPClientConfig{},
 				BackoffConfig:  util.BackoffConfig{MinBackoff: 5 * time.Second, MaxBackoff: 10 * time.Second, MaxRetries: c.clientMaxRetries},
-				ExternalLabels: lokiflag.LabelSet{},
+				ExternalLabels: valiflag.LabelSet{},
 				Timeout:        1 * time.Second,
 				TenantID:       c.clientTenantID,
 			}

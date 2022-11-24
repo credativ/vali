@@ -31,13 +31,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/logentry/stages"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/client"
-	"github.com/grafana/loki/pkg/promtail/config"
-	"github.com/grafana/loki/pkg/promtail/positions"
-	"github.com/grafana/loki/pkg/promtail/scrapeconfig"
-	file2 "github.com/grafana/loki/pkg/promtail/targets/file"
+	"github.com/credativ/vali/pkg/logentry/stages"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/client"
+	"github.com/credativ/vali/pkg/promtail/config"
+	"github.com/credativ/vali/pkg/promtail/positions"
+	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	file2 "github.com/credativ/vali/pkg/promtail/targets/file"
 )
 
 const httpTestPort = 9080
@@ -74,7 +74,7 @@ func TestPromtail(t *testing.T) {
 		recMtx:         sync.Mutex{},
 		t:              t,
 	}
-	http.Handle("/loki/api/v1/push", handler)
+	http.Handle("/vali/api/v1/push", handler)
 	var (
 		wg        sync.WaitGroup
 		listenErr error
@@ -539,7 +539,7 @@ func parsePromMetrics(t *testing.T, bytes []byte, contentType string, metricName
 
 func buildTestConfig(t *testing.T, positionsFileName string, logDirName string) config.Config {
 	var clientURL flagext.URLValue
-	err := clientURL.Set("http://localhost:3100/loki/api/v1/push")
+	err := clientURL.Set("http://localhost:3100/vali/api/v1/push")
 	if err != nil {
 		t.Fatal("Failed to parse client URL")
 	}

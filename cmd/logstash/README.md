@@ -1,4 +1,4 @@
-# Contributing to Loki Logstash Output Plugin
+# Contributing to Vali Logstash Output Plugin
 
 For information about how to use this plugin see this [documentation](../../docs/sources/clients/logstash/_index.md).
 
@@ -53,24 +53,24 @@ ruby -S bundle exec rake vendor
 
 ### Build the plugin
 
-`gem build logstash-output-loki.gemspec`
+`gem build logstash-output-vali.gemspec`
 
 ### Test
 
 `ruby -S bundle exec rspec`
 
-Alternatively if you don't want to install JRuby. Enter inside logstash-loki container.
+Alternatively if you don't want to install JRuby. Enter inside logstash-vali container.
 
 ```bash
-docker build -t logstash-loki ./
-docker run -v  `pwd`/spec:/home/logstash/spec -it --rm --entrypoint /bin/sh logstash-loki
+docker build -t logstash-vali ./
+docker run -v  `pwd`/spec:/home/logstash/spec -it --rm --entrypoint /bin/sh logstash-vali
 bundle exec rspec
 ```
 
 ## Install plugin to local logstash
 
-`bin/logstash-plugin install --no-verify --local logstash-output-loki-1.0.0.gem`
+`bin/logstash-plugin install --no-verify --local logstash-output-vali-1.0.0.gem`
 
 ## Send sample event and check plugin is working
 
-`bin/logstash -f loki.conf`
+`bin/logstash -f vali.conf`

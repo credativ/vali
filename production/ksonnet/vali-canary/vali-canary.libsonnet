@@ -9,15 +9,15 @@ k + config {
 
   local container = $.core.v1.container,
 
-  loki_canary_args:: {
+  vali_canary_args:: {
     labelvalue: '$(POD_NAME)',
   },
 
-  loki_canary_container::
-    container.new('loki-canary', $._images.loki_canary) +
+  vali_canary_container::
+    container.new('vali-canary', $._images.vali_canary) +
     $.util.resourcesRequests('10m', '20Mi') +
     container.withPorts($.core.v1.containerPort.new(name='http-metrics', port=80)) +
-    container.withArgsMixin($.util.mapToFlags($.loki_canary_args)) +
+    container.withArgsMixin($.util.mapToFlags($.vali_canary_args)) +
     container.withEnv([
       envVar.fromFieldPath('HOSTNAME', 'spec.nodeName'),
       envVar.fromFieldPath('POD_NAME', 'metadata.name'),
@@ -25,6 +25,6 @@ k + config {
 
   local daemonSet = $.apps.v1.daemonSet,
 
-  loki_canary_daemonset:
-    daemonSet.new('loki-canary', [$.loki_canary_container]),
+  vali_canary_daemonset:
+    daemonSet.new('vali-canary', [$.vali_canary_container]),
 }

@@ -37,8 +37,8 @@
       deployment.new('ruler', 2, [$.ruler_container]) +
       deployment.mixin.spec.template.spec.withTerminationGracePeriodSeconds(600) +
       $.config_hash_mixin +
-      $.util.configVolumeMount('loki', '/etc/loki/config') +
-      $.util.configVolumeMount('overrides', '/etc/loki/overrides') +
+      $.util.configVolumeMount('vali', '/etc/vali/config') +
+      $.util.configVolumeMount('overrides', '/etc/vali/overrides') +
       $.util.antiAffinity
     else {},
 
@@ -63,10 +63,10 @@
     statefulSet.mixin.spec.withServiceName('ruler') +
     statefulSet.mixin.spec.withPodManagementPolicy('Parallel') +
     $.config_hash_mixin +
-    $.util.configVolumeMount('loki', '/etc/loki/config') +
-    $.util.configVolumeMount('overrides', '/etc/loki/overrides') +
+    $.util.configVolumeMount('vali', '/etc/vali/config') +
+    $.util.configVolumeMount('overrides', '/etc/vali/overrides') +
     $.util.antiAffinity +
     statefulSet.mixin.spec.updateStrategy.withType('RollingUpdate') +
-    statefulSet.mixin.spec.template.spec.securityContext.withFsGroup(10001)  // 10001 is the group ID assigned to Loki in the Dockerfile
+    statefulSet.mixin.spec.template.spec.securityContext.withFsGroup(10001)  // 10001 is the group ID assigned to Vali in the Dockerfile
   else {},
 }

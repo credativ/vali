@@ -1,3 +1,3 @@
-# Deploy Loki to Kubernetes
+# Deploy Vali to Kubernetes
 
 See the [Tanka Installation Docs](../../docs/sources/installation/tanka.md)

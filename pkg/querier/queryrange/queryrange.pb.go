@@ -11,9 +11,9 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
 	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
-	github_com_grafana_loki_pkg_logproto "github.com/grafana/loki/pkg/logproto"
-	logproto "github.com/grafana/loki/pkg/logproto"
-	stats "github.com/grafana/loki/pkg/logql/stats"
+	github_com_grafana_vali_pkg_logproto "github.com/credativ/vali/pkg/logproto"
+	logproto "github.com/credativ/vali/pkg/logproto"
+	stats "github.com/credativ/vali/pkg/logql/stats"
 	io "io"
 	math "math"
 	reflect "reflect"
@@ -33,7 +33,7 @@ var _ = time.Kitchen
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
-type LokiRequest struct {
+type ValiRequest struct {
 	Query     string             `protobuf:"bytes,1,opt,name=query,proto3" json:"query,omitempty"`
 	Limit     uint32             `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	Step      int64              `protobuf:"varint,3,opt,name=step,proto3" json:"step,omitempty"`
@@ -44,17 +44,17 @@ type LokiRequest struct {
 	Shards    []string           `protobuf:"bytes,8,rep,name=shards,proto3" json:"shards"`
 }
 
-func (m *LokiRequest) Reset()      { *m = LokiRequest{} }
-func (*LokiRequest) ProtoMessage() {}
-func (*LokiRequest) Descriptor() ([]byte, []int) {
+func (m *ValiRequest) Reset()      { *m = ValiRequest{} }
+func (*ValiRequest) ProtoMessage() {}
+func (*ValiRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_51b9d53b40d11902, []int{0}
 }
-func (m *LokiRequest) XXX_Unmarshal(b []byte) error {
+func (m *ValiRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *LokiRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ValiRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_LokiRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ValiRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -64,77 +64,77 @@ func (m *LokiRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 		return b[:n], nil
 	}
 }
-func (m *LokiRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LokiRequest.Merge(m, src)
+func (m *ValiRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValiRequest.Merge(m, src)
 }
-func (m *LokiRequest) XXX_Size() int {
+func (m *ValiRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *LokiRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_LokiRequest.DiscardUnknown(m)
+func (m *ValiRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValiRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_LokiRequest proto.InternalMessageInfo
+var xxx_messageInfo_ValiRequest proto.InternalMessageInfo
 
-func (m *LokiRequest) GetQuery() string {
+func (m *ValiRequest) GetQuery() string {
 	if m != nil {
 		return m.Query
 	}
 	return ""
 }
 
-func (m *LokiRequest) GetLimit() uint32 {
+func (m *ValiRequest) GetLimit() uint32 {
 	if m != nil {
 		return m.Limit
 	}
 	return 0
 }
 
-func (m *LokiRequest) GetStep() int64 {
+func (m *ValiRequest) GetStep() int64 {
 	if m != nil {
 		return m.Step
 	}
 	return 0
 }
 
-func (m *LokiRequest) GetStartTs() time.Time {
+func (m *ValiRequest) GetStartTs() time.Time {
 	if m != nil {
 		return m.StartTs
 	}
 	return time.Time{}
 }
 
-func (m *LokiRequest) GetEndTs() time.Time {
+func (m *ValiRequest) GetEndTs() time.Time {
 	if m != nil {
 		return m.EndTs
 	}
 	return time.Time{}
 }
 
-func (m *LokiRequest) GetDirection() logproto.Direction {
+func (m *ValiRequest) GetDirection() logproto.Direction {
 	if m != nil {
 		return m.Direction
 	}
 	return logproto.FORWARD
 }
 
-func (m *LokiRequest) GetPath() string {
+func (m *ValiRequest) GetPath() string {
 	if m != nil {
 		return m.Path
 	}
 	return ""
 }
 
-func (m *LokiRequest) GetShards() []string {
+func (m *ValiRequest) GetShards() []string {
 	if m != nil {
 		return m.Shards
 	}
 	return nil
 }
 
-type LokiResponse struct {
+type ValiResponse struct {
 	Status     string                                                                            `protobuf:"bytes,1,opt,name=Status,proto3" json:"status"`
-	Data       LokiData                                                                          `protobuf:"bytes,2,opt,name=Data,proto3" json:"data,omitempty"`
+	Data       ValiData                                                                          `protobuf:"bytes,2,opt,name=Data,proto3" json:"data,omitempty"`
 	ErrorType  string                                                                            `protobuf:"bytes,3,opt,name=ErrorType,proto3" json:"errorType,omitempty"`
 	Error      string                                                                            `protobuf:"bytes,4,opt,name=Error,proto3" json:"error,omitempty"`
 	Direction  logproto.Direction                                                                `protobuf:"varint,5,opt,name=direction,proto3,enum=logproto.Direction" json:"direction,omitempty"`
@@ -144,17 +144,17 @@ type LokiResponse struct {
 	Headers    []github_com_cortexproject_cortex_pkg_querier_queryrange.PrometheusResponseHeader `protobuf:"bytes,9,rep,name=Headers,proto3,customtype=github.com/cortexproject/cortex/pkg/querier/queryrange.PrometheusResponseHeader" json:"-"`
 }
 
-func (m *LokiResponse) Reset()      { *m = LokiResponse{} }
-func (*LokiResponse) ProtoMessage() {}
-func (*LokiResponse) Descriptor() ([]byte, []int) {
+func (m *ValiResponse) Reset()      { *m = ValiResponse{} }
+func (*ValiResponse) ProtoMessage() {}
+func (*ValiResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_51b9d53b40d11902, []int{1}
 }
-func (m *LokiResponse) XXX_Unmarshal(b []byte) error {
+func (m *ValiResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *LokiResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ValiResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_LokiResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ValiResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -164,92 +164,92 @@ func (m *LokiResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error)
 		return b[:n], nil
 	}
 }
-func (m *LokiResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LokiResponse.Merge(m, src)
+func (m *ValiResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValiResponse.Merge(m, src)
 }
-func (m *LokiResponse) XXX_Size() int {
+func (m *ValiResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *LokiResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_LokiResponse.DiscardUnknown(m)
+func (m *ValiResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValiResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_LokiResponse proto.InternalMessageInfo
+var xxx_messageInfo_ValiResponse proto.InternalMessageInfo
 
-func (m *LokiResponse) GetStatus() string {
+func (m *ValiResponse) GetStatus() string {
 	if m != nil {
 		return m.Status
 	}
 	return ""
 }
 
-func (m *LokiResponse) GetData() LokiData {
+func (m *ValiResponse) GetData() ValiData {
 	if m != nil {
 		return m.Data
 	}
-	return LokiData{}
+	return ValiData{}
 }
 
-func (m *LokiResponse) GetErrorType() string {
+func (m *ValiResponse) GetErrorType() string {
 	if m != nil {
 		return m.ErrorType
 	}
 	return ""
 }
 
-func (m *LokiResponse) GetError() string {
+func (m *ValiResponse) GetError() string {
 	if m != nil {
 		return m.Error
 	}
 	return ""
 }
 
-func (m *LokiResponse) GetDirection() logproto.Direction {
+func (m *ValiResponse) GetDirection() logproto.Direction {
 	if m != nil {
 		return m.Direction
 	}
 	return logproto.FORWARD
 }
 
-func (m *LokiResponse) GetLimit() uint32 {
+func (m *ValiResponse) GetLimit() uint32 {
 	if m != nil {
 		return m.Limit
 	}
 	return 0
 }
 
-func (m *LokiResponse) GetVersion() uint32 {
+func (m *ValiResponse) GetVersion() uint32 {
 	if m != nil {
 		return m.Version
 	}
 	return 0
 }
 
-func (m *LokiResponse) GetStatistics() stats.Result {
+func (m *ValiResponse) GetStatistics() stats.Result {
 	if m != nil {
 		return m.Statistics
 	}
 	return stats.Result{}
 }
 
-type LokiSeriesRequest struct {
+type ValiSeriesRequest struct {
 	Match   []string  `protobuf:"bytes,1,rep,name=match,proto3" json:"match,omitempty"`
 	StartTs time.Time `protobuf:"bytes,2,opt,name=startTs,proto3,stdtime" json:"startTs"`
 	EndTs   time.Time `protobuf:"bytes,3,opt,name=endTs,proto3,stdtime" json:"endTs"`
 	Path    string    `protobuf:"bytes,4,opt,name=path,proto3" json:"path,omitempty"`
 }
 
-func (m *LokiSeriesRequest) Reset()      { *m = LokiSeriesRequest{} }
-func (*LokiSeriesRequest) ProtoMessage() {}
-func (*LokiSeriesRequest) Descriptor() ([]byte, []int) {
+func (m *ValiSeriesRequest) Reset()      { *m = ValiSeriesRequest{} }
+func (*ValiSeriesRequest) ProtoMessage() {}
+func (*ValiSeriesRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_51b9d53b40d11902, []int{2}
 }
-func (m *LokiSeriesRequest) XXX_Unmarshal(b []byte) error {
+func (m *ValiSeriesRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *LokiSeriesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ValiSeriesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_LokiSeriesRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ValiSeriesRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -259,64 +259,64 @@ func (m *LokiSeriesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return b[:n], nil
 	}
 }
-func (m *LokiSeriesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LokiSeriesRequest.Merge(m, src)
+func (m *ValiSeriesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValiSeriesRequest.Merge(m, src)
 }
-func (m *LokiSeriesRequest) XXX_Size() int {
+func (m *ValiSeriesRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *LokiSeriesRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_LokiSeriesRequest.DiscardUnknown(m)
+func (m *ValiSeriesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValiSeriesRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_LokiSeriesRequest proto.InternalMessageInfo
+var xxx_messageInfo_ValiSeriesRequest proto.InternalMessageInfo
 
-func (m *LokiSeriesRequest) GetMatch() []string {
+func (m *ValiSeriesRequest) GetMatch() []string {
 	if m != nil {
 		return m.Match
 	}
 	return nil
 }
 
-func (m *LokiSeriesRequest) GetStartTs() time.Time {
+func (m *ValiSeriesRequest) GetStartTs() time.Time {
 	if m != nil {
 		return m.StartTs
 	}
 	return time.Time{}
 }
 
-func (m *LokiSeriesRequest) GetEndTs() time.Time {
+func (m *ValiSeriesRequest) GetEndTs() time.Time {
 	if m != nil {
 		return m.EndTs
 	}
 	return time.Time{}
 }
 
-func (m *LokiSeriesRequest) GetPath() string {
+func (m *ValiSeriesRequest) GetPath() string {
 	if m != nil {
 		return m.Path
 	}
 	return ""
 }
 
-type LokiSeriesResponse struct {
+type ValiSeriesResponse struct {
 	Status  string                                                                            `protobuf:"bytes,1,opt,name=Status,proto3" json:"status"`
 	Data    []logproto.SeriesIdentifier                                                       `protobuf:"bytes,2,rep,name=Data,proto3" json:"data,omitempty"`
 	Version uint32                                                                            `protobuf:"varint,3,opt,name=version,proto3" json:"version,omitempty"`
 	Headers []github_com_cortexproject_cortex_pkg_querier_queryrange.PrometheusResponseHeader `protobuf:"bytes,4,rep,name=Headers,proto3,customtype=github.com/cortexproject/cortex/pkg/querier/queryrange.PrometheusResponseHeader" json:"-"`
 }
 
-func (m *LokiSeriesResponse) Reset()      { *m = LokiSeriesResponse{} }
-func (*LokiSeriesResponse) ProtoMessage() {}
-func (*LokiSeriesResponse) Descriptor() ([]byte, []int) {
+func (m *ValiSeriesResponse) Reset()      { *m = ValiSeriesResponse{} }
+func (*ValiSeriesResponse) ProtoMessage() {}
+func (*ValiSeriesResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_51b9d53b40d11902, []int{3}
 }
-func (m *LokiSeriesResponse) XXX_Unmarshal(b []byte) error {
+func (m *ValiSeriesResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *LokiSeriesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ValiSeriesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_LokiSeriesResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ValiSeriesResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -326,56 +326,56 @@ func (m *LokiSeriesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, 
 		return b[:n], nil
 	}
 }
-func (m *LokiSeriesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LokiSeriesResponse.Merge(m, src)
+func (m *ValiSeriesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValiSeriesResponse.Merge(m, src)
 }
-func (m *LokiSeriesResponse) XXX_Size() int {
+func (m *ValiSeriesResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *LokiSeriesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_LokiSeriesResponse.DiscardUnknown(m)
+func (m *ValiSeriesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValiSeriesResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_LokiSeriesResponse proto.InternalMessageInfo
+var xxx_messageInfo_ValiSeriesResponse proto.InternalMessageInfo
 
-func (m *LokiSeriesResponse) GetStatus() string {
+func (m *ValiSeriesResponse) GetStatus() string {
 	if m != nil {
 		return m.Status
 	}
 	return ""
 }
 
-func (m *LokiSeriesResponse) GetData() []logproto.SeriesIdentifier {
+func (m *ValiSeriesResponse) GetData() []logproto.SeriesIdentifier {
 	if m != nil {
 		return m.Data
 	}
 	return nil
 }
 
-func (m *LokiSeriesResponse) GetVersion() uint32 {
+func (m *ValiSeriesResponse) GetVersion() uint32 {
 	if m != nil {
 		return m.Version
 	}
 	return 0
 }
 
-type LokiLabelNamesRequest struct {
+type ValiLabelNamesRequest struct {
 	StartTs time.Time `protobuf:"bytes,1,opt,name=startTs,proto3,stdtime" json:"startTs"`
 	EndTs   time.Time `protobuf:"bytes,2,opt,name=endTs,proto3,stdtime" json:"endTs"`
 	Path    string    `protobuf:"bytes,3,opt,name=path,proto3" json:"path,omitempty"`
 }
 
-func (m *LokiLabelNamesRequest) Reset()      { *m = LokiLabelNamesRequest{} }
-func (*LokiLabelNamesRequest) ProtoMessage() {}
-func (*LokiLabelNamesRequest) Descriptor() ([]byte, []int) {
+func (m *ValiLabelNamesRequest) Reset()      { *m = ValiLabelNamesRequest{} }
+func (*ValiLabelNamesRequest) ProtoMessage() {}
+func (*ValiLabelNamesRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_51b9d53b40d11902, []int{4}
 }
-func (m *LokiLabelNamesRequest) XXX_Unmarshal(b []byte) error {
+func (m *ValiLabelNamesRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *LokiLabelNamesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ValiLabelNamesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_LokiLabelNamesRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ValiLabelNamesRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -385,57 +385,57 @@ func (m *LokiLabelNamesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *LokiLabelNamesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LokiLabelNamesRequest.Merge(m, src)
+func (m *ValiLabelNamesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValiLabelNamesRequest.Merge(m, src)
 }
-func (m *LokiLabelNamesRequest) XXX_Size() int {
+func (m *ValiLabelNamesRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *LokiLabelNamesRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_LokiLabelNamesRequest.DiscardUnknown(m)
+func (m *ValiLabelNamesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValiLabelNamesRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_LokiLabelNamesRequest proto.InternalMessageInfo
+var xxx_messageInfo_ValiLabelNamesRequest proto.InternalMessageInfo
 
-func (m *LokiLabelNamesRequest) GetStartTs() time.Time {
+func (m *ValiLabelNamesRequest) GetStartTs() time.Time {
 	if m != nil {
 		return m.StartTs
 	}
 	return time.Time{}
 }
 
-func (m *LokiLabelNamesRequest) GetEndTs() time.Time {
+func (m *ValiLabelNamesRequest) GetEndTs() time.Time {
 	if m != nil {
 		return m.EndTs
 	}
 	return time.Time{}
 }
 
-func (m *LokiLabelNamesRequest) GetPath() string {
+func (m *ValiLabelNamesRequest) GetPath() string {
 	if m != nil {
 		return m.Path
 	}
 	return ""
 }
 
-type LokiLabelNamesResponse struct {
+type ValiLabelNamesResponse struct {
 	Status  string                                                                            `protobuf:"bytes,1,opt,name=Status,proto3" json:"status"`
 	Data    []string                                                                          `protobuf:"bytes,2,rep,name=Data,proto3" json:"data,omitempty"`
 	Version uint32                                                                            `protobuf:"varint,3,opt,name=version,proto3" json:"version,omitempty"`
 	Headers []github_com_cortexproject_cortex_pkg_querier_queryrange.PrometheusResponseHeader `protobuf:"bytes,4,rep,name=Headers,proto3,customtype=github.com/cortexproject/cortex/pkg/querier/queryrange.PrometheusResponseHeader" json:"-"`
 }
 
-func (m *LokiLabelNamesResponse) Reset()      { *m = LokiLabelNamesResponse{} }
-func (*LokiLabelNamesResponse) ProtoMessage() {}
-func (*LokiLabelNamesResponse) Descriptor() ([]byte, []int) {
+func (m *ValiLabelNamesResponse) Reset()      { *m = ValiLabelNamesResponse{} }
+func (*ValiLabelNamesResponse) ProtoMessage() {}
+func (*ValiLabelNamesResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_51b9d53b40d11902, []int{5}
 }
-func (m *LokiLabelNamesResponse) XXX_Unmarshal(b []byte) error {
+func (m *ValiLabelNamesResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *LokiLabelNamesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ValiLabelNamesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_LokiLabelNamesResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ValiLabelNamesResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -445,55 +445,55 @@ func (m *LokiLabelNamesResponse) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *LokiLabelNamesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LokiLabelNamesResponse.Merge(m, src)
+func (m *ValiLabelNamesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValiLabelNamesResponse.Merge(m, src)
 }
-func (m *LokiLabelNamesResponse) XXX_Size() int {
+func (m *ValiLabelNamesResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *LokiLabelNamesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_LokiLabelNamesResponse.DiscardUnknown(m)
+func (m *ValiLabelNamesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValiLabelNamesResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_LokiLabelNamesResponse proto.InternalMessageInfo
+var xxx_messageInfo_ValiLabelNamesResponse proto.InternalMessageInfo
 
-func (m *LokiLabelNamesResponse) GetStatus() string {
+func (m *ValiLabelNamesResponse) GetStatus() string {
 	if m != nil {
 		return m.Status
 	}
 	return ""
 }
 
-func (m *LokiLabelNamesResponse) GetData() []string {
+func (m *ValiLabelNamesResponse) GetData() []string {
 	if m != nil {
 		return m.Data
 	}
 	return nil
 }
 
-func (m *LokiLabelNamesResponse) GetVersion() uint32 {
+func (m *ValiLabelNamesResponse) GetVersion() uint32 {
 	if m != nil {
 		return m.Version
 	}
 	return 0
 }
 
-type LokiData struct {
+type ValiData struct {
 	ResultType string                                        `protobuf:"bytes,1,opt,name=ResultType,proto3" json:"resultType"`
-	Result     []github_com_grafana_loki_pkg_logproto.Stream `protobuf:"bytes,2,rep,name=Result,proto3,customtype=github.com/grafana/loki/pkg/logproto.Stream" json:"result"`
+	Result     []github_com_grafana_vali_pkg_logproto.Stream `protobuf:"bytes,2,rep,name=Result,proto3,customtype=github.com/credativ/vali/pkg/logproto.Stream" json:"result"`
 }
 
-func (m *LokiData) Reset()      { *m = LokiData{} }
-func (*LokiData) ProtoMessage() {}
-func (*LokiData) Descriptor() ([]byte, []int) {
+func (m *ValiData) Reset()      { *m = ValiData{} }
+func (*ValiData) ProtoMessage() {}
+func (*ValiData) Descriptor() ([]byte, []int) {
 	return fileDescriptor_51b9d53b40d11902, []int{6}
 }
-func (m *LokiData) XXX_Unmarshal(b []byte) error {
+func (m *ValiData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *LokiData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ValiData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_LokiData.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ValiData.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -503,42 +503,42 @@ func (m *LokiData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *LokiData) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LokiData.Merge(m, src)
+func (m *ValiData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValiData.Merge(m, src)
 }
-func (m *LokiData) XXX_Size() int {
+func (m *ValiData) XXX_Size() int {
 	return m.Size()
 }
-func (m *LokiData) XXX_DiscardUnknown() {
-	xxx_messageInfo_LokiData.DiscardUnknown(m)
+func (m *ValiData) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValiData.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_LokiData proto.InternalMessageInfo
+var xxx_messageInfo_ValiData proto.InternalMessageInfo
 
-func (m *LokiData) GetResultType() string {
+func (m *ValiData) GetResultType() string {
 	if m != nil {
 		return m.ResultType
 	}
 	return ""
 }
 
-// LokiPromResponse wraps a Prometheus response with statistics.
-type LokiPromResponse struct {
+// ValiPromResponse wraps a Prometheus response with statistics.
+type ValiPromResponse struct {
 	Response   *queryrange.PrometheusResponse `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
 	Statistics stats.Result                   `protobuf:"bytes,2,opt,name=statistics,proto3" json:"statistics"`
 }
 
-func (m *LokiPromResponse) Reset()      { *m = LokiPromResponse{} }
-func (*LokiPromResponse) ProtoMessage() {}
-func (*LokiPromResponse) Descriptor() ([]byte, []int) {
+func (m *ValiPromResponse) Reset()      { *m = ValiPromResponse{} }
+func (*ValiPromResponse) ProtoMessage() {}
+func (*ValiPromResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_51b9d53b40d11902, []int{7}
 }
-func (m *LokiPromResponse) XXX_Unmarshal(b []byte) error {
+func (m *ValiPromResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *LokiPromResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ValiPromResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_LokiPromResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ValiPromResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -548,26 +548,26 @@ func (m *LokiPromResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *LokiPromResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LokiPromResponse.Merge(m, src)
+func (m *ValiPromResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValiPromResponse.Merge(m, src)
 }
-func (m *LokiPromResponse) XXX_Size() int {
+func (m *ValiPromResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *LokiPromResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_LokiPromResponse.DiscardUnknown(m)
+func (m *ValiPromResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValiPromResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_LokiPromResponse proto.InternalMessageInfo
+var xxx_messageInfo_ValiPromResponse proto.InternalMessageInfo
 
-func (m *LokiPromResponse) GetResponse() *queryrange.PrometheusResponse {
+func (m *ValiPromResponse) GetResponse() *queryrange.PrometheusResponse {
 	if m != nil {
 		return m.Response
 	}
 	return nil
 }
 
-func (m *LokiPromResponse) GetStatistics() stats.Result {
+func (m *ValiPromResponse) GetStatistics() stats.Result {
 	if m != nil {
 		return m.Statistics
 	}
@@ -575,14 +575,14 @@ func (m *LokiPromResponse) GetStatistics() stats.Result {
 }
 
 func init() {
-	proto.RegisterType((*LokiRequest)(nil), "queryrange.LokiRequest")
-	proto.RegisterType((*LokiResponse)(nil), "queryrange.LokiResponse")
-	proto.RegisterType((*LokiSeriesRequest)(nil), "queryrange.LokiSeriesRequest")
-	proto.RegisterType((*LokiSeriesResponse)(nil), "queryrange.LokiSeriesResponse")
-	proto.RegisterType((*LokiLabelNamesRequest)(nil), "queryrange.LokiLabelNamesRequest")
-	proto.RegisterType((*LokiLabelNamesResponse)(nil), "queryrange.LokiLabelNamesResponse")
-	proto.RegisterType((*LokiData)(nil), "queryrange.LokiData")
-	proto.RegisterType((*LokiPromResponse)(nil), "queryrange.LokiPromResponse")
+	proto.RegisterType((*ValiRequest)(nil), "queryrange.ValiRequest")
+	proto.RegisterType((*ValiResponse)(nil), "queryrange.ValiResponse")
+	proto.RegisterType((*ValiSeriesRequest)(nil), "queryrange.ValiSeriesRequest")
+	proto.RegisterType((*ValiSeriesResponse)(nil), "queryrange.ValiSeriesResponse")
+	proto.RegisterType((*ValiLabelNamesRequest)(nil), "queryrange.ValiLabelNamesRequest")
+	proto.RegisterType((*ValiLabelNamesResponse)(nil), "queryrange.ValiLabelNamesResponse")
+	proto.RegisterType((*ValiData)(nil), "queryrange.ValiData")
+	proto.RegisterType((*ValiPromResponse)(nil), "queryrange.ValiPromResponse")
 }
 
 func init() {
@@ -647,14 +647,14 @@ var fileDescriptor_51b9d53b40d11902 = []byte{
 	0x78, 0xf3, 0xaf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x0e, 0xd7, 0x7d, 0x78, 0x8a, 0x09, 0x00, 0x00,
 }
 
-func (this *LokiRequest) Equal(that interface{}) bool {
+func (this *ValiRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*LokiRequest)
+	that1, ok := that.(*ValiRequest)
 	if !ok {
-		that2, ok := that.(LokiRequest)
+		that2, ok := that.(ValiRequest)
 		if ok {
 			that1 = &that2
 		} else {
@@ -697,14 +697,14 @@ func (this *LokiRequest) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *LokiResponse) Equal(that interface{}) bool {
+func (this *ValiResponse) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*LokiResponse)
+	that1, ok := that.(*ValiResponse)
 	if !ok {
-		that2, ok := that.(LokiResponse)
+		that2, ok := that.(ValiResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -750,14 +750,14 @@ func (this *LokiResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *LokiSeriesRequest) Equal(that interface{}) bool {
+func (this *ValiSeriesRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*LokiSeriesRequest)
+	that1, ok := that.(*ValiSeriesRequest)
 	if !ok {
-		that2, ok := that.(LokiSeriesRequest)
+		that2, ok := that.(ValiSeriesRequest)
 		if ok {
 			that1 = &that2
 		} else {
@@ -788,14 +788,14 @@ func (this *LokiSeriesRequest) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *LokiSeriesResponse) Equal(that interface{}) bool {
+func (this *ValiSeriesResponse) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*LokiSeriesResponse)
+	that1, ok := that.(*ValiSeriesResponse)
 	if !ok {
-		that2, ok := that.(LokiSeriesResponse)
+		that2, ok := that.(ValiSeriesResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -831,14 +831,14 @@ func (this *LokiSeriesResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *LokiLabelNamesRequest) Equal(that interface{}) bool {
+func (this *ValiLabelNamesRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*LokiLabelNamesRequest)
+	that1, ok := that.(*ValiLabelNamesRequest)
 	if !ok {
-		that2, ok := that.(LokiLabelNamesRequest)
+		that2, ok := that.(ValiLabelNamesRequest)
 		if ok {
 			that1 = &that2
 		} else {
@@ -861,14 +861,14 @@ func (this *LokiLabelNamesRequest) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *LokiLabelNamesResponse) Equal(that interface{}) bool {
+func (this *ValiLabelNamesResponse) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*LokiLabelNamesResponse)
+	that1, ok := that.(*ValiLabelNamesResponse)
 	if !ok {
-		that2, ok := that.(LokiLabelNamesResponse)
+		that2, ok := that.(ValiLabelNamesResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -904,14 +904,14 @@ func (this *LokiLabelNamesResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *LokiData) Equal(that interface{}) bool {
+func (this *ValiData) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*LokiData)
+	that1, ok := that.(*ValiData)
 	if !ok {
-		that2, ok := that.(LokiData)
+		that2, ok := that.(ValiData)
 		if ok {
 			that1 = &that2
 		} else {
@@ -936,14 +936,14 @@ func (this *LokiData) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *LokiPromResponse) Equal(that interface{}) bool {
+func (this *ValiPromResponse) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*LokiPromResponse)
+	that1, ok := that.(*ValiPromResponse)
 	if !ok {
-		that2, ok := that.(LokiPromResponse)
+		that2, ok := that.(ValiPromResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -963,12 +963,12 @@ func (this *LokiPromResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *LokiRequest) GoString() string {
+func (this *ValiRequest) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 12)
-	s = append(s, "&queryrange.LokiRequest{")
+	s = append(s, "&queryrange.ValiRequest{")
 	s = append(s, "Query: "+fmt.Sprintf("%#v", this.Query)+",\n")
 	s = append(s, "Limit: "+fmt.Sprintf("%#v", this.Limit)+",\n")
 	s = append(s, "Step: "+fmt.Sprintf("%#v", this.Step)+",\n")
@@ -980,12 +980,12 @@ func (this *LokiRequest) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *LokiResponse) GoString() string {
+func (this *ValiResponse) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 13)
-	s = append(s, "&queryrange.LokiResponse{")
+	s = append(s, "&queryrange.ValiResponse{")
 	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
 	s = append(s, "Data: "+strings.Replace(this.Data.GoString(), `&`, ``, 1)+",\n")
 	s = append(s, "ErrorType: "+fmt.Sprintf("%#v", this.ErrorType)+",\n")
@@ -998,12 +998,12 @@ func (this *LokiResponse) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *LokiSeriesRequest) GoString() string {
+func (this *ValiSeriesRequest) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 8)
-	s = append(s, "&queryrange.LokiSeriesRequest{")
+	s = append(s, "&queryrange.ValiSeriesRequest{")
 	s = append(s, "Match: "+fmt.Sprintf("%#v", this.Match)+",\n")
 	s = append(s, "StartTs: "+fmt.Sprintf("%#v", this.StartTs)+",\n")
 	s = append(s, "EndTs: "+fmt.Sprintf("%#v", this.EndTs)+",\n")
@@ -1011,12 +1011,12 @@ func (this *LokiSeriesRequest) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *LokiSeriesResponse) GoString() string {
+func (this *ValiSeriesResponse) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 8)
-	s = append(s, "&queryrange.LokiSeriesResponse{")
+	s = append(s, "&queryrange.ValiSeriesResponse{")
 	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
 	if this.Data != nil {
 		vs := make([]*logproto.SeriesIdentifier, len(this.Data))
@@ -1030,24 +1030,24 @@ func (this *LokiSeriesResponse) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *LokiLabelNamesRequest) GoString() string {
+func (this *ValiLabelNamesRequest) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 7)
-	s = append(s, "&queryrange.LokiLabelNamesRequest{")
+	s = append(s, "&queryrange.ValiLabelNamesRequest{")
 	s = append(s, "StartTs: "+fmt.Sprintf("%#v", this.StartTs)+",\n")
 	s = append(s, "EndTs: "+fmt.Sprintf("%#v", this.EndTs)+",\n")
 	s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *LokiLabelNamesResponse) GoString() string {
+func (this *ValiLabelNamesResponse) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 8)
-	s = append(s, "&queryrange.LokiLabelNamesResponse{")
+	s = append(s, "&queryrange.ValiLabelNamesResponse{")
 	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
 	s = append(s, "Data: "+fmt.Sprintf("%#v", this.Data)+",\n")
 	s = append(s, "Version: "+fmt.Sprintf("%#v", this.Version)+",\n")
@@ -1055,23 +1055,23 @@ func (this *LokiLabelNamesResponse) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *LokiData) GoString() string {
+func (this *ValiData) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&queryrange.LokiData{")
+	s = append(s, "&queryrange.ValiData{")
 	s = append(s, "ResultType: "+fmt.Sprintf("%#v", this.ResultType)+",\n")
 	s = append(s, "Result: "+fmt.Sprintf("%#v", this.Result)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *LokiPromResponse) GoString() string {
+func (this *ValiPromResponse) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&queryrange.LokiPromResponse{")
+	s = append(s, "&queryrange.ValiPromResponse{")
 	if this.Response != nil {
 		s = append(s, "Response: "+fmt.Sprintf("%#v", this.Response)+",\n")
 	}
@@ -1087,7 +1087,7 @@ func valueToGoStringQueryrange(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
-func (m *LokiRequest) Marshal() (dAtA []byte, err error) {
+func (m *ValiRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1097,7 +1097,7 @@ func (m *LokiRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *LokiRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *ValiRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1163,7 +1163,7 @@ func (m *LokiRequest) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *LokiResponse) Marshal() (dAtA []byte, err error) {
+func (m *ValiResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1173,7 +1173,7 @@ func (m *LokiResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *LokiResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *ValiResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1242,7 +1242,7 @@ func (m *LokiResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *LokiSeriesRequest) Marshal() (dAtA []byte, err error) {
+func (m *ValiSeriesRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1252,7 +1252,7 @@ func (m *LokiSeriesRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *LokiSeriesRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *ValiSeriesRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1297,7 +1297,7 @@ func (m *LokiSeriesRequest) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *LokiSeriesResponse) Marshal() (dAtA []byte, err error) {
+func (m *ValiSeriesResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1307,7 +1307,7 @@ func (m *LokiSeriesResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *LokiSeriesResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *ValiSeriesResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1350,7 +1350,7 @@ func (m *LokiSeriesResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *LokiLabelNamesRequest) Marshal() (dAtA []byte, err error) {
+func (m *ValiLabelNamesRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1360,7 +1360,7 @@ func (m *LokiLabelNamesRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *LokiLabelNamesRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *ValiLabelNamesRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1390,7 +1390,7 @@ func (m *LokiLabelNamesRequest) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *LokiLabelNamesResponse) Marshal() (dAtA []byte, err error) {
+func (m *ValiLabelNamesResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1400,7 +1400,7 @@ func (m *LokiLabelNamesResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *LokiLabelNamesResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *ValiLabelNamesResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1446,7 +1446,7 @@ func (m *LokiLabelNamesResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *LokiData) Marshal() (dAtA []byte, err error) {
+func (m *ValiData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1456,7 +1456,7 @@ func (m *LokiData) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *LokiData) MarshalTo(dAtA []byte) (int, error) {
+func (m *ValiData) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1482,7 +1482,7 @@ func (m *LokiData) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *LokiPromResponse) Marshal() (dAtA []byte, err error) {
+func (m *ValiPromResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1492,7 +1492,7 @@ func (m *LokiPromResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *LokiPromResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *ValiPromResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1527,7 +1527,7 @@ func encodeVarintQueryrange(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return offset + 1
 }
-func (m *LokiRequest) Size() (n int) {
+func (m *ValiRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1563,7 +1563,7 @@ func (m *LokiRequest) Size() (n int) {
 	return n
 }
 
-func (m *LokiResponse) Size() (n int) {
+func (m *ValiResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1603,7 +1603,7 @@ func (m *LokiResponse) Size() (n int) {
 	return n
 }
 
-func (m *LokiSeriesRequest) Size() (n int) {
+func (m *ValiSeriesRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1626,7 +1626,7 @@ func (m *LokiSeriesRequest) Size() (n int) {
 	return n
 }
 
-func (m *LokiSeriesResponse) Size() (n int) {
+func (m *ValiSeriesResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1654,7 +1654,7 @@ func (m *LokiSeriesResponse) Size() (n int) {
 	return n
 }
 
-func (m *LokiLabelNamesRequest) Size() (n int) {
+func (m *ValiLabelNamesRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1671,7 +1671,7 @@ func (m *LokiLabelNamesRequest) Size() (n int) {
 	return n
 }
 
-func (m *LokiLabelNamesResponse) Size() (n int) {
+func (m *ValiLabelNamesResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1699,7 +1699,7 @@ func (m *LokiLabelNamesResponse) Size() (n int) {
 	return n
 }
 
-func (m *LokiData) Size() (n int) {
+func (m *ValiData) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1718,7 +1718,7 @@ func (m *LokiData) Size() (n int) {
 	return n
 }
 
-func (m *LokiPromResponse) Size() (n int) {
+func (m *ValiPromResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1746,11 +1746,11 @@ func sovQueryrange(x uint64) (n int) {
 func sozQueryrange(x uint64) (n int) {
 	return sovQueryrange(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *LokiRequest) String() string {
+func (this *ValiRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&LokiRequest{`,
+	s := strings.Join([]string{`&ValiRequest{`,
 		`Query:` + fmt.Sprintf("%v", this.Query) + `,`,
 		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
 		`Step:` + fmt.Sprintf("%v", this.Step) + `,`,
@@ -1763,13 +1763,13 @@ func (this *LokiRequest) String() string {
 	}, "")
 	return s
 }
-func (this *LokiResponse) String() string {
+func (this *ValiResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&LokiResponse{`,
+	s := strings.Join([]string{`&ValiResponse{`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
-		`Data:` + strings.Replace(strings.Replace(this.Data.String(), "LokiData", "LokiData", 1), `&`, ``, 1) + `,`,
+		`Data:` + strings.Replace(strings.Replace(this.Data.String(), "ValiData", "ValiData", 1), `&`, ``, 1) + `,`,
 		`ErrorType:` + fmt.Sprintf("%v", this.ErrorType) + `,`,
 		`Error:` + fmt.Sprintf("%v", this.Error) + `,`,
 		`Direction:` + fmt.Sprintf("%v", this.Direction) + `,`,
@@ -1781,11 +1781,11 @@ func (this *LokiResponse) String() string {
 	}, "")
 	return s
 }
-func (this *LokiSeriesRequest) String() string {
+func (this *ValiSeriesRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&LokiSeriesRequest{`,
+	s := strings.Join([]string{`&ValiSeriesRequest{`,
 		`Match:` + fmt.Sprintf("%v", this.Match) + `,`,
 		`StartTs:` + strings.Replace(strings.Replace(this.StartTs.String(), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
 		`EndTs:` + strings.Replace(strings.Replace(this.EndTs.String(), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
@@ -1794,11 +1794,11 @@ func (this *LokiSeriesRequest) String() string {
 	}, "")
 	return s
 }
-func (this *LokiSeriesResponse) String() string {
+func (this *ValiSeriesResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&LokiSeriesResponse{`,
+	s := strings.Join([]string{`&ValiSeriesResponse{`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
 		`Data:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Data), "SeriesIdentifier", "logproto.SeriesIdentifier", 1), `&`, ``, 1) + `,`,
 		`Version:` + fmt.Sprintf("%v", this.Version) + `,`,
@@ -1807,11 +1807,11 @@ func (this *LokiSeriesResponse) String() string {
 	}, "")
 	return s
 }
-func (this *LokiLabelNamesRequest) String() string {
+func (this *ValiLabelNamesRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&LokiLabelNamesRequest{`,
+	s := strings.Join([]string{`&ValiLabelNamesRequest{`,
 		`StartTs:` + strings.Replace(strings.Replace(this.StartTs.String(), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
 		`EndTs:` + strings.Replace(strings.Replace(this.EndTs.String(), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
 		`Path:` + fmt.Sprintf("%v", this.Path) + `,`,
@@ -1819,11 +1819,11 @@ func (this *LokiLabelNamesRequest) String() string {
 	}, "")
 	return s
 }
-func (this *LokiLabelNamesResponse) String() string {
+func (this *ValiLabelNamesResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&LokiLabelNamesResponse{`,
+	s := strings.Join([]string{`&ValiLabelNamesResponse{`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
 		`Data:` + fmt.Sprintf("%v", this.Data) + `,`,
 		`Version:` + fmt.Sprintf("%v", this.Version) + `,`,
@@ -1832,22 +1832,22 @@ func (this *LokiLabelNamesResponse) String() string {
 	}, "")
 	return s
 }
-func (this *LokiData) String() string {
+func (this *ValiData) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&LokiData{`,
+	s := strings.Join([]string{`&ValiData{`,
 		`ResultType:` + fmt.Sprintf("%v", this.ResultType) + `,`,
 		`Result:` + fmt.Sprintf("%v", this.Result) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *LokiPromResponse) String() string {
+func (this *ValiPromResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&LokiPromResponse{`,
+	s := strings.Join([]string{`&ValiPromResponse{`,
 		`Response:` + strings.Replace(fmt.Sprintf("%v", this.Response), "PrometheusResponse", "queryrange.PrometheusResponse", 1) + `,`,
 		`Statistics:` + strings.Replace(strings.Replace(this.Statistics.String(), "Result", "stats.Result", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -1862,7 +1862,7 @@ func valueToStringQueryrange(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *LokiRequest) Unmarshal(dAtA []byte) error {
+func (m *ValiRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1885,10 +1885,10 @@ func (m *LokiRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: LokiRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: ValiRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LokiRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ValiRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2134,7 +2134,7 @@ func (m *LokiRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *LokiResponse) Unmarshal(dAtA []byte) error {
+func (m *ValiResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2157,10 +2157,10 @@ func (m *LokiResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: LokiResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: ValiResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LokiResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ValiResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2440,7 +2440,7 @@ func (m *LokiResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *LokiSeriesRequest) Unmarshal(dAtA []byte) error {
+func (m *ValiSeriesRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2463,10 +2463,10 @@ func (m *LokiSeriesRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: LokiSeriesRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: ValiSeriesRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LokiSeriesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ValiSeriesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2623,7 +2623,7 @@ func (m *LokiSeriesRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *LokiSeriesResponse) Unmarshal(dAtA []byte) error {
+func (m *ValiSeriesResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2646,10 +2646,10 @@ func (m *LokiSeriesResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: LokiSeriesResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: ValiSeriesResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LokiSeriesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ValiSeriesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2795,7 +2795,7 @@ func (m *LokiSeriesResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *LokiLabelNamesRequest) Unmarshal(dAtA []byte) error {
+func (m *ValiLabelNamesRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2818,10 +2818,10 @@ func (m *LokiLabelNamesRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: LokiLabelNamesRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: ValiLabelNamesRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LokiLabelNamesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ValiLabelNamesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2946,7 +2946,7 @@ func (m *LokiLabelNamesRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *LokiLabelNamesResponse) Unmarshal(dAtA []byte) error {
+func (m *ValiLabelNamesResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2969,10 +2969,10 @@ func (m *LokiLabelNamesResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: LokiLabelNamesResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: ValiLabelNamesResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LokiLabelNamesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ValiLabelNamesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3116,7 +3116,7 @@ func (m *LokiLabelNamesResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *LokiData) Unmarshal(dAtA []byte) error {
+func (m *ValiData) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3139,10 +3139,10 @@ func (m *LokiData) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: LokiData: wiretype end group for non-group")
+			return fmt.Errorf("proto: ValiData: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LokiData: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ValiData: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3206,7 +3206,7 @@ func (m *LokiData) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Result = append(m.Result, github_com_grafana_loki_pkg_logproto.Stream{})
+			m.Result = append(m.Result, github_com_grafana_vali_pkg_logproto.Stream{})
 			if err := m.Result[len(m.Result)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3235,7 +3235,7 @@ func (m *LokiData) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *LokiPromResponse) Unmarshal(dAtA []byte) error {
+func (m *ValiPromResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3258,10 +3258,10 @@ func (m *LokiPromResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: LokiPromResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: ValiPromResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LokiPromResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ValiPromResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

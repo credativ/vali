@@ -37,7 +37,7 @@ pipeline_stages:
 var testJSONLogLine = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level" : "WARN",
 	"nested" : {"child":"value"},
@@ -60,7 +60,7 @@ func TestPipeline_JSON(t *testing.T) {
 			testJSONLogLine,
 			map[string]interface{}{
 				"out":      "this is a log line",
-				"app":      "loki",
+				"app":      "vali",
 				"nested":   "{\"child\":\"value\"}",
 				"duration": float64(125),
 				"unknown":  nil,
@@ -210,7 +210,7 @@ func TestJSONConfig_validate(t *testing.T) {
 var logFixture = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level" : "WARN",
 	"numeric": {
@@ -253,7 +253,7 @@ func TestJSONParser_Parse(t *testing.T) {
 			logFixture,
 			map[string]interface{}{
 				"time":      "2012-11-01T22:08:41+00:00",
-				"app":       "loki",
+				"app":       "vali",
 				"component": "[\"parser\",\"type\"]",
 				"level":     "WARN",
 				"float":     12.34,
@@ -286,7 +286,7 @@ func TestJSONParser_Parse(t *testing.T) {
 			"{}",
 			map[string]interface{}{
 				"time":      "2012-11-01T22:08:41+00:00",
-				"app":       "loki",
+				"app":       "vali",
 				"component": "[\"parser\",\"type\"]",
 				"level":     "WARN",
 				"float":     12.34,

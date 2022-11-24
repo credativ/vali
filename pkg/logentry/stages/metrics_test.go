@@ -14,7 +14,7 @@ import (
 	"github.com/prometheus/common/model"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/grafana/loki/pkg/logentry/metric"
+	"github.com/credativ/vali/pkg/logentry/metric"
 )
 
 var testMetricYaml = `
@@ -24,20 +24,20 @@ pipeline_stages:
       app: app
       payload: payload
 - metrics:
-    loki_count:
+    vali_count:
       type: Counter
       description: uhhhhhhh
       prefix: my_promtail_custom_
       source: app
       config:
-        value: loki
+        value: vali
         action: inc
-    bloki_count:
+    bvali_count:
       type: Gauge
       description: blerrrgh
       source: app
       config:
-        value: bloki
+        value: bvali
         action: dec
     total_lines_count:
       type: Counter
@@ -63,7 +63,7 @@ pipeline_stages:
 var testMetricLogLine1 = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"loki",
+	"app":"vali",
     "payload": 10,
 	"component": ["parser","type"],
 	"level" : "WARN"
@@ -72,7 +72,7 @@ var testMetricLogLine1 = `
 var testMetricLogLine2 = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"bloki",
+	"app":"bvali",
     "payload": 20,
 	"component": ["parser","type"],
 	"level" : "WARN"
@@ -87,12 +87,12 @@ var testMetricLogLineWithMissingKey = `
 }
 `
 
-const expectedMetrics = `# HELP my_promtail_custom_loki_count uhhhhhhh
-# TYPE my_promtail_custom_loki_count counter
-my_promtail_custom_loki_count{test="app"} 1
-# HELP promtail_custom_bloki_count blerrrgh
-# TYPE promtail_custom_bloki_count gauge
-promtail_custom_bloki_count{test="app"} -1
+const expectedMetrics = `# HELP my_promtail_custom_vali_count uhhhhhhh
+# TYPE my_promtail_custom_vali_count counter
+my_promtail_custom_vali_count{test="app"} 1
+# HELP promtail_custom_bvali_count blerrrgh
+# TYPE promtail_custom_bvali_count gauge
+promtail_custom_bvali_count{test="app"} -1
 # HELP promtail_custom_payload_size_bytes grrrragh
 # TYPE promtail_custom_payload_size_bytes histogram
 promtail_custom_payload_size_bytes_bucket{test="app",le="10"} 1
@@ -135,7 +135,7 @@ func TestPipelineWithMissingKey_Metrics(t *testing.T) {
 	}
 	Debug = true
 	processEntries(pl, newEntry(nil, nil, testMetricLogLineWithMissingKey, time.Now()))
-	expectedLog := "level=debug msg=\"failed to convert extracted value to string, can't perform value comparison\" metric=bloki_count err=\"can't convert <nil> to string\""
+	expectedLog := "level=debug msg=\"failed to convert extracted value to string, can't perform value comparison\" metric=bvali_count err=\"can't convert <nil> to string\""
 	if !(strings.Contains(buf.String(), expectedLog)) {
 		t.Errorf("\nexpected: %s\n+actual: %s", expectedLog, buf.String())
 	}
@@ -151,7 +151,7 @@ pipeline_stages:
     selector: '{drop="true"}'
     action: drop
 - metrics:
-    loki_count:
+    vali_count:
       type: Counter
       source: app
       description: "should only inc on non dropped labels"
@@ -162,9 +162,9 @@ pipeline_stages:
 const expectedDropMetrics = `# HELP logentry_dropped_lines_total A count of all log lines dropped as a result of a pipeline stage
 # TYPE logentry_dropped_lines_total counter
 logentry_dropped_lines_total{reason="match_stage"} 1
-# HELP promtail_custom_loki_count should only inc on non dropped labels
-# TYPE promtail_custom_loki_count counter
-promtail_custom_loki_count 1
+# HELP promtail_custom_vali_count should only inc on non dropped labels
+# TYPE promtail_custom_vali_count counter
+promtail_custom_vali_count 1
 `
 
 func TestMetricsWithDropInPipeline(t *testing.T) {

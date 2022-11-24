@@ -15,21 +15,21 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/weaveworks/common/httpgrpc"
 
-	"github.com/grafana/loki/pkg/chunkenc"
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/log"
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/chunkenc"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/log"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 var (
 	chunksCreatedTotal = prometheus.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "ingester_chunks_created_total",
 		Help:      "The total number of chunks created in the ingester.",
 	})
 	samplesPerChunk = prometheus.NewHistogram(prometheus.HistogramOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Subsystem: "ingester",
 		Name:      "samples_per_chunk",
 		Help:      "The number of samples in a chunk.",
@@ -37,7 +37,7 @@ var (
 		Buckets: prometheus.LinearBuckets(4096, 2048, 6),
 	})
 	blocksPerChunk = prometheus.NewHistogram(prometheus.HistogramOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Subsystem: "ingester",
 		Name:      "blocks_per_chunk",
 		Help:      "The number of blocks in a chunk.",

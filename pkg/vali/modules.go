@@ -1,4 +1,4 @@
-package loki
+package vali
 
 import (
 	"errors"
@@ -14,9 +14,9 @@ import (
 	"github.com/cortexproject/cortex/pkg/frontend/transport"
 	"github.com/cortexproject/cortex/pkg/frontend/v1/frontendv1pb"
 
-	"github.com/grafana/loki/pkg/ruler/manager"
-	"github.com/grafana/loki/pkg/storage/stores/shipper/compactor"
-	"github.com/grafana/loki/pkg/util/runtime"
+	"github.com/credativ/vali/pkg/ruler/manager"
+	"github.com/credativ/vali/pkg/storage/stores/shipper/compactor"
+	"github.com/credativ/vali/pkg/util/runtime"
 
 	"github.com/cortexproject/cortex/pkg/chunk"
 	"github.com/cortexproject/cortex/pkg/chunk/cache"
@@ -40,23 +40,23 @@ import (
 	"github.com/weaveworks/common/server"
 	"google.golang.org/grpc/health/grpc_health_v1"
 
-	"github.com/grafana/loki/pkg/distributor"
-	"github.com/grafana/loki/pkg/ingester"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/querier"
-	"github.com/grafana/loki/pkg/querier/queryrange"
-	"github.com/grafana/loki/pkg/ruler"
-	loki_storage "github.com/grafana/loki/pkg/storage"
-	"github.com/grafana/loki/pkg/storage/stores/shipper"
-	"github.com/grafana/loki/pkg/storage/stores/shipper/uploads"
-	serverutil "github.com/grafana/loki/pkg/util/server"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/distributor"
+	"github.com/credativ/vali/pkg/ingester"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/querier"
+	"github.com/credativ/vali/pkg/querier/queryrange"
+	"github.com/credativ/vali/pkg/ruler"
+	vali_storage "github.com/credativ/vali/pkg/storage"
+	"github.com/credativ/vali/pkg/storage/stores/shipper"
+	"github.com/credativ/vali/pkg/storage/stores/shipper/uploads"
+	serverutil "github.com/credativ/vali/pkg/util/server"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 const maxChunkAgeForTableManager = 12 * time.Hour
 
-// The various modules that make up Loki.
+// The various modules that make up Vali.
 const (
 	Ring            string = "ring"
 	RuntimeConfig   string = "runtime-config"
@@ -77,8 +77,8 @@ const (
 	All             string = "all"
 )
 
-func (t *Loki) initServer() (services.Service, error) {
-	// Loki handles signals on its own.
+func (t *Vali) initServer() (services.Service, error) {
+	// Vali handles signals on its own.
 	cortex.DisableSignalHandling(&t.cfg.Server)
 	serv, err := server.New(t.cfg.Server)
 	if err != nil {
@@ -103,7 +103,7 @@ func (t *Loki) initServer() (services.Service, error) {
 	return s, nil
 }
 
-func (t *Loki) initRing() (_ services.Service, err error) {
+func (t *Vali) initRing() (_ services.Service, err error) {
 	t.cfg.Ingester.LifecyclerConfig.RingConfig.KVStore.Multi.ConfigProvider = multiClientRuntimeConfigChannel(t.runtimeConfig)
 	t.cfg.Ingester.LifecyclerConfig.RingConfig.KVStore.MemberlistKV = t.memberlistKV.GetMemberlistKV
 	t.ring, err = ring.New(t.cfg.Ingester.LifecyclerConfig.RingConfig, "ingester", ring.IngesterRingKey, prometheus.DefaultRegisterer)
@@ -115,7 +115,7 @@ func (t *Loki) initRing() (_ services.Service, err error) {
 	return t.ring, nil
 }
 
-func (t *Loki) initRuntimeConfig() (services.Service, error) {
+func (t *Vali) initRuntimeConfig() (services.Service, error) {
 	if t.cfg.RuntimeConfig.LoadPath == "" {
 		t.cfg.RuntimeConfig.LoadPath = t.cfg.LimitsConfig.PerTenantOverrideConfig
 		t.cfg.RuntimeConfig.ReloadPeriod = t.cfg.LimitsConfig.PerTenantOverridePeriod
@@ -136,19 +136,19 @@ func (t *Loki) initRuntimeConfig() (services.Service, error) {
 	return t.runtimeConfig, err
 }
 
-func (t *Loki) initOverrides() (_ services.Service, err error) {
+func (t *Vali) initOverrides() (_ services.Service, err error) {
 	t.overrides, err = validation.NewOverrides(t.cfg.LimitsConfig, tenantLimitsFromRuntimeConfig(t.runtimeConfig))
 	// overrides are not a service, since they don't have any operational state.
 	return nil, err
 }
 
-func (t *Loki) initTenantConfigs() (_ services.Service, err error) {
+func (t *Vali) initTenantConfigs() (_ services.Service, err error) {
 	t.tenantConfigs, err = runtime.NewTenantConfigs(tenantConfigFromRuntimeConfig(t.runtimeConfig))
 	// tenantConfigs are not a service, since they don't have any operational state.
 	return nil, err
 }
 
-func (t *Loki) initDistributor() (services.Service, error) {
+func (t *Vali) initDistributor() (services.Service, error) {
 	t.cfg.Distributor.DistributorRing.KVStore.Multi.ConfigProvider = multiClientRuntimeConfigChannel(t.runtimeConfig)
 	t.cfg.Distributor.DistributorRing.KVStore.MemberlistKV = t.memberlistKV.GetMemberlistKV
 	var err error
@@ -167,17 +167,17 @@ func (t *Loki) initDistributor() (services.Service, error) {
 	).Wrap(http.HandlerFunc(t.distributor.PushHandler))
 
 	t.Server.HTTP.Handle("/api/prom/push", pushHandler)
-	t.Server.HTTP.Handle("/loki/api/v1/push", pushHandler)
+	t.Server.HTTP.Handle("/vali/api/v1/push", pushHandler)
 	return t.distributor, nil
 }
 
-func (t *Loki) initQuerier() (services.Service, error) {
+func (t *Vali) initQuerier() (services.Service, error) {
 	var (
 		worker services.Service
 		err    error
 	)
 
-	// NewQuerierWorker now expects Frontend (or Scheduler) address to be set. Loki only supports Frontend for now.
+	// NewQuerierWorker now expects Frontend (or Scheduler) address to be set. Vali only supports Frontend for now.
 	if t.cfg.Worker.FrontendAddress != "" {
 		// In case someone set scheduler address, we ignore it.
 		t.cfg.Worker.SchedulerAddress = ""
@@ -203,15 +203,15 @@ func (t *Loki) initQuerier() (services.Service, error) {
 		serverutil.NewPrepopulateMiddleware(),
 		serverutil.ResponseJSONMiddleware(),
 	)
-	t.Server.HTTP.Handle("/loki/api/v1/query_range", httpMiddleware.Wrap(http.HandlerFunc(t.querier.RangeQueryHandler)))
-	t.Server.HTTP.Handle("/loki/api/v1/query", httpMiddleware.Wrap(http.HandlerFunc(t.querier.InstantQueryHandler)))
-	// Prometheus compatibility requires `loki/api/v1/labels` however we already released `loki/api/v1/label`
-	// which is a little more consistent with `/loki/api/v1/label/{name}/values` so we are going to handle both paths.
-	t.Server.HTTP.Handle("/loki/api/v1/label", httpMiddleware.Wrap(http.HandlerFunc(t.querier.LabelHandler)))
-	t.Server.HTTP.Handle("/loki/api/v1/labels", httpMiddleware.Wrap(http.HandlerFunc(t.querier.LabelHandler)))
-	t.Server.HTTP.Handle("/loki/api/v1/label/{name}/values", httpMiddleware.Wrap(http.HandlerFunc(t.querier.LabelHandler)))
-	t.Server.HTTP.Handle("/loki/api/v1/tail", httpMiddleware.Wrap(http.HandlerFunc(t.querier.TailHandler)))
-	t.Server.HTTP.Handle("/loki/api/v1/series", httpMiddleware.Wrap(http.HandlerFunc(t.querier.SeriesHandler)))
+	t.Server.HTTP.Handle("/vali/api/v1/query_range", httpMiddleware.Wrap(http.HandlerFunc(t.querier.RangeQueryHandler)))
+	t.Server.HTTP.Handle("/vali/api/v1/query", httpMiddleware.Wrap(http.HandlerFunc(t.querier.InstantQueryHandler)))
+	// Prometheus compatibility requires `vali/api/v1/labels` however we already released `vali/api/v1/label`
+	// which is a little more consistent with `/vali/api/v1/label/{name}/values` so we are going to handle both paths.
+	t.Server.HTTP.Handle("/vali/api/v1/label", httpMiddleware.Wrap(http.HandlerFunc(t.querier.LabelHandler)))
+	t.Server.HTTP.Handle("/vali/api/v1/labels", httpMiddleware.Wrap(http.HandlerFunc(t.querier.LabelHandler)))
+	t.Server.HTTP.Handle("/vali/api/v1/label/{name}/values", httpMiddleware.Wrap(http.HandlerFunc(t.querier.LabelHandler)))
+	t.Server.HTTP.Handle("/vali/api/v1/tail", httpMiddleware.Wrap(http.HandlerFunc(t.querier.TailHandler)))
+	t.Server.HTTP.Handle("/vali/api/v1/series", httpMiddleware.Wrap(http.HandlerFunc(t.querier.SeriesHandler)))
 
 	t.Server.HTTP.Handle("/api/prom/query", httpMiddleware.Wrap(http.HandlerFunc(t.querier.LogQueryHandler)))
 	t.Server.HTTP.Handle("/api/prom/label", httpMiddleware.Wrap(http.HandlerFunc(t.querier.LabelHandler)))
@@ -221,7 +221,7 @@ func (t *Loki) initQuerier() (services.Service, error) {
 	return worker, nil // ok if worker is nil here
 }
 
-func (t *Loki) initIngester() (_ services.Service, err error) {
+func (t *Vali) initIngester() (_ services.Service, err error) {
 	t.cfg.Ingester.LifecyclerConfig.RingConfig.KVStore.Multi.ConfigProvider = multiClientRuntimeConfigChannel(t.runtimeConfig)
 	t.cfg.Ingester.LifecyclerConfig.RingConfig.KVStore.MemberlistKV = t.memberlistKV.GetMemberlistKV
 	t.cfg.Ingester.LifecyclerConfig.ListenPort = t.cfg.Server.GRPCListenPort
@@ -240,7 +240,7 @@ func (t *Loki) initIngester() (_ services.Service, err error) {
 	return t.ingester, nil
 }
 
-func (t *Loki) initTableManager() (services.Service, error) {
+func (t *Vali) initTableManager() (services.Service, error) {
 	err := t.cfg.SchemaConfig.Load()
 	if err != nil {
 		return nil, err
@@ -280,15 +280,15 @@ func (t *Loki) initTableManager() (services.Service, error) {
 	return t.tableManager, nil
 }
 
-func (t *Loki) initStore() (_ services.Service, err error) {
+func (t *Vali) initStore() (_ services.Service, err error) {
 	// If RF > 1 and current or upcoming index type is boltdb-shipper then disable index dedupe and write dedupe cache.
 	// This is to ensure that index entries are replicated to all the boltdb files in ingesters flushing replicated data.
-	if t.cfg.Ingester.LifecyclerConfig.RingConfig.ReplicationFactor > 1 && loki_storage.UsingBoltdbShipper(t.cfg.SchemaConfig.Configs) {
+	if t.cfg.Ingester.LifecyclerConfig.RingConfig.ReplicationFactor > 1 && vali_storage.UsingBoltdbShipper(t.cfg.SchemaConfig.Configs) {
 		t.cfg.ChunkStoreConfig.DisableIndexDeduplication = true
 		t.cfg.ChunkStoreConfig.WriteDedupeCacheConfig = cache.Config{}
 	}
 
-	if loki_storage.UsingBoltdbShipper(t.cfg.SchemaConfig.Configs) {
+	if vali_storage.UsingBoltdbShipper(t.cfg.SchemaConfig.Configs) {
 		t.cfg.StorageConfig.BoltDBShipperConfig.IngesterName = t.cfg.Ingester.LifecyclerConfig.ID
 		switch t.cfg.Target {
 		case Ingester:
@@ -321,21 +321,21 @@ func (t *Loki) initStore() (_ services.Service, err error) {
 		return
 	}
 
-	if loki_storage.UsingBoltdbShipper(t.cfg.SchemaConfig.Configs) {
+	if vali_storage.UsingBoltdbShipper(t.cfg.SchemaConfig.Configs) {
 		boltdbShipperMinIngesterQueryStoreDuration := boltdbShipperMinIngesterQueryStoreDuration(t.cfg)
 		switch t.cfg.Target {
 		case Querier, Ruler:
 			// Use AsyncStore to query both ingesters local store and chunk store for store queries.
 			// Only queriers should use the AsyncStore, it should never be used in ingesters.
-			chunkStore = loki_storage.NewAsyncStore(chunkStore, t.ingesterQuerier,
+			chunkStore = vali_storage.NewAsyncStore(chunkStore, t.ingesterQuerier,
 				calculateAsyncStoreQueryIngestersWithin(t.cfg.Querier.QueryIngestersWithin, boltdbShipperMinIngesterQueryStoreDuration),
 			)
 		case All:
 			// We want ingester to also query the store when using boltdb-shipper but only when running with target All.
 			// We do not want to use AsyncStore otherwise it would start spiraling around doing queries over and over again to the ingesters and store.
-			// ToDo: See if we can avoid doing this when not running loki in clustered mode.
+			// ToDo: See if we can avoid doing this when not running vali in clustered mode.
 			t.cfg.Ingester.QueryStore = true
-			boltdbShipperConfigIdx := loki_storage.ActivePeriodConfig(t.cfg.SchemaConfig.Configs)
+			boltdbShipperConfigIdx := vali_storage.ActivePeriodConfig(t.cfg.SchemaConfig.Configs)
 			if t.cfg.SchemaConfig.Configs[boltdbShipperConfigIdx].IndexType != shipper.BoltDBShipperType {
 				boltdbShipperConfigIdx++
 			}
@@ -348,7 +348,7 @@ func (t *Loki) initStore() (_ services.Service, err error) {
 		}
 	}
 
-	t.store, err = loki_storage.NewStore(t.cfg.StorageConfig, t.cfg.SchemaConfig, chunkStore, prometheus.DefaultRegisterer)
+	t.store, err = vali_storage.NewStore(t.cfg.StorageConfig, t.cfg.SchemaConfig, chunkStore, prometheus.DefaultRegisterer)
 	if err != nil {
 		return
 	}
@@ -359,7 +359,7 @@ func (t *Loki) initStore() (_ services.Service, err error) {
 	}), nil
 }
 
-func (t *Loki) initIngesterQuerier() (_ services.Service, err error) {
+func (t *Vali) initIngesterQuerier() (_ services.Service, err error) {
 	t.ingesterQuerier, err = querier.NewIngesterQuerier(t.cfg.IngesterClient, t.ring, t.cfg.Querier.ExtraQueryDelay)
 	if err != nil {
 		return nil, err
@@ -373,7 +373,7 @@ type disabledShuffleShardingLimits struct{}
 
 func (disabledShuffleShardingLimits) MaxQueriersPerUser(userID string) int { return 0 }
 
-func (t *Loki) initQueryFrontend() (_ services.Service, err error) {
+func (t *Vali) initQueryFrontend() (_ services.Service, err error) {
 	level.Debug(util_log.Logger).Log("msg", "initializing query frontend", "config", fmt.Sprintf("%+v", t.cfg.Frontend))
 
 	roundTripper, frontendV1, _, err := frontend.InitFrontend(frontend.CombinedFrontendConfig{
@@ -444,19 +444,19 @@ func (t *Loki) initQueryFrontend() (_ services.Service, err error) {
 	} else {
 		defaultHandler = frontendHandler
 	}
-	t.Server.HTTP.Handle("/loki/api/v1/query_range", frontendHandler)
-	t.Server.HTTP.Handle("/loki/api/v1/query", frontendHandler)
-	t.Server.HTTP.Handle("/loki/api/v1/label", frontendHandler)
-	t.Server.HTTP.Handle("/loki/api/v1/labels", frontendHandler)
-	t.Server.HTTP.Handle("/loki/api/v1/label/{name}/values", frontendHandler)
-	t.Server.HTTP.Handle("/loki/api/v1/series", frontendHandler)
+	t.Server.HTTP.Handle("/vali/api/v1/query_range", frontendHandler)
+	t.Server.HTTP.Handle("/vali/api/v1/query", frontendHandler)
+	t.Server.HTTP.Handle("/vali/api/v1/label", frontendHandler)
+	t.Server.HTTP.Handle("/vali/api/v1/labels", frontendHandler)
+	t.Server.HTTP.Handle("/vali/api/v1/label/{name}/values", frontendHandler)
+	t.Server.HTTP.Handle("/vali/api/v1/series", frontendHandler)
 	t.Server.HTTP.Handle("/api/prom/query", frontendHandler)
 	t.Server.HTTP.Handle("/api/prom/label", frontendHandler)
 	t.Server.HTTP.Handle("/api/prom/label/{name}/values", frontendHandler)
 	t.Server.HTTP.Handle("/api/prom/series", frontendHandler)
 
 	// defer tail endpoints to the default handler
-	t.Server.HTTP.Handle("/loki/api/v1/tail", defaultHandler)
+	t.Server.HTTP.Handle("/vali/api/v1/tail", defaultHandler)
 	t.Server.HTTP.Handle("/api/prom/tail", defaultHandler)
 
 	return services.NewIdleService(nil, func(_ error) error {
@@ -468,7 +468,7 @@ func (t *Loki) initQueryFrontend() (_ services.Service, err error) {
 	}), nil
 }
 
-func (t *Loki) initRulerStorage() (_ services.Service, err error) {
+func (t *Vali) initRulerStorage() (_ services.Service, err error) {
 	// if the ruler is not configured and we're in single binary then let's just log an error and continue.
 	// unfortunately there is no way to generate a "default" config and compare default against actual
 	// to determine if it's unconfigured.  the following check, however, correctly tests this.
@@ -478,10 +478,10 @@ func (t *Loki) initRulerStorage() (_ services.Service, err error) {
 		return
 	}
 
-	// Loki doesn't support the configdb backend, but without excessive mangling/refactoring
+	// Vali doesn't support the configdb backend, but without excessive mangling/refactoring
 	// it's hard to enforce this at validation time. Therefore detect this and fail early.
 	if t.cfg.Ruler.StoreConfig.Type == "configdb" {
-		return nil, errors.New("configdb is not supported as a Loki rules backend type")
+		return nil, errors.New("configdb is not supported as a Vali rules backend type")
 	}
 
 	// Make sure storage directory exists if using filesystem store
@@ -497,7 +497,7 @@ func (t *Loki) initRulerStorage() (_ services.Service, err error) {
 	return
 }
 
-func (t *Loki) initRuler() (_ services.Service, err error) {
+func (t *Vali) initRuler() (_ services.Service, err error) {
 	if t.RulerStorage == nil {
 		level.Info(util_log.Logger).Log("msg", "RulerStorage is nil.  Not starting the ruler.")
 		return nil, nil
@@ -546,18 +546,18 @@ func (t *Loki) initRuler() (_ services.Service, err error) {
 		t.Server.HTTP.Path("/api/prom/rules/{namespace}/{groupName}").Methods("DELETE").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.DeleteRuleGroup)))
 
 		// Ruler API Routes
-		t.Server.HTTP.Path("/loki/api/v1/rules").Methods("GET").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.ListRules)))
-		t.Server.HTTP.Path("/loki/api/v1/rules/{namespace}").Methods("GET").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.ListRules)))
-		t.Server.HTTP.Path("/loki/api/v1/rules/{namespace}").Methods("POST").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.CreateRuleGroup)))
-		t.Server.HTTP.Path("/loki/api/v1/rules/{namespace}").Methods("DELETE").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.DeleteNamespace)))
-		t.Server.HTTP.Path("/loki/api/v1/rules/{namespace}/{groupName}").Methods("GET").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.GetRuleGroup)))
-		t.Server.HTTP.Path("/loki/api/v1/rules/{namespace}/{groupName}").Methods("DELETE").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.DeleteRuleGroup)))
+		t.Server.HTTP.Path("/vali/api/v1/rules").Methods("GET").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.ListRules)))
+		t.Server.HTTP.Path("/vali/api/v1/rules/{namespace}").Methods("GET").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.ListRules)))
+		t.Server.HTTP.Path("/vali/api/v1/rules/{namespace}").Methods("POST").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.CreateRuleGroup)))
+		t.Server.HTTP.Path("/vali/api/v1/rules/{namespace}").Methods("DELETE").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.DeleteNamespace)))
+		t.Server.HTTP.Path("/vali/api/v1/rules/{namespace}/{groupName}").Methods("GET").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.GetRuleGroup)))
+		t.Server.HTTP.Path("/vali/api/v1/rules/{namespace}/{groupName}").Methods("DELETE").Handler(t.HTTPAuthMiddleware.Wrap(http.HandlerFunc(t.rulerAPI.DeleteRuleGroup)))
 	}
 
 	return t.ruler, nil
 }
 
-func (t *Loki) initMemberlistKV() (services.Service, error) {
+func (t *Vali) initMemberlistKV() (services.Service, error) {
 	t.cfg.MemberlistKV.MetricsRegisterer = prometheus.DefaultRegisterer
 	t.cfg.MemberlistKV.Codecs = []codec.Codec{
 		ring.GetCodec(),
@@ -567,7 +567,7 @@ func (t *Loki) initMemberlistKV() (services.Service, error) {
 	return t.memberlistKV, nil
 }
 
-func (t *Loki) initCompactor() (services.Service, error) {
+func (t *Vali) initCompactor() (services.Service, error) {
 	var err error
 	t.compactor, err = compactor.NewCompactor(t.cfg.CompactorConfig, t.cfg.StorageConfig.Config, prometheus.DefaultRegisterer)
 	if err != nil {

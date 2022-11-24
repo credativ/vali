@@ -34,34 +34,34 @@ func TestParseRequest(t *testing.T) {
 		valid           bool
 	}{
 		{
-			path:        `/loki/api/v1/push`,
+			path:        `/vali/api/v1/push`,
 			body:        ``,
 			contentType: `application/json`,
 			valid:       false},
 		{
-			path:        `/loki/api/v1/push`,
+			path:        `/vali/api/v1/push`,
 			body:        `{"streams": [{ "stream": { "foo": "bar2" }, "values": [ [ "1570818238000000000", "fizzbuzz" ] ] }]}`,
 			contentType: ``,
 			valid:       false},
 		{
-			path:        `/loki/api/v1/push`,
+			path:        `/vali/api/v1/push`,
 			body:        `{"streams": [{ "stream": { "foo": "bar2" }, "values": [ [ "1570818238000000000", "fizzbuzz" ] ] }]}`,
 			contentType: `application/json`,
 			valid:       true},
 		{
-			path:            `/loki/api/v1/push`,
+			path:            `/vali/api/v1/push`,
 			body:            `{"streams": [{ "stream": { "foo": "bar2" }, "values": [ [ "1570818238000000000", "fizzbuzz" ] ] }]}`,
 			contentType:     `application/json`,
 			contentEncoding: ``,
 			valid:           true},
 		{
-			path:            `/loki/api/v1/push`,
+			path:            `/vali/api/v1/push`,
 			body:            gzipString(`{"streams": [{ "stream": { "foo": "bar2" }, "values": [ [ "1570818238000000000", "fizzbuzz" ] ] }]}`),
 			contentType:     `application/json`,
 			contentEncoding: `gzip`,
 			valid:           true},
 		{
-			path:            `/loki/api/v1/push`,
+			path:            `/vali/api/v1/push`,
 			body:            gzipString(`{"streams": [{ "stream": { "foo": "bar2" }, "values": [ [ "1570818238000000000", "fizzbuzz" ] ] }]}`),
 			contentType:     `application/json`,
 			contentEncoding: `snappy`,

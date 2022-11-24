@@ -5,10 +5,10 @@ import (
 	"context"
 	"io"
 
-	"github.com/grafana/loki/pkg/helpers"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/stats"
-	"github.com/grafana/loki/pkg/util"
+	"github.com/credativ/vali/pkg/helpers"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/util"
 )
 
 // SampleIterator iterates over samples in time-order.

@@ -18,11 +18,11 @@ import (
 	"github.com/weaveworks/common/httpgrpc"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/unmarshal"
-	unmarshal_legacy "github.com/grafana/loki/pkg/logql/unmarshal/legacy"
-	lokiutil "github.com/grafana/loki/pkg/util"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/unmarshal"
+	unmarshal_legacy "github.com/credativ/vali/pkg/logql/unmarshal/legacy"
+	valiutil "github.com/credativ/vali/pkg/util"
 )
 
 var (
@@ -30,12 +30,12 @@ var (
 	contentEnc  = http.CanonicalHeaderKey("Content-Encoding")
 
 	bytesIngested = promauto.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "distributor_bytes_received_total",
 		Help:      "The total number of uncompressed bytes received per tenant",
 	}, []string{"tenant"})
 	linesIngested = promauto.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "distributor_lines_received_total",
 		Help:      "The total number of lines received per tenant",
 	}, []string{"tenant"})
@@ -107,24 +107,24 @@ func (d *Distributor) PushHandler(w http.ResponseWriter, r *http.Request) {
 
 func ParseRequest(logger gokit.Logger, userID string, r *http.Request) (*logproto.PushRequest, error) {
 
-	var body lokiutil.SizeReader
+	var body valiutil.SizeReader
 
 	contentEncoding := r.Header.Get(contentEnc)
 	switch contentEncoding {
 	case "":
-		body = lokiutil.NewSizeReader(r.Body)
+		body = valiutil.NewSizeReader(r.Body)
 	case "snappy":
 		// Snappy-decoding is done by `util.ParseProtoReader(..., util.RawSnappy)` below.
 		// Pass on body bytes. Note: HTTP clients do not need to set this header,
 		// but they sometimes do. See #3407.
-		body = lokiutil.NewSizeReader(r.Body)
+		body = valiutil.NewSizeReader(r.Body)
 	case "gzip":
 		gzipReader, err := gzip.NewReader(r.Body)
 		if err != nil {
 			return nil, err
 		}
 		defer gzipReader.Close()
-		body = lokiutil.NewSizeReader(gzipReader)
+		body = valiutil.NewSizeReader(gzipReader)
 	default:
 		return nil, fmt.Errorf("Content-Encoding %q not supported", contentEncoding)
 	}
@@ -177,7 +177,7 @@ func ParseRequest(logger gokit.Logger, userID string, r *http.Request) (*logprot
 	case applicationJSON:
 		var err error
 
-		// todo once https://github.com/weaveworks/common/commit/73225442af7da93ec8f6a6e2f7c8aafaee3f8840 is in Loki.
+		// todo once https://github.com/weaveworks/common/commit/73225442af7da93ec8f6a6e2f7c8aafaee3f8840 is in Vali.
 		// We can try to pass the body as bytes.buffer instead to avoid reading into another buffer.
 		if loghttp.GetVersion(r.RequestURI) == loghttp.VersionV1 {
 			err = unmarshal.DecodePushRequest(body, &req)

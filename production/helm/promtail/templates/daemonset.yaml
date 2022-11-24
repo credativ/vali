@@ -59,10 +59,10 @@ spec:
           args:
             - "-config.file=/etc/promtail/promtail.yaml"
             {{- if not (or .Values.config.client.url .Values.config.clients) }}
-            {{- if and .Values.loki.user .Values.loki.password }}
-            - "-client.url={{ .Values.loki.serviceScheme }}://{{ .Values.loki.user }}:{{ .Values.loki.password }}@{{ include "loki.serviceName" . }}:{{ .Values.loki.servicePort }}/loki/api/v1/push"
+            {{- if and .Values.vali.user .Values.vali.password }}
+            - "-client.url={{ .Values.vali.serviceScheme }}://{{ .Values.vali.user }}:{{ .Values.vali.password }}@{{ include "vali.serviceName" . }}:{{ .Values.vali.servicePort }}/vali/api/v1/push"
             {{- else }}
-            - "-client.url={{ .Values.loki.serviceScheme }}://{{ include "loki.serviceName" . }}:{{ .Values.loki.servicePort }}/loki/api/v1/push"
+            - "-client.url={{ .Values.vali.serviceScheme }}://{{ include "vali.serviceName" . }}:{{ .Values.vali.servicePort }}/vali/api/v1/push"
             {{- end }}
             {{- end }}
             {{- if .Values.extraCommandlineArgs }}

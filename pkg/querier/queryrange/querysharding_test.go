@@ -15,29 +15,29 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
 )
 
 var (
 	nilShardingMetrics = logql.NewShardingMetrics(nil)
-	defaultReq         = func() *LokiRequest {
-		return &LokiRequest{
+	defaultReq         = func() *ValiRequest {
+		return &ValiRequest{
 			Limit:     100,
 			StartTs:   start,
 			EndTs:     end,
 			Direction: logproto.BACKWARD,
-			Path:      "/loki/api/v1/query_range",
+			Path:      "/vali/api/v1/query_range",
 		}
 	}
-	lokiResps = []queryrange.Response{
-		&LokiResponse{
+	valiResps = []queryrange.Response{
+		&ValiResponse{
 			Status:    loghttp.QueryStatusSuccess,
 			Direction: logproto.BACKWARD,
 			Limit:     defaultReq().Limit,
 			Version:   1,
-			Data: LokiData{
+			Data: ValiData{
 				ResultType: loghttp.ResultTypeStream,
 				Result: []logproto.Stream{
 					{
@@ -50,12 +50,12 @@ var (
 				},
 			},
 		},
-		&LokiResponse{
+		&ValiResponse{
 			Status:    loghttp.QueryStatusSuccess,
 			Direction: logproto.BACKWARD,
 			Limit:     100,
 			Version:   1,
-			Data: LokiData{
+			Data: ValiData{
 				ResultType: loghttp.ResultTypeStream,
 				Result: []logproto.Stream{
 					{
@@ -104,9 +104,9 @@ func Test_shardSplitter(t *testing.T) {
 			splitter := &shardSplitter{
 				shardingware: queryrange.HandlerFunc(func(ctx context.Context, req queryrange.Request) (queryrange.Response, error) {
 					didShard = true
-					return mockHandler(lokiResps[0], nil).Do(ctx, req)
+					return mockHandler(valiResps[0], nil).Do(ctx, req)
 				}),
-				next:                mockHandler(lokiResps[1], nil),
+				next:                mockHandler(valiResps[1], nil),
 				now:                 func() time.Time { return end },
 				MinShardingLookback: tc.lookback,
 			}
@@ -118,9 +118,9 @@ func Test_shardSplitter(t *testing.T) {
 			require.Nil(t, err)
 
 			if tc.shouldShard {
-				require.Equal(t, lokiResps[0], resp)
+				require.Equal(t, valiResps[0], resp)
 			} else {
-				require.Equal(t, lokiResps[1], resp)
+				require.Equal(t, valiResps[1], resp)
 			}
 		})
 	}
@@ -133,7 +133,7 @@ func Test_astMapper(t *testing.T) {
 	handler := queryrange.HandlerFunc(func(ctx context.Context, req queryrange.Request) (queryrange.Response, error) {
 		lock.Lock()
 		defer lock.Unlock()
-		resp := lokiResps[called]
+		resp := valiResps[called]
 		called++
 		return resp, nil
 	})
@@ -153,11 +153,11 @@ func Test_astMapper(t *testing.T) {
 	resp, err := mware.Do(context.Background(), defaultReq().WithQuery(`{food="bar"}`))
 	require.Nil(t, err)
 
-	expected, err := lokiCodec.MergeResponse(lokiResps...)
-	sort.Sort(logproto.Streams(expected.(*LokiResponse).Data.Result))
+	expected, err := valiCodec.MergeResponse(valiResps...)
+	sort.Sort(logproto.Streams(expected.(*ValiResponse).Data.Result))
 	require.Nil(t, err)
 	require.Equal(t, called, 2)
-	require.Equal(t, expected.(*LokiResponse).Data, resp.(*LokiResponse).Data)
+	require.Equal(t, expected.(*ValiResponse).Data, resp.(*ValiResponse).Data)
 
 }
 

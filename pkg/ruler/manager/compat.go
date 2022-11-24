@@ -23,8 +23,8 @@ import (
 	"github.com/weaveworks/common/user"
 	yaml "gopkg.in/yaml.v3"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
 )
 
 // RulesLimits is the one function we need from limits.Overrides, and
@@ -68,12 +68,12 @@ func engineQueryFunc(engine *logql.Engine, overrides RulesLimits, userID string)
 	})
 }
 
-// MultiTenantManagerAdapter will wrap a MultiTenantManager which validates loki rules
+// MultiTenantManagerAdapter will wrap a MultiTenantManager which validates vali rules
 func MultiTenantManagerAdapter(mgr ruler.MultiTenantManager) ruler.MultiTenantManager {
 	return &MultiTenantManager{mgr}
 }
 
-// MultiTenantManager wraps a cortex MultiTenantManager but validates loki rules
+// MultiTenantManager wraps a cortex MultiTenantManager but validates vali rules
 type MultiTenantManager struct {
 	ruler.MultiTenantManager
 }

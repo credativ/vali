@@ -7,11 +7,11 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/util/flagext"
 )
 
-// MultiClient is client pushing to one or more loki instances.
+// MultiClient is client pushing to one or more vali instances.
 type MultiClient struct {
 	clients []Client
 	entries chan api.Entry

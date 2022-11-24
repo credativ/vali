@@ -1,7 +1,7 @@
 {
   _config+: {
     overrides: {
-      // insert tenant overrides here. see https://github.com/grafana/loki/tree/master/docs/configuration#limits_config
+      // insert tenant overrides here. see https://github.com/credativ/vali/tree/master/docs/configuration#limits_config
       //
       //   'tenant_x': {
       //     ingestion_rate_strategy: 'global',

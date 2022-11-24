@@ -1,11 +1,11 @@
-local lokiOperational = (import './dashboard-loki-operational.json');
+local valiOperational = (import './dashboard-vali-operational.json');
 local utils = import 'mixin-utils/utils.libsonnet';
 
 {
   grafanaDashboards+: {
     local dashboards = self,
 
-    'loki-operational.json': {
+    'vali-operational.json': {
       local cfg = self,
 
       showAnnotations:: true,
@@ -33,7 +33,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
         {
           name:: 'logs',
           type:: 'datasource',
-          query:: 'loki',
+          query:: 'vali',
         },
         {
           name:: 'metrics',
@@ -59,24 +59,24 @@ local utils = import 'mixin-utils/utils.libsonnet';
           type:: cfg.namespaceType,
         },
       ],
-    } + lokiOperational + {
+    } + valiOperational + {
       annotations:
-        if dashboards['loki-operational.json'].showAnnotations
+        if dashboards['vali-operational.json'].showAnnotations
         then super.annotations
         else {},
 
       links:
-        if dashboards['loki-operational.json'].showLinks then
+        if dashboards['vali-operational.json'].showLinks then
           super.links
         else [],
 
       local matcherStr(matcherId) =
-        if std.length(dashboards['loki-operational.json'].matchers[matcherId]) > 0 then
-          std.join(',', ['%(label)s%(op)s"%(value)s"' % matcher for matcher in dashboards['loki-operational.json'].matchers[matcherId]]) + ','
+        if std.length(dashboards['vali-operational.json'].matchers[matcherId]) > 0 then
+          std.join(',', ['%(label)s%(op)s"%(value)s"' % matcher for matcher in dashboards['vali-operational.json'].matchers[matcherId]]) + ','
         else '',
 
       local replaceClusterMatchers(expr) =
-        if dashboards['loki-operational.json'].showMultiCluster
+        if dashboards['vali-operational.json'].showMultiCluster
         then expr
         else
           std.strReplace(
@@ -203,7 +203,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
             skipUrlSync: false,
             type: l.type,
           },
-          for l in dashboards['loki-operational.json'].templateLabels
+          for l in dashboards['vali-operational.json'].templateLabels
           if l.type == 'datasource'
         ] + [
           {
@@ -234,7 +234,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
             type: l.type,
             useTags: false,
           }
-          for l in dashboards['loki-operational.json'].templateLabels
+          for l in dashboards['vali-operational.json'].templateLabels
           if l.type == 'query' || l.type == 'custom'
         ],
       },

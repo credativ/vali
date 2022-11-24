@@ -10,14 +10,14 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/weaveworks/common/instrument"
 
-	"github.com/grafana/loki/pkg/canary/reader"
+	"github.com/credativ/vali/pkg/canary/reader"
 )
 
 const (
 	ErrOutOfOrderEntry           = "out of order entry %s was received before entries: %v\n"
 	ErrEntryNotReceivedWs        = "websocket failed to receive entry %v within %f seconds\n"
 	ErrEntryNotReceived          = "failed to receive entry %v within %f seconds\n"
-	ErrSpotCheckEntryNotReceived = "failed to find entry %v in Loki when spot check querying %v after it was written\n"
+	ErrSpotCheckEntryNotReceived = "failed to find entry %v in Vali when spot check querying %v after it was written\n"
 	ErrDuplicateEntry            = "received a duplicate entry for ts %v\n"
 	ErrUnexpectedEntry           = "received an unexpected entry with ts %v\n"
 	DebugWebsocketMissingEntry   = "websocket missing entry: %v\n"
@@ -27,64 +27,64 @@ const (
 
 var (
 	totalEntries = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "entries_total",
 		Help:      "counts log entries written to the file",
 	})
 	outOfOrderEntries = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "out_of_order_entries_total",
 		Help:      "counts log entries received with a timestamp more recent than the others in the queue",
 	})
 	wsMissingEntries = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "websocket_missing_entries_total",
 		Help:      "counts log entries not received within the wait duration via the websocket connection",
 	})
 	missingEntries = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "missing_entries_total",
 		Help:      "counts log entries not received within the maxWait duration via both websocket and direct query",
 	})
 	spotCheckMissing = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "spot_check_missing_entries_total",
 		Help:      "counts log entries not received when directly queried as part of spot checking",
 	})
 	spotCheckEntries = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "spot_check_entries_total",
 		Help:      "total count of entries pot checked",
 	})
 	unexpectedEntries = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "unexpected_entries_total",
 		Help:      "counts a log entry received which was not expected (e.g. received after reported missing)",
 	})
 	duplicateEntries = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "duplicate_entries_total",
 		Help:      "counts a log entry received more than one time",
 	})
 	metricTestExpected = promauto.NewGauge(prometheus.GaugeOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "metric_test_expected",
 		Help:      "How many counts were expected by the metric test query",
 	})
 	metricTestActual = promauto.NewGauge(prometheus.GaugeOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "metric_test_actual",
 		Help:      "How many counts were actually received by the metric test query",
 	})
 	responseLatency   prometheus.Histogram
 	metricTestLatency = promauto.NewHistogram(prometheus.HistogramOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "metric_test_request_duration_seconds",
 		Help:      "how long the metric test query execution took in seconds.",
 		Buckets:   instrument.DefBuckets,
 	})
 	spotTestLatency = promauto.NewHistogram(prometheus.HistogramOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "spot_check_request_duration_seconds",
 		Help:      "how long the spot check test query execution took in seconds.",
 		Buckets:   instrument.DefBuckets,
@@ -120,7 +120,7 @@ type Comparator struct {
 	startTime           time.Time
 	sent                chan time.Time
 	recv                chan time.Time
-	rdr                 reader.LokiReader
+	rdr                 reader.ValiReader
 	quit                chan struct{}
 	done                chan struct{}
 }
@@ -136,7 +136,7 @@ func NewComparator(writer io.Writer,
 	buckets int,
 	sentChan chan time.Time,
 	receivedChan chan time.Time,
-	reader reader.LokiReader,
+	reader reader.ValiReader,
 	confirmAsync bool) *Comparator {
 	c := &Comparator{
 		w:                   writer,
@@ -166,9 +166,9 @@ func NewComparator(writer io.Writer,
 
 	if responseLatency == nil {
 		responseLatency = promauto.NewHistogram(prometheus.HistogramOpts{
-			Namespace: "loki_canary",
+			Namespace: "vali_canary",
 			Name:      "response_latency_seconds",
-			Help:      "is how long it takes for log lines to be returned from Loki in seconds.",
+			Help:      "is how long it takes for log lines to be returned from Vali in seconds.",
 			Buckets:   prometheus.ExponentialBuckets(0.5, 2, buckets),
 		})
 	}
@@ -348,7 +348,7 @@ func (c *Comparator) spotCheckEntries(currTime time.Time) {
 			continue
 		}
 		spotCheckEntries.Inc()
-		// Because we are querying loki timestamps vs the timestamp in the log,
+		// Because we are querying vali timestamps vs the timestamp in the log,
 		// make the range +/- 10 seconds to allow for clock inaccuracies
 		start := *sce
 		adjustedStart := start.Add(-10 * time.Second)
@@ -357,7 +357,7 @@ func (c *Comparator) spotCheckEntries(currTime time.Time) {
 		recvd, err := c.rdr.Query(adjustedStart, adjustedEnd)
 		spotTestLatency.Observe(time.Since(begin).Seconds())
 		if err != nil {
-			fmt.Fprintf(c.w, "error querying loki: %s\n", err)
+			fmt.Fprintf(c.w, "error querying vali: %s\n", err)
 			return
 		}
 
@@ -401,7 +401,7 @@ func (c *Comparator) pruneEntries(currentTime time.Time) {
 			fmt.Fprintf(c.w, ErrEntryNotReceivedWs, t.UnixNano(), c.wait.Seconds())
 		})
 
-	// Add the list of missing entries to the list for which we will attempt to query Loki for
+	// Add the list of missing entries to the list for which we will attempt to query Vali for
 	c.missingMtx.Lock()
 	c.missingEntries = append(c.missingEntries, missing...)
 	c.missingMtx.Unlock()
@@ -425,7 +425,7 @@ func (c *Comparator) pruneEntries(currentTime time.Time) {
 }
 
 func (c *Comparator) confirmMissing(currentTime time.Time) {
-	// Because we are querying loki timestamps vs the timestamp in the log,
+	// Because we are querying vali timestamps vs the timestamp in the log,
 	// make the range +/- 10 seconds to allow for clock inaccuracies
 	start := *c.missingEntries[0]
 	start = start.Add(-10 * time.Second)
@@ -433,11 +433,11 @@ func (c *Comparator) confirmMissing(currentTime time.Time) {
 	end = end.Add(10 * time.Second)
 	recvd, err := c.rdr.Query(start, end)
 	if err != nil {
-		fmt.Fprintf(c.w, "error querying loki: %s\n", err)
+		fmt.Fprintf(c.w, "error querying vali: %s\n", err)
 		return
 	}
 	// This is to help debug some missing log entries when queried,
-	// let's print exactly what we are missing and what Loki sent back
+	// let's print exactly what we are missing and what Vali sent back
 	for _, r := range c.missingEntries {
 		fmt.Fprintf(c.w, DebugWebsocketMissingEntry, r.UnixNano())
 	}
@@ -455,7 +455,7 @@ func (c *Comparator) confirmMissing(currentTime time.Time) {
 		found := false
 		for _, r := range recvd {
 			if (*m).Equal(r) {
-				// Entry was found in loki, this can be dropped from the list of missing
+				// Entry was found in vali, this can be dropped from the list of missing
 				// which is done by NOT incrementing the output index k
 				fmt.Fprintf(c.w, DebugEntryFound, (*m).UnixNano(), currentTime.Sub(*m).Seconds())
 				found = true

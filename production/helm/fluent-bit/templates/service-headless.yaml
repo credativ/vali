@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fluent-bit-loki.fullname" . }}-headless
+  name: {{ template "fluent-bit-vali.fullname" . }}-headless
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "fluent-bit-loki.name" . }}
-    chart: {{ template "fluent-bit-loki.chart" . }}
+    app: {{ template "fluent-bit-vali.name" . }}
+    chart: {{ template "fluent-bit-vali.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -17,6 +17,6 @@ spec:
       name: http-metrics
       targetPort: http-metrics
   selector:
-    app: {{ template "fluent-bit-loki.name" . }}
+    app: {{ template "fluent-bit-vali.name" . }}
     release: {{ .Release.Name }}
 {{- end }}

@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ template "loki.fullname" . }}
+  name: {{ template "vali.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "loki.name" . }}
-    chart: {{ template "loki.chart" . }}
+    app: {{ template "vali.name" . }}
+    chart: {{ template "vali.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
@@ -15,16 +15,16 @@ spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: {{ template "loki.name" . }}
+      app: {{ template "vali.name" . }}
       release: {{ .Release.Name }}
-  serviceName: {{ template "loki.fullname" . }}-headless
+  serviceName: {{ template "vali.fullname" . }}-headless
   updateStrategy:
     {{- toYaml .Values.updateStrategy | nindent 4 }}
   template:
     metadata:
       labels:
-        app: {{ template "loki.name" . }}
-        name: {{ template "loki.name" . }}
+        app: {{ template "vali.name" . }}
+        name: {{ template "vali.name" . }}
         release: {{ .Release.Name }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
@@ -35,7 +35,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "loki.serviceAccountName" . }}
+      serviceAccountName: {{ template "vali.serviceAccountName" . }}
     {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
     {{- end }}
@@ -54,7 +54,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
-            - "-config.file=/etc/loki/loki.yaml"
+            - "-config.file=/etc/vali/vali.yaml"
           {{- range $key, $value := .Values.extraArgs }}
             - "-{{ $key }}={{ $value }}"
           {{- end }}
@@ -63,7 +63,7 @@ spec:
               {{ toYaml .Values.extraVolumeMounts | nindent 12}}
             {{- end }}
             - name: config
-              mountPath: /etc/loki
+              mountPath: /etc/vali
             - name: storage
               mountPath: "/data"
               subPath: {{ .Values.persistence.subPath }}
@@ -109,11 +109,11 @@ spec:
           emptyDir: {}
         - name: rules
           configMap:
-            name: {{ template "loki.fullname" . }}-alerting-rules
+            name: {{ template "vali.fullname" . }}-alerting-rules
         {{- end }}
         - name: config
           secret:
-            secretName: {{ template "loki.fullname" . }}
+            secretName: {{ template "vali.fullname" . }}
 {{- if .Values.extraVolumes }}
 {{ toYaml .Values.extraVolumes | indent 8}}
 {{- end }}

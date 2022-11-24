@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/grafana/loki/pkg/loghttp"
+	"github.com/credativ/vali/pkg/loghttp"
 )
 
 func TestDefaultOutput_Format(t *testing.T) {
@@ -146,22 +146,22 @@ func TestColorForLabels(t *testing.T) {
 		"different labels": {
 			loghttp.LabelSet(map[string]string{
 				"type": "test",
-				"app":  "loki",
+				"app":  "vali",
 			}),
 			loghttp.LabelSet(map[string]string{
 				"type": "test",
-				"app":  "grafana-loki",
+				"app":  "grafana-vali",
 			}),
 			false,
 		},
 		"same labels": {
 			loghttp.LabelSet(map[string]string{
 				"type": "test",
-				"app":  "loki",
+				"app":  "vali",
 			}),
 			loghttp.LabelSet(map[string]string{
 				"type": "test",
-				"app":  "loki",
+				"app":  "vali",
 			}),
 			true,
 		},

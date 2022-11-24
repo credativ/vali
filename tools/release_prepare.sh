@@ -26,31 +26,31 @@ else
     exit 1
 fi
 
-LOKI_CURRENT=$(sed -n -e 's/^version: //p' production/helm/loki/Chart.yaml)
-LOKI_SUGGESTED=$(tools/increment_version.sh -m ${LOKI_CURRENT})
+VALI_CURRENT=$(sed -n -e 's/^version: //p' production/helm/vali/Chart.yaml)
+VALI_SUGGESTED=$(tools/increment_version.sh -m ${VALI_CURRENT})
 PROMTAIL_CURRENT=$(sed -n -e 's/^version: //p' production/helm/promtail/Chart.yaml)
 PROMTAIL_SUGGESTED=$(tools/increment_version.sh -m ${PROMTAIL_CURRENT})
-LOKI_STACK_CURRENT=$(sed -n -e 's/^version: //p' production/helm/loki-stack/Chart.yaml)
-LOKI_STACK_SUGGESTED=$(tools/increment_version.sh -m ${LOKI_STACK_CURRENT})
+VALI_STACK_CURRENT=$(sed -n -e 's/^version: //p' production/helm/vali-stack/Chart.yaml)
+VALI_STACK_SUGGESTED=$(tools/increment_version.sh -m ${VALI_STACK_CURRENT})
 echo
-echo "Current Loki helm chart version: ${LOKI_CURRENT}"
-read -p "Enter new Loki helm chart version [${LOKI_SUGGESTED}]: " LOKI_VERSION
-LOKI_VERSION=${LOKI_VERSION:-${LOKI_SUGGESTED}}
+echo "Current Vali helm chart version: ${VALI_CURRENT}"
+read -p "Enter new Vali helm chart version [${VALI_SUGGESTED}]: " VALI_VERSION
+VALI_VERSION=${VALI_VERSION:-${VALI_SUGGESTED}}
 echo
 echo "Current Promtail helm chart version: ${PROMTAIL_CURRENT}"
 read -p "Enter new Promtail helm chart version [${PROMTAIL_SUGGESTED}]: " PROMTAIL_VERSION
 PROMTAIL_VERSION=${PROMTAIL_VERSION:-${PROMTAIL_SUGGESTED}}
 echo
-echo "Current Loki-Stack helm chart version: ${LOKI_STACK_CURRENT}"
-read -p "Enter new Loki-Stack helm chart version [${LOKI_STACK_SUGGESTED}]: " LOKI_STACK_VERSION
-LOKI_STACK_VERSION=${LOKI_STACK_VERSION:-${LOKI_STACK_SUGGESTED}}
+echo "Current Vali-Stack helm chart version: ${VALI_STACK_CURRENT}"
+read -p "Enter new Vali-Stack helm chart version [${VALI_STACK_SUGGESTED}]: " VALI_STACK_VERSION
+VALI_STACK_VERSION=${VALI_STACK_VERSION:-${VALI_STACK_SUGGESTED}}
 echo
 
 echo "Creating Release"
 echo "Release Version:       ${VERSION}"
-echo "Loki Helm Chart:       ${LOKI_VERSION}"
+echo "Vali Helm Chart:       ${VALI_VERSION}"
 echo "Promtail Helm Chart:   ${PROMTAIL_VERSION}"
-echo "Loki-Stack Helm Chart: ${LOKI_STACK_VERSION}"
+echo "Vali-Stack Helm Chart: ${VALI_STACK_VERSION}"
 echo
 read -p "Is this correct? [y]: " CONTINUE
 CONTINUE=${CONTINUE:-y}
@@ -62,19 +62,19 @@ fi
 
 echo "Updating helm and ksonnet image versions"
 sed-wrap "s/.*promtail:.*/    promtail: 'grafana\/promtail:${VERSION}',/" production/ksonnet/promtail/config.libsonnet
-sed-wrap "s/.*loki_canary:.*/    loki_canary: 'grafana\/loki-canary:${VERSION}',/" production/ksonnet/loki-canary/config.libsonnet
-sed-wrap "s/.*loki:.*/    loki: 'grafana\/loki:${VERSION}',/" production/ksonnet/loki/images.libsonnet
-sed-wrap "s/.*tag:.*/  tag: ${VERSION}/" production/helm/loki/values.yaml
+sed-wrap "s/.*vali_canary:.*/    vali_canary: 'grafana\/vali-canary:${VERSION}',/" production/ksonnet/vali-canary/config.libsonnet
+sed-wrap "s/.*vali:.*/    vali: 'grafana\/vali:${VERSION}',/" production/ksonnet/vali/images.libsonnet
+sed-wrap "s/.*tag:.*/  tag: ${VERSION}/" production/helm/vali/values.yaml
 sed-wrap "s/.*tag:.*/  tag: ${VERSION}/" production/helm/promtail/values.yaml
 
 echo "Updating helm charts"
-sed-wrap "s/^version:.*/version: ${LOKI_VERSION}/" production/helm/loki/Chart.yaml
+sed-wrap "s/^version:.*/version: ${VALI_VERSION}/" production/helm/vali/Chart.yaml
 sed-wrap "s/^version:.*/version: ${PROMTAIL_VERSION}/" production/helm/promtail/Chart.yaml
-sed-wrap "s/^version:.*/version: ${LOKI_STACK_VERSION}/" production/helm/loki-stack/Chart.yaml
+sed-wrap "s/^version:.*/version: ${VALI_STACK_VERSION}/" production/helm/vali-stack/Chart.yaml
 
-sed-wrap "s/^appVersion:.*/appVersion: ${VERSION}/" production/helm/loki/Chart.yaml
+sed-wrap "s/^appVersion:.*/appVersion: ${VERSION}/" production/helm/vali/Chart.yaml
 sed-wrap "s/^appVersion:.*/appVersion: ${VERSION}/" production/helm/promtail/Chart.yaml
-sed-wrap "s/^appVersion:.*/appVersion: ${VERSION}/" production/helm/loki-stack/Chart.yaml
+sed-wrap "s/^appVersion:.*/appVersion: ${VERSION}/" production/helm/vali-stack/Chart.yaml
 
 echo
 echo "######################################################################################################"

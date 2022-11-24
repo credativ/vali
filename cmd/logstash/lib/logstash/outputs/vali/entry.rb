@@ -1,9 +1,9 @@
-module Loki
+module Vali
     def to_ns(s)
         (s.to_f * (10**9)).to_i
     end
     class Entry
-        include Loki
+        include Vali
         attr_reader :labels, :entry
         def initialize(event,message_field)
             @entry = {

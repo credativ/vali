@@ -10,8 +10,8 @@ import (
 	json "github.com/json-iterator/go"
 	"github.com/prometheus/common/model"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 var (
@@ -30,7 +30,7 @@ const (
 	QueryStatusFail    = "fail"
 )
 
-// QueryResponse represents the http json response to a Loki range and instant query
+// QueryResponse represents the http json response to a Vali range and instant query
 type QueryResponse struct {
 	Status string            `json:"status"`
 	Data   QueryResponseData `json:"data"`

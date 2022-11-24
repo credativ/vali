@@ -15,7 +15,7 @@ import (
 	"github.com/cortexproject/cortex/pkg/chunk"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/storage/stores/shipper/testutil"
+	"github.com/credativ/vali/pkg/storage/stores/shipper/testutil"
 )
 
 func buildTestTableManager(t *testing.T, path string) (*TableManager, stopFunc) {

@@ -5,7 +5,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
   grafanaDashboards+: {
     local dashboards = self,
 
-    'loki-chunks.json':{
+    'vali-chunks.json':{
       local cfg = self,
 
       showMultiCluster:: true,
@@ -19,9 +19,9 @@ local utils = import 'mixin-utils/utils.libsonnet';
       namespaceType:: 'query',
       namespaceQuery::
         if cfg.showMultiCluster then
-          'kube_pod_container_info{cluster="$cluster", image=~".*loki.*"}'
+          'kube_pod_container_info{cluster="$cluster", image=~".*vali.*"}'
         else
-          'kube_pod_container_info{image=~".*loki.*"}',
+          'kube_pod_container_info{image=~".*vali.*"}',
 
       assert (cfg.namespaceType == 'custom' || cfg.namespaceType == 'query') : "Only types 'query' and 'custom' are allowed for dashboard variable 'namespace'",
 
@@ -41,7 +41,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
           {
             variable:: 'cluster',
             label:: cfg.clusterLabel,
-            query:: 'kube_pod_container_info{image=~".*loki.*"}',
+            query:: 'kube_pod_container_info{image=~".*vali.*"}',
             type:: 'query'
           },
         ] else []
@@ -54,19 +54,19 @@ local utils = import 'mixin-utils/utils.libsonnet';
         },
       ],
     } +
-    g.dashboard('Loki / Chunks')
+    g.dashboard('Vali / Chunks')
     .addRow(
       g.row('Active Series / Chunks')
       .addPanel(
         g.panel('Series') +
-        g.queryPanel('sum(loki_ingester_memory_chunks{%s})' % dashboards['loki-chunks.json'].ingesterSelector, 'series'),
+        g.queryPanel('sum(vali_ingester_memory_chunks{%s})' % dashboards['vali-chunks.json'].ingesterSelector, 'series'),
       )
       .addPanel(
         g.panel('Chunks per series') +
         g.queryPanel(
-          'sum(loki_ingester_memory_chunks{%s}) / sum(loki_ingester_memory_streams{%s})' % [
-            dashboards['loki-chunks.json'].ingesterSelector,
-            dashboards['loki-chunks.json'].ingesterSelectorOnly,
+          'sum(vali_ingester_memory_chunks{%s}) / sum(vali_ingester_memory_streams{%s})' % [
+            dashboards['vali-chunks.json'].ingesterSelector,
+            dashboards['vali-chunks.json'].ingesterSelectorOnly,
           ],
           'chunks'
         ),
@@ -76,27 +76,27 @@ local utils = import 'mixin-utils/utils.libsonnet';
       g.row('Flush Stats')
       .addPanel(
         g.panel('Utilization') +
-        g.latencyPanel('loki_ingester_chunk_utilization', '{%s}' % dashboards['loki-chunks.json'].ingesterSelector, multiplier='1') +
+        g.latencyPanel('vali_ingester_chunk_utilization', '{%s}' % dashboards['vali-chunks.json'].ingesterSelector, multiplier='1') +
         { yaxes: g.yaxes('percentunit') },
       )
       .addPanel(
         g.panel('Age') +
-        g.latencyPanel('loki_ingester_chunk_age_seconds', '{%s}' % dashboards['loki-chunks.json'].ingesterSelector),
+        g.latencyPanel('vali_ingester_chunk_age_seconds', '{%s}' % dashboards['vali-chunks.json'].ingesterSelector),
       ),
     )
     .addRow(
       g.row('Flush Stats')
       .addPanel(
         g.panel('Size') +
-        g.latencyPanel('loki_ingester_chunk_entries', '{%s}' % dashboards['loki-chunks.json'].ingesterSelector, multiplier='1') +
+        g.latencyPanel('vali_ingester_chunk_entries', '{%s}' % dashboards['vali-chunks.json'].ingesterSelector, multiplier='1') +
         { yaxes: g.yaxes('short') },
       )
       .addPanel(
         g.panel('Entries') +
         g.queryPanel(
           'sum(rate(cortex_chunk_store_index_entries_per_chunk_sum{%s}[5m])) / sum(rate(cortex_chunk_store_index_entries_per_chunk_count{%s}[5m]))' % [
-            dashboards['loki-chunks.json'].ingesterSelector,
-            dashboards['loki-chunks.json'].ingesterSelector,
+            dashboards['vali-chunks.json'].ingesterSelector,
+            dashboards['vali-chunks.json'].ingesterSelector,
           ],
           'entries'
         ),
@@ -106,11 +106,11 @@ local utils = import 'mixin-utils/utils.libsonnet';
       g.row('Flush Stats')
       .addPanel(
         g.panel('Queue Length') +
-        g.queryPanel('cortex_ingester_flush_queue_length{%s}' % dashboards['loki-chunks.json'].ingesterSelector, '{{pod}}'),
+        g.queryPanel('cortex_ingester_flush_queue_length{%s}' % dashboards['vali-chunks.json'].ingesterSelector, '{{pod}}'),
       )
       .addPanel(
         g.panel('Flush Rate') +
-        g.qpsPanel('loki_ingester_chunk_age_seconds_count{%s}' % dashboards['loki-chunks.json'].ingesterSelector,),
+        g.qpsPanel('vali_ingester_chunk_age_seconds_count{%s}' % dashboards['vali-chunks.json'].ingesterSelector,),
       ),
     )
     .addRow(
@@ -119,11 +119,11 @@ local utils = import 'mixin-utils/utils.libsonnet';
         g.panel('Chunk Duration hours (end-start)') +
         g.queryPanel(
           [
-            'histogram_quantile(0.5, sum(rate(loki_ingester_chunk_bounds_hours_bucket{%s}[5m])) by (le))' % dashboards['loki-chunks.json'].ingesterSelector,
-            'histogram_quantile(0.99, sum(rate(loki_ingester_chunk_bounds_hours_bucket{%s}[5m])) by (le))' % dashboards['loki-chunks.json'].ingesterSelector,
-            'sum(rate(loki_ingester_chunk_bounds_hours_sum{%s}[5m])) / sum(rate(loki_ingester_chunk_bounds_hours_count{%s}[5m]))' % [
-              dashboards['loki-chunks.json'].ingesterSelector,
-              dashboards['loki-chunks.json'].ingesterSelector,
+            'histogram_quantile(0.5, sum(rate(vali_ingester_chunk_bounds_hours_bucket{%s}[5m])) by (le))' % dashboards['vali-chunks.json'].ingesterSelector,
+            'histogram_quantile(0.99, sum(rate(vali_ingester_chunk_bounds_hours_bucket{%s}[5m])) by (le))' % dashboards['vali-chunks.json'].ingesterSelector,
+            'sum(rate(vali_ingester_chunk_bounds_hours_sum{%s}[5m])) / sum(rate(vali_ingester_chunk_bounds_hours_count{%s}[5m]))' % [
+              dashboards['vali-chunks.json'].ingesterSelector,
+              dashboards['vali-chunks.json'].ingesterSelector,
             ],
           ],
           [
@@ -164,7 +164,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
             type: l.type,
             useTags: false,
           }
-          for l in dashboards['loki-chunks.json'].templateLabels
+          for l in dashboards['vali-chunks.json'].templateLabels
         ],
       },
     },

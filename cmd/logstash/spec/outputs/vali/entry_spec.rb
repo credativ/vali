@@ -1,12 +1,12 @@
 # encoding: utf-8
 require "logstash/devutils/rspec/spec_helper"
-require "logstash/outputs/loki"
+require "logstash/outputs/vali"
 require "logstash/codecs/plain"
 require "logstash/event"
 require "net/http"
-include Loki
+include Vali
 
-describe Loki::Entry do
+describe Vali::Entry do
   context 'test entry generation' do
       let (:event) {
         LogStash::Event.new(
@@ -49,7 +49,7 @@ describe Loki::Entry do
     }
 
     it 'to_json' do
-      @batch = Loki::Batch.new(entries.first)
+      @batch = Vali::Batch.new(entries.first)
       entries.drop(1).each { |e| @batch.add(e)}
       expect(JSON.parse(@batch.to_json)).to eql expected
     end

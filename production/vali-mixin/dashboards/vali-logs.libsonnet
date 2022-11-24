@@ -1,10 +1,10 @@
-local lokiLogs = (import './dashboard-loki-logs.json');
+local valiLogs = (import './dashboard-vali-logs.json');
 
 {
   grafanaDashboards+: {
     local dashboards = self,
 
-    'loki-logs.json': {
+    'vali-logs.json': {
       local cfg = self,
 
       showMultiCluster:: true,
@@ -23,7 +23,7 @@ local lokiLogs = (import './dashboard-loki-logs.json');
         {
           name:: 'logs',
           type:: 'datasource',
-          query:: 'loki',
+          query:: 'vali',
         },
         {
           name:: 'logmetrics',
@@ -138,13 +138,13 @@ local lokiLogs = (import './dashboard-loki-logs.json');
           type: 'textbox',
         },
       ],
-    } + lokiLogs +
+    } + valiLogs +
     {
       panels: [
         p + {
           targets: [
             e + {
-              expr: if dashboards['loki-logs.json'].showMultiCluster then super.expr
+              expr: if dashboards['vali-logs.json'].showMultiCluster then super.expr
               else std.strReplace(super.expr, 'cluster="$cluster", ', '')
             }
             for e in p.targets
@@ -167,7 +167,7 @@ local lokiLogs = (import './dashboard-loki-logs.json');
             skipUrlSync: false,
             type: l.type,
           },
-          for l in dashboards['loki-logs.json'].templateLabels
+          for l in dashboards['vali-logs.json'].templateLabels
           if l.type == 'datasource'
         ] + [
           {
@@ -190,7 +190,7 @@ local lokiLogs = (import './dashboard-loki-logs.json');
             type: 'query',
             useTags: false,
           }
-          for l in dashboards['loki-logs.json'].templateLabels
+          for l in dashboards['vali-logs.json'].templateLabels
           if l.type == 'query'
         ] + [
           {
@@ -205,7 +205,7 @@ local lokiLogs = (import './dashboard-loki-logs.json');
             skipUrlSync: false,
             type: l.type
           }
-          for l in dashboards['loki-logs.json'].templateLabels
+          for l in dashboards['vali-logs.json'].templateLabels
           if l.type == 'custom'
         ] + [
           {
@@ -217,7 +217,7 @@ local lokiLogs = (import './dashboard-loki-logs.json');
             skipUrlSync: false,
             type: l.type,
           }
-          for l in dashboards['loki-logs.json'].templateLabels
+          for l in dashboards['vali-logs.json'].templateLabels
           if l.type == 'textbox'
         ],
       },

@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/logproto"
+	"github.com/credativ/vali/pkg/logproto"
 )
 
 func TestHttp_defaultQueryRangeStep(t *testing.T) {
@@ -55,7 +55,7 @@ func TestHttp_ParseRangeQuery_Step(t *testing.T) {
 		expected *RangeQuery
 	}{
 		"should set the default step based on the input time range if the step parameter is not provided": {
-			reqPath: "/loki/api/v1/query_range?query={}&start=0&end=3600000000000",
+			reqPath: "/vali/api/v1/query_range?query={}&start=0&end=3600000000000",
 			expected: &RangeQuery{
 				Query:     "{}",
 				Start:     time.Unix(0, 0),
@@ -66,7 +66,7 @@ func TestHttp_ParseRangeQuery_Step(t *testing.T) {
 			},
 		},
 		"should use the input step parameter if provided as an integer": {
-			reqPath: "/loki/api/v1/query_range?query={}&start=0&end=3600000000000&step=5",
+			reqPath: "/vali/api/v1/query_range?query={}&start=0&end=3600000000000&step=5",
 			expected: &RangeQuery{
 				Query:     "{}",
 				Start:     time.Unix(0, 0),
@@ -77,7 +77,7 @@ func TestHttp_ParseRangeQuery_Step(t *testing.T) {
 			},
 		},
 		"should use the input step parameter if provided as a float without decimals": {
-			reqPath: "/loki/api/v1/query_range?query={}&start=0&end=3600000000000&step=5.000",
+			reqPath: "/vali/api/v1/query_range?query={}&start=0&end=3600000000000&step=5.000",
 			expected: &RangeQuery{
 				Query:     "{}",
 				Start:     time.Unix(0, 0),
@@ -88,7 +88,7 @@ func TestHttp_ParseRangeQuery_Step(t *testing.T) {
 			},
 		},
 		"should use the input step parameter if provided as a float with decimals": {
-			reqPath: "/loki/api/v1/query_range?query={}&start=0&end=3600000000000&step=5.500",
+			reqPath: "/vali/api/v1/query_range?query={}&start=0&end=3600000000000&step=5.500",
 			expected: &RangeQuery{
 				Query:     "{}",
 				Start:     time.Unix(0, 0),
@@ -99,7 +99,7 @@ func TestHttp_ParseRangeQuery_Step(t *testing.T) {
 			},
 		},
 		"should use the input step parameter if provided as a duration in seconds": {
-			reqPath: "/loki/api/v1/query_range?query={}&start=0&end=3600000000000&step=5s",
+			reqPath: "/vali/api/v1/query_range?query={}&start=0&end=3600000000000&step=5s",
 			expected: &RangeQuery{
 				Query:     "{}",
 				Start:     time.Unix(0, 0),
@@ -110,7 +110,7 @@ func TestHttp_ParseRangeQuery_Step(t *testing.T) {
 			},
 		},
 		"should use the input step parameter if provided as a duration in days": {
-			reqPath: "/loki/api/v1/query_range?query={}&start=0&end=3600000000000&step=5d",
+			reqPath: "/vali/api/v1/query_range?query={}&start=0&end=3600000000000&step=5d",
 			expected: &RangeQuery{
 				Query:     "{}",
 				Start:     time.Unix(0, 0),
@@ -146,31 +146,31 @@ func Test_interval(t *testing.T) {
 	}{
 		{
 			"valid_step_int",
-			"/loki/api/v1/query_range?query={}&start=0&end=3600000000000&interval=5",
+			"/vali/api/v1/query_range?query={}&start=0&end=3600000000000&interval=5",
 			5 * time.Second,
 			false,
 		},
 		{
 			"valid_step_duration",
-			"/loki/api/v1/query_range?query={}&start=0&end=3600000000000&interval=5m",
+			"/vali/api/v1/query_range?query={}&start=0&end=3600000000000&interval=5m",
 			5 * time.Minute,
 			false,
 		},
 		{
 			"invalid",
-			"/loki/api/v1/query_range?query={}&start=0&end=3600000000000&interval=a",
+			"/vali/api/v1/query_range?query={}&start=0&end=3600000000000&interval=a",
 			0,
 			true,
 		},
 		{
 			"valid_0",
-			"/loki/api/v1/query_range?query={}&start=0&end=3600000000000&interval=0",
+			"/vali/api/v1/query_range?query={}&start=0&end=3600000000000&interval=0",
 			0,
 			false,
 		},
 		{
 			"valid_not_included",
-			"/loki/api/v1/query_range?query={}&start=0&end=3600000000000",
+			"/vali/api/v1/query_range?query={}&start=0&end=3600000000000",
 			0,
 			false,
 		},

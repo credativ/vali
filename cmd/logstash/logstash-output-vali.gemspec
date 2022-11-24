@@ -1,11 +1,11 @@
 Gem::Specification.new do |s|
-  s.name    = 'logstash-output-loki'
+  s.name    = 'logstash-output-vali'
   s.version = '1.0.3'
   s.authors = ['Aditya C S','Cyril Tovena']
   s.email   = ['aditya.gnu@gmail.com','cyril.tovena@grafana.com']
 
-  s.summary       = 'Output plugin to ship logs to a Grafana Loki server'
-  s.description   = 'Output plugin to ship logs to a Grafana Loki server'
+  s.summary       = 'Output plugin to ship logs to a Grafana Vali server'
+  s.description   = 'Output plugin to ship logs to a Grafana Vali server'
   s.homepage      = 'https://github.com/grafana/loki/'
   s.license       = 'Apache-2.0'
   s.require_paths = ["lib"]

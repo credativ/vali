@@ -14,11 +14,11 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	loki_runtime "github.com/grafana/loki/pkg/util/runtime"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	vali_runtime "github.com/credativ/vali/pkg/util/runtime"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 func defaultConfig() *Config {
@@ -39,7 +39,7 @@ func TestLabelsCollisions(t *testing.T) {
 	require.NoError(t, err)
 	limiter := NewLimiter(limits, &ringCountMock{count: 1}, 1)
 
-	i := newInstance(defaultConfig(), "test", limiter, loki_runtime.DefaultTenantConfigs(), noopWAL{}, nil, &OnceSwitch{})
+	i := newInstance(defaultConfig(), "test", limiter, vali_runtime.DefaultTenantConfigs(), noopWAL{}, nil, &OnceSwitch{})
 
 	// avoid entries from the future.
 	tt := time.Now().Add(-5 * time.Minute)
@@ -66,7 +66,7 @@ func TestConcurrentPushes(t *testing.T) {
 	require.NoError(t, err)
 	limiter := NewLimiter(limits, &ringCountMock{count: 1}, 1)
 
-	inst := newInstance(defaultConfig(), "test", limiter, loki_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, &OnceSwitch{})
+	inst := newInstance(defaultConfig(), "test", limiter, vali_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, &OnceSwitch{})
 
 	const (
 		concurrent          = 10
@@ -124,7 +124,7 @@ func TestSyncPeriod(t *testing.T) {
 		minUtil    = 0.20
 	)
 
-	inst := newInstance(defaultConfig(), "test", limiter, loki_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, &OnceSwitch{})
+	inst := newInstance(defaultConfig(), "test", limiter, vali_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, &OnceSwitch{})
 	lbls := makeRandomLabels()
 
 	tt := time.Now()
@@ -164,7 +164,7 @@ func Test_SeriesQuery(t *testing.T) {
 	cfg.SyncPeriod = 1 * time.Minute
 	cfg.SyncMinUtilization = 0.20
 
-	instance := newInstance(cfg, "test", limiter, loki_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, &OnceSwitch{})
+	instance := newInstance(cfg, "test", limiter, vali_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, &OnceSwitch{})
 
 	currentTime := time.Now()
 
@@ -274,7 +274,7 @@ func Benchmark_PushInstance(b *testing.B) {
 	require.NoError(b, err)
 	limiter := NewLimiter(limits, &ringCountMock{count: 1}, 1)
 
-	i := newInstance(&Config{}, "test", limiter, loki_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, &OnceSwitch{})
+	i := newInstance(&Config{}, "test", limiter, vali_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, &OnceSwitch{})
 	ctx := context.Background()
 
 	for n := 0; n < b.N; n++ {
@@ -316,7 +316,7 @@ func Benchmark_instance_addNewTailer(b *testing.B) {
 
 	ctx := context.Background()
 
-	inst := newInstance(&Config{}, "test", limiter, loki_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, &OnceSwitch{})
+	inst := newInstance(&Config{}, "test", limiter, vali_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, &OnceSwitch{})
 	t, err := newTailer("foo", `{namespace="foo",pod="bar",instance=~"10.*"}`, nil)
 	require.NoError(b, err)
 	for i := 0; i < 10000; i++ {
@@ -366,7 +366,7 @@ func Test_Iterator(t *testing.T) {
 	defaultLimits := defaultLimitsTestConfig()
 	overrides, err := validation.NewOverrides(defaultLimits, nil)
 	require.NoError(t, err)
-	instance := newInstance(&ingesterConfig, "fake", NewLimiter(overrides, &ringCountMock{count: 1}, 1), loki_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, nil)
+	instance := newInstance(&ingesterConfig, "fake", NewLimiter(overrides, &ringCountMock{count: 1}, 1), vali_runtime.DefaultTenantConfigs(), noopWAL{}, NilMetrics, nil)
 	ctx := context.TODO()
 	direction := logproto.BACKWARD
 	limit := uint32(2)

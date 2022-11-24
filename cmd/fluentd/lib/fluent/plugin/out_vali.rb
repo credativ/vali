@@ -24,8 +24,8 @@ require 'time'
 module Fluent
   module Plugin
     # Subclass of Fluent Plugin Output
-    class LokiOutput < Fluent::Plugin::Output # rubocop:disable Metrics/ClassLength
-      Fluent::Plugin.register_output('loki', self)
+    class ValiOutput < Fluent::Plugin::Output # rubocop:disable Metrics/ClassLength
+      Fluent::Plugin.register_output('vali', self)
 
       class LogPostError < StandardError; end
 
@@ -35,7 +35,7 @@ module Fluent
 
       DEFAULT_BUFFER_TYPE = 'memory'
 
-      desc 'Loki API base URL'
+      desc 'Vali API base URL'
       config_param :url, :string, default: 'https://logs-prod-us-central1.grafana.net'
 
       desc 'Authentication: basic auth credentials'
@@ -55,7 +55,7 @@ module Fluent
       desc 'TLS: disable server certificate verification'
       config_param :insecure_tls, :bool, default: false
 
-      desc 'Loki tenant id'
+      desc 'Vali tenant id'
       config_param :tenant, :string, default: nil
 
       desc 'extra labels to add to all log streams'
@@ -64,7 +64,7 @@ module Fluent
       desc 'format to use when flattening the record to a log line'
       config_param :line_format, :enum, list: %i[json key_value], default: :key_value
 
-      desc 'extract kubernetes labels as loki labels'
+      desc 'extract kubernetes labels as vali labels'
       config_param :extract_kubernetes_labels, :bool, default: false
 
       desc 'comma separated list of needless record keys to remove'
@@ -81,7 +81,7 @@ module Fluent
       def configure(conf) # rubocop:disable Metrics/CyclomaticComplexity
         compat_parameters_convert(conf, :buffer)
         super
-        @uri = URI.parse(@url + '/loki/api/v1/push')
+        @uri = URI.parse(@url + '/vali/api/v1/push')
         unless @uri.is_a?(URI::HTTP) || @uri.is_a?(URI::HTTPS)
           raise Fluent::ConfigError, 'URL parameter must have HTTP/HTTPS scheme'
         end
@@ -144,16 +144,16 @@ module Fluent
         true
       end
 
-      # flush a chunk to loki
+      # flush a chunk to vali
       def write(chunk)
         # streams by label
-        payload = generic_to_loki(chunk)
+        payload = generic_to_vali(chunk)
         body = { 'streams' => payload }
 
         tenant = extract_placeholders(@tenant, chunk) if @tenant
 
-        # add ingest path to loki url
-        res = loki_http_request(body, tenant)
+        # add ingest path to vali url
+        res = vali_http_request(body, tenant)
 
         if res.is_a?(Net::HTTPSuccess)
           log.debug "POST request was responded to with status code #{res.code}"
@@ -198,16 +198,16 @@ module Fluent
         opts
       end
 
-      def generic_to_loki(chunk)
-        # log.debug("GenericToLoki: converting #{chunk}")
-        streams = chunk_to_loki(chunk)
+      def generic_to_vali(chunk)
+        # log.debug("GenericToVali: converting #{chunk}")
+        streams = chunk_to_vali(chunk)
         payload = payload_builder(streams)
         payload
       end
 
       private
 
-      def loki_http_request(body, tenant)
+      def vali_http_request(body, tenant)
         req = Net::HTTP::Post.new(
           @uri.request_uri
         )
@@ -219,7 +219,7 @@ module Fluent
 
         opts = http_request_opts(@uri)
 
-        msg = "sending #{req.body.length} bytes to loki"
+        msg = "sending #{req.body.length} bytes to vali"
         msg += " (tenant: \"#{tenant}\")" if tenant
         log.debug msg
 
@@ -293,8 +293,8 @@ module Fluent
       end
 
       #
-      # convert a line to loki line with labels
-      def line_to_loki(record)
+      # convert a line to vali line with labels
+      def line_to_vali(record)
         chunk_labels = {}
         line = ''
         if record.is_a?(Hash)
@@ -325,7 +325,7 @@ module Fluent
         end
 
         # add buffer flush thread title as a label if there are multiple flush threads
-        # this prevents "entry out of order" errors in loki by making the label constellation
+        # this prevents "entry out of order" errors in vali by making the label constellation
         # unique per flush thread
         # note that flush thread != fluentd worker. if you use multiple workers you still need to
         # add the worker id as a label
@@ -340,14 +340,14 @@ module Fluent
         }
       end
 
-      # iterate through each chunk and create a loki stream entry
-      def chunk_to_loki(chunk)
+      # iterate through each chunk and create a vali stream entry
+      def chunk_to_vali(chunk)
         streams = {}
         last_time = nil
         chunk.each do |time, record|
           # each chunk has a unique set of labels
           last_time = time if last_time.nil?
-          result = line_to_loki(record)
+          result = line_to_vali(record)
           chunk_labels = result[:labels]
           # initialize a new stream with the chunk_labels if it does not exist
           streams[chunk_labels] = [] if streams[chunk_labels].nil?

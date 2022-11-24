@@ -214,8 +214,8 @@ func (m *Series) GetLastLine() string {
 }
 
 func init() {
-	proto.RegisterType((*Chunk)(nil), "loki_ingester.Chunk")
-	proto.RegisterType((*Series)(nil), "loki_ingester.Series")
+	proto.RegisterType((*Chunk)(nil), "vali_ingester.Chunk")
+	proto.RegisterType((*Series)(nil), "vali_ingester.Series")
 }
 
 func init() { proto.RegisterFile("pkg/ingester/checkpoint.proto", fileDescriptor_00f4b7152db9bdb5) }

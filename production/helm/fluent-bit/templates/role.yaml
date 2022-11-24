@@ -2,11 +2,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "fluent-bit-loki.fullname" . }}
+  name: {{ template "fluent-bit-vali.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "fluent-bit-loki.name" . }}
-    chart: {{ template "fluent-bit-loki.chart" . }}
+    app: {{ template "fluent-bit-vali.name" . }}
+    chart: {{ template "fluent-bit-vali.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 {{- if .Values.rbac.pspEnabled }}
@@ -14,6 +14,6 @@ rules:
 - apiGroups:      ['extensions']
   resources:      ['podsecuritypolicies']
   verbs:          ['use']
-  resourceNames:  [{{ template "fluent-bit-loki.fullname" . }}]
+  resourceNames:  [{{ template "fluent-bit-vali.fullname" . }}]
 {{- end }}
 {{- end }}

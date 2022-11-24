@@ -64,7 +64,7 @@
     gcs_bucket_name: error 'must specify GCS bucket name',
 
     // Cassandra variables
-    cassandra_keyspace: 'lokiindex',
+    cassandra_keyspace: 'valiindex',
     cassandra_username: '',
     cassandra_password: '',
     cassandra_addresses: error 'must specify cassandra_addresses',
@@ -123,11 +123,11 @@
     schema_start_date: '2018-07-11',
 
     commonArgs: {
-      'config.file': '/etc/loki/config/config.yaml',
-      'limits.per-user-override-config': '/etc/loki/overrides/overrides.yaml',
+      'config.file': '/etc/vali/config/config.yaml',
+      'limits.per-user-override-config': '/etc/vali/overrides/overrides.yaml',
     },
 
-    loki: {
+    vali: {
       server: {
         graceful_shutdown_timeout: '5s',
         http_server_idle_timeout: '120s',
@@ -349,15 +349,15 @@
   local configMap = $.core.v1.configMap,
 
   config_file:
-    configMap.new('loki') +
+    configMap.new('vali') +
     configMap.withData({
-      'config.yaml': $.util.manifestYaml($._config.loki),
+      'config.yaml': $.util.manifestYaml($._config.vali),
     }),
 
   local deployment = $.apps.v1.deployment,
 
   config_hash_mixin::
     deployment.mixin.spec.template.metadata.withAnnotationsMixin({
-      config_hash: std.md5(std.toString($._config.loki)),
+      config_hash: std.md5(std.toString($._config.vali)),
     }),
 }

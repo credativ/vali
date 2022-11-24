@@ -14,8 +14,8 @@ import (
 	"github.com/cortexproject/cortex/pkg/util/flagext"
 	"github.com/weaveworks/common/logging"
 
-	"github.com/grafana/loki/pkg/promtail/client"
-	lokiflag "github.com/grafana/loki/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/promtail/client"
+	valiflag "github.com/credativ/vali/pkg/util/flagext"
 )
 
 type fakeConfig map[string]string
@@ -39,11 +39,11 @@ func Test_parseConfig(t *testing.T) {
 			&config{
 				lineFormat: jsonFormat,
 				clientConfig: client.Config{
-					URL:            mustParseURL("http://localhost:3100/loki/api/v1/push"),
+					URL:            mustParseURL("http://localhost:3100/vali/api/v1/push"),
 					BatchSize:      defaultClientCfg.BatchSize,
 					BatchWait:      defaultClientCfg.BatchWait,
 					Timeout:        defaultClientCfg.Timeout,
-					ExternalLabels: lokiflag.LabelSet{LabelSet: model.LabelSet{"job": "fluent-bit"}},
+					ExternalLabels: valiflag.LabelSet{LabelSet: model.LabelSet{"job": "fluent-bit"}},
 					BackoffConfig:  defaultClientCfg.BackoffConfig,
 				},
 				logLevel:      mustParseLogLevel("info"),
@@ -52,7 +52,7 @@ func Test_parseConfig(t *testing.T) {
 			false},
 		{"setting values",
 			map[string]string{
-				"URL":           "http://somewhere.com:3100/loki/api/v1/push",
+				"URL":           "http://somewhere.com:3100/vali/api/v1/push",
 				"TenantID":      "my-tenant-id",
 				"LineFormat":    "key_value",
 				"LogLevel":      "warn",
@@ -70,12 +70,12 @@ func Test_parseConfig(t *testing.T) {
 			&config{
 				lineFormat: kvPairFormat,
 				clientConfig: client.Config{
-					URL:            mustParseURL("http://somewhere.com:3100/loki/api/v1/push"),
+					URL:            mustParseURL("http://somewhere.com:3100/vali/api/v1/push"),
 					TenantID:       "my-tenant-id",
 					BatchSize:      100,
 					BatchWait:      mustParseDuration("30s"),
 					Timeout:        mustParseDuration("1s"),
-					ExternalLabels: lokiflag.LabelSet{LabelSet: model.LabelSet{"app": "foo"}},
+					ExternalLabels: valiflag.LabelSet{LabelSet: model.LabelSet{"app": "foo"}},
 					BackoffConfig:  util.BackoffConfig{MinBackoff: mustParseDuration("1ms"), MaxBackoff: mustParseDuration("5m"), MaxRetries: 10},
 				},
 				logLevel:      mustParseLogLevel("warn"),
@@ -86,7 +86,7 @@ func Test_parseConfig(t *testing.T) {
 			false},
 		{"with label map",
 			map[string]string{
-				"URL":           "http://somewhere.com:3100/loki/api/v1/push",
+				"URL":           "http://somewhere.com:3100/vali/api/v1/push",
 				"LineFormat":    "key_value",
 				"LogLevel":      "warn",
 				"Labels":        `{app="foo"}`,
@@ -104,12 +104,12 @@ func Test_parseConfig(t *testing.T) {
 			&config{
 				lineFormat: kvPairFormat,
 				clientConfig: client.Config{
-					URL:            mustParseURL("http://somewhere.com:3100/loki/api/v1/push"),
+					URL:            mustParseURL("http://somewhere.com:3100/vali/api/v1/push"),
 					TenantID:       "", // empty as not set in fluent-bit plugin config map
 					BatchSize:      100,
 					BatchWait:      mustParseDuration("30s"),
 					Timeout:        mustParseDuration("1s"),
-					ExternalLabels: lokiflag.LabelSet{LabelSet: model.LabelSet{"app": "foo"}},
+					ExternalLabels: valiflag.LabelSet{LabelSet: model.LabelSet{"app": "foo"}},
 					BackoffConfig:  util.BackoffConfig{MinBackoff: mustParseDuration("1ms"), MaxBackoff: mustParseDuration("5m"), MaxRetries: 10},
 				},
 				logLevel:      mustParseLogLevel("warn"),

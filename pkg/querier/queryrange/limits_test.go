@@ -17,9 +17,9 @@ import (
 	"github.com/weaveworks/common/user"
 	"go.uber.org/atomic"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/marshal"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/marshal"
 )
 
 func TestLimits(t *testing.T) {
@@ -45,7 +45,7 @@ func TestLimits(t *testing.T) {
 	require.Equal(t, wrapped.QuerySplitDuration("a"), time.Minute)
 	require.Equal(t, wrapped.QuerySplitDuration("b"), time.Hour)
 
-	r := &LokiRequest{
+	r := &ValiRequest{
 		Query:   "qry",
 		StartTs: time.Now(),
 		Step:    int64(time.Minute / time.Millisecond),
@@ -69,7 +69,7 @@ func Test_seriesLimiter(t *testing.T) {
 	}
 	require.NoError(t, err)
 
-	lreq := &LokiRequest{
+	lreq := &ValiRequest{
 		Query:     `rate({app="foo"} |= "foo"[1m])`,
 		Limit:     1000,
 		Step:      30000, // 30sec
@@ -80,7 +80,7 @@ func Test_seriesLimiter(t *testing.T) {
 	}
 
 	ctx := user.InjectOrgID(context.Background(), "1")
-	req, err := lokiCodec.EncodeRequest(ctx, lreq)
+	req, err := valiCodec.EncodeRequest(ctx, lreq)
 	require.NoError(t, err)
 
 	req = req.WithContext(ctx)
@@ -167,7 +167,7 @@ func Test_MaxQueryParallelism(t *testing.T) {
 	r, err := http.NewRequestWithContext(ctx, "GET", "/query_range", http.NoBody)
 	require.Nil(t, err)
 
-	_, _ = NewLimitedRoundTripper(f, lokiCodec, fakeLimits{maxQueryParallelism: maxQueryParallelism},
+	_, _ = NewLimitedRoundTripper(f, valiCodec, fakeLimits{maxQueryParallelism: maxQueryParallelism},
 		queryrange.MiddlewareFunc(func(next queryrange.Handler) queryrange.Handler {
 			return queryrange.HandlerFunc(func(c context.Context, r queryrange.Request) (queryrange.Response, error) {
 				var wg sync.WaitGroup
@@ -175,7 +175,7 @@ func Test_MaxQueryParallelism(t *testing.T) {
 					wg.Add(1)
 					go func() {
 						defer wg.Done()
-						_, _ = next.Do(c, &LokiRequest{})
+						_, _ = next.Do(c, &ValiRequest{})
 					}()
 				}
 				wg.Wait()
@@ -201,12 +201,12 @@ func Test_MaxQueryParallelismLateScheduling(t *testing.T) {
 	r, err := http.NewRequestWithContext(ctx, "GET", "/query_range", http.NoBody)
 	require.Nil(t, err)
 
-	_, _ = NewLimitedRoundTripper(f, lokiCodec, fakeLimits{maxQueryParallelism: maxQueryParallelism},
+	_, _ = NewLimitedRoundTripper(f, valiCodec, fakeLimits{maxQueryParallelism: maxQueryParallelism},
 		queryrange.MiddlewareFunc(func(next queryrange.Handler) queryrange.Handler {
 			return queryrange.HandlerFunc(func(c context.Context, r queryrange.Request) (queryrange.Response, error) {
 				for i := 0; i < 10; i++ {
 					go func() {
-						_, _ = next.Do(c, &LokiRequest{})
+						_, _ = next.Do(c, &ValiRequest{})
 					}()
 				}
 				return nil, nil

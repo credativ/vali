@@ -10,13 +10,13 @@ import (
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/pkg/relabel"
 
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/promtail/scrapeconfig"
-	"github.com/grafana/loki/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/promtail/targets/target"
 )
 
 // GcplogTarget represents the target specific to GCP project.
-// It collects logs from GCP and push it to Loki.
+// It collects logs from GCP and push it to Vali.
 // nolint:golint
 type GcplogTarget struct {
 	metrics       *Metrics
@@ -38,7 +38,7 @@ type GcplogTarget struct {
 
 // NewGcplogTarget returns the new instannce of GcplogTarget for
 // the given `project-id`. It scraps logs from the GCP project
-// and push it Loki via given `api.EntryHandler.`
+// and push it Vali via given `api.EntryHandler.`
 // It starts the `run` loop to consume log entries that can be
 // stopped via `target.Stop()`
 // nolint:golint,govet

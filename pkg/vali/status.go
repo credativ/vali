@@ -1,11 +1,11 @@
-package loki
+package vali
 
 import (
 	"fmt"
 	"net/http"
 )
 
-func (t *Loki) servicesHandler(w http.ResponseWriter, r *http.Request) {
+func (t *Vali) servicesHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 	w.Header().Set("Content-Type", "text/plain")
 

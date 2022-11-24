@@ -22,12 +22,12 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/cfg"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/loki"
-	"github.com/grafana/loki/pkg/storage"
-	"github.com/grafana/loki/pkg/util"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/cfg"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/vali"
+	"github.com/credativ/vali/pkg/storage"
+	"github.com/credativ/vali/pkg/util"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 type syncRange struct {
@@ -37,14 +37,14 @@ type syncRange struct {
 
 func main() {
 
-	var defaultsConfig loki.Config
+	var defaultsConfig vali.Config
 
 	from := flag.String("from", "", "Start Time RFC339Nano 2006-01-02T15:04:05.999999999Z07:00")
 	to := flag.String("to", "", "End Time RFC339Nano 2006-01-02T15:04:05.999999999Z07:00")
 	sf := flag.String("source.config.file", "", "source datasource config")
 	df := flag.String("dest.config.file", "", "dest datasource config")
-	source := flag.String("source.tenant", "fake", "Source tenant identifier, default is `fake` for single tenant Loki")
-	dest := flag.String("dest.tenant", "fake", "Destination tenant identifier, default is `fake` for single tenant Loki")
+	source := flag.String("source.tenant", "fake", "Source tenant identifier, default is `fake` for single tenant Vali")
+	dest := flag.String("dest.tenant", "fake", "Destination tenant identifier, default is `fake` for single tenant Vali")
 	match := flag.String("match", "", "Optional label match")
 
 	batch := flag.Int("batchLen", 500, "Specify how many chunks to read/write in one batch")

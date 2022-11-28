@@ -2491,7 +2491,7 @@ func (this *SeriesIdentifier) GoString() string {
 	s := make([]string, 0, 5)
 	s = append(s, "&logproto.SeriesIdentifier{")
 	keysForLabels := make([]string, 0, len(this.Labels))
-	for k, _ := range this.Labels {
+	for k := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
 	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
@@ -3759,7 +3759,7 @@ func (m *SeriesIdentifier) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if len(m.Labels) > 0 {
-		for k, _ := range m.Labels {
+		for k := range m.Labels {
 			dAtA[i] = 0xa
 			i++
 			v := m.Labels[k]
@@ -4711,7 +4711,7 @@ func (this *SeriesIdentifier) String() string {
 		return "nil"
 	}
 	keysForLabels := make([]string, 0, len(this.Labels))
-	for k, _ := range this.Labels {
+	for k := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
 	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)

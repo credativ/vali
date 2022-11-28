@@ -59,7 +59,7 @@ func Test_GetCreateBookrmark(t *testing.T) {
 	defer client.Stop()
 	ta, err := New(util_log.Logger, client, nil, &scrapeconfig.WindowsEventsTargetConfig{
 		BookmarkPath: "c:foo.xml",
-		PollInterval:  time.Microsecond,
+		PollInterval: time.Microsecond,
 		Query: `<QueryList>
 			<Query Id="0" Path="Application">
 			  <Select Path="Application">*[System[Provider[@Name='mylog']]]</Select>
@@ -93,7 +93,7 @@ func Test_GetCreateBookrmark(t *testing.T) {
 	defer client.Stop()
 	ta, err = New(util_log.Logger, client, nil, &scrapeconfig.WindowsEventsTargetConfig{
 		BookmarkPath: "c:foo.xml",
-		PollInterval:  time.Microsecond,
+		PollInterval: time.Microsecond,
 		Query: `<QueryList>
 			<Query Id="0" Path="Application">
 			  <Select Path="Application">*[System[Provider[@Name='mylog']]]</Select>

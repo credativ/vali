@@ -15,8 +15,8 @@ import (
 
 	_ "github.com/credativ/vali/pkg/build"
 	"github.com/credativ/vali/pkg/cfg"
-	"github.com/credativ/vali/pkg/vali"
 	logutil "github.com/credativ/vali/pkg/util"
+	"github.com/credativ/vali/pkg/vali"
 
 	util_log "github.com/cortexproject/cortex/pkg/util/log"
 

@@ -39,7 +39,6 @@ import (
 	"github.com/credativ/vali/pkg/distributor"
 	"github.com/credativ/vali/pkg/ingester"
 	"github.com/credativ/vali/pkg/ingester/client"
-	"github.com/credativ/vali/pkg/valifrontend"
 	"github.com/credativ/vali/pkg/querier"
 	"github.com/credativ/vali/pkg/querier/queryrange"
 	"github.com/credativ/vali/pkg/ruler"
@@ -47,6 +46,7 @@ import (
 	"github.com/credativ/vali/pkg/tracing"
 	serverutil "github.com/credativ/vali/pkg/util/server"
 	"github.com/credativ/vali/pkg/util/validation"
+	"github.com/credativ/vali/pkg/valifrontend"
 )
 
 // Config is the root config for Vali.

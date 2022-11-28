@@ -12,10 +12,10 @@ import (
 	"github.com/credativ/vali/pkg/promtail/targets/file"
 	"github.com/credativ/vali/pkg/promtail/targets/gcplog"
 	"github.com/credativ/vali/pkg/promtail/targets/journal"
-	"github.com/credativ/vali/pkg/promtail/targets/valipush"
 	"github.com/credativ/vali/pkg/promtail/targets/stdin"
 	"github.com/credativ/vali/pkg/promtail/targets/syslog"
 	"github.com/credativ/vali/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/promtail/targets/valipush"
 	"github.com/credativ/vali/pkg/promtail/targets/windows"
 )
 

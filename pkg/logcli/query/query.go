@@ -27,9 +27,9 @@ import (
 	"github.com/credativ/vali/pkg/logql"
 	"github.com/credativ/vali/pkg/logql/marshal"
 	"github.com/credativ/vali/pkg/logql/stats"
-	"github.com/credativ/vali/pkg/vali"
 	"github.com/credativ/vali/pkg/storage"
 	"github.com/credativ/vali/pkg/util/validation"
+	"github.com/credativ/vali/pkg/vali"
 )
 
 type streamEntryPair struct {

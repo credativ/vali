@@ -2,17 +2,12 @@
 
 Currently there are five ways to try out Vali, in order from easier to hardest:
 
-- [Grafana Cloud: Hosted Logs](#grafana-cloud-logs)
 - [Run Vali locally with Docker](#run-locally-using-docker)
 - [Use Helm to deploy on Kubernetes](#using-helm-to-deploy-on-kubernetes)
 - [Build Vali from source](#build-and-run-from-source)
 - [Get inspired by our production setup](#get-inspired-by-our-production-setup)
 
 For the various ways to run `promtail`, the tailing agent, see our [Promtail documentation](../docs/clients/promtail/README.md).
-
-## Grafana Cloud: Hosted Logs
-
-Grafana is offering hosted Vali as part of our broader Grafana Cloud platform. Learn more at [grafana.com/loki](https://grafana.com/oss/vali/#products-and-services).
 
 ## Run locally using Docker
 

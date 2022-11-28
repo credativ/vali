@@ -9,7 +9,7 @@ The components of Vali are currently distributed in plain binary form and as Doc
 
 #### Docker container:
 * https://hub.docker.com/r/credativ/vali
-* https://hub.docker.com/r/grafana/promtail
+* https://hub.docker.com/r/credativ/promtail
 ```bash
 $ docker pull "grafana/vali:${CIRCLE_TAG}"
 $ docker pull "grafana/promtail:${CIRCLE_TAG}"
@@ -21,7 +21,7 @@ Choose from the assets below for the application and architecture matching your 
 Example for `Vali` on the `linux` operating system and `amd64` architecture:
 
 ```bash
-$ curl -O -L "https://github.com/grafana/loki/releases/download/${CIRCLE_TAG}/vali-linux-amd64.zip"
+$ curl -O -L "https://github.com/credativ/vali/releases/download/${CIRCLE_TAG}/vali-linux-amd64.zip"
 # extract the binary
 $ unzip "vali-linux-amd64.zip"
 # make sure it is executable

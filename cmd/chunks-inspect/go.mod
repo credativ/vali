@@ -1,4 +1,4 @@
-module github.com/grafana/loki/cmd/chunks-inspect
+module github.com/credativ/vali/cmd/chunks-inspect
 
 go 1.15
 

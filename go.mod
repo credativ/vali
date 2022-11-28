@@ -1,4 +1,4 @@
-module github.com/grafana/loki
+module github.com/credativ/vali
 
 go 1.15
 

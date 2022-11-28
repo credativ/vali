@@ -10,7 +10,7 @@ RUN apk add --no-cache curl && \
 FROM alpine as golangci
 RUN apk add --no-cache curl && \
     cd / && \
-    curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.32.2
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.32.2
 
 FROM alpine:edge as docker
 RUN apk add --no-cache docker-cli
@@ -58,7 +58,7 @@ RUN GO111MODULE=on go get \
     # https://github.com/golang/tools/releases v0.1.7
     golang.org/x/tools/cmd/goyacc@58d531046acdc757f177387bc1725bfa79895d69 \
     github.com/mitchellh/gox \
-    github.com/tcnksm/ghr && \
+    github.com/tcnksm/ghr@v0.13 && \
     rm -rf /go/pkg /go/src
 ENV GOCACHE=/go/cache
 

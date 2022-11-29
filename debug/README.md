@@ -18,7 +18,7 @@ ks init promtail
 cd promtail
 ks env add promtail
 jb init
-jb install github.com/grafana/loki/production/ksonnet/promtail
+jb install github.com/credativ/vali/production/ksonnet/promtail
 vi environments/promtail/main.jsonnet
 ```
 

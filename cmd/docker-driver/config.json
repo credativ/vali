@@ -1,6 +1,6 @@
 {
     "description": "Vali Logging Driver",
-    "documentation": "https://github.com/grafana/loki",
+    "documentation": "https://github.com/credativ/vali",
     "entrypoint": [
         "/bin/docker-driver"
     ],

@@ -11,8 +11,8 @@ import (
 
 	"github.com/credativ/vali/pkg/logproto"
 	"github.com/credativ/vali/pkg/logql"
-	"github.com/credativ/vali/pkg/valitail/api"
 	"github.com/credativ/vali/pkg/util"
+	"github.com/credativ/vali/pkg/valitail/api"
 )
 
 const (

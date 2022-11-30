@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/valitail/api"
 	"github.com/credativ/vali/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/valitail/api"
 )
 
 func TestNewLogger(t *testing.T) {

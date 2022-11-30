@@ -21,9 +21,9 @@ import (
 	_ "github.com/credativ/vali/pkg/build"
 	"github.com/credativ/vali/pkg/cfg"
 	"github.com/credativ/vali/pkg/logentry/stages"
+	logutil "github.com/credativ/vali/pkg/util"
 	"github.com/credativ/vali/pkg/valitail"
 	"github.com/credativ/vali/pkg/valitail/config"
-	logutil "github.com/credativ/vali/pkg/util"
 )
 
 func init() {

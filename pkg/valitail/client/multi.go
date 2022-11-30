@@ -7,8 +7,8 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/credativ/vali/pkg/valitail/api"
 	"github.com/credativ/vali/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/valitail/api"
 )
 
 // MultiClient is client pushing to one or more vali instances.

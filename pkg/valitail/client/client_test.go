@@ -20,8 +20,8 @@ import (
 	"github.com/prometheus/common/model"
 
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/valitail/api"
 	valiflag "github.com/credativ/vali/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/valitail/api"
 )
 
 var logEntries = []api.Entry{

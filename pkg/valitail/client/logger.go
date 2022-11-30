@@ -12,8 +12,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"gopkg.in/yaml.v2"
 
-	"github.com/credativ/vali/pkg/valitail/api"
 	valiflag "github.com/credativ/vali/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/valitail/api"
 )
 
 var (

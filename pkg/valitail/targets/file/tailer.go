@@ -12,9 +12,9 @@ import (
 	"go.uber.org/atomic"
 
 	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/util"
 	"github.com/credativ/vali/pkg/valitail/api"
 	"github.com/credativ/vali/pkg/valitail/positions"
-	"github.com/credativ/vali/pkg/util"
 )
 
 type tailer struct {

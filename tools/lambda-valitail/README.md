@@ -1,6 +1,6 @@
-# lambda-promtail
+# lambda-valitail
 
-This is a sample template for lambda-promtail - Below is a brief explanation of what we have generated for you:
+This is a sample template for lambda-valitail - Below is a brief explanation of what we have generated for you:
 
 ```bash
 .
@@ -49,7 +49,7 @@ make build
 
 To deploy your application for the first time, first make sure you've set the following parameters in the template:
 - `LogGroup`
-- `PromtailAddress`
+- `ValitailAddress`
 - `ReservedConcurrency`
 
 These can also be set via overrides by passing the following argument to `sam deploy`:
@@ -67,7 +67,7 @@ Also, if your deployment requires a VPC configuration, make sure to edit the `Vp
 Then run the following in your shell:
 
 ```bash
-sam deploy --guided --capabilities CAPABILITY_IAM,CAPABILITY_NAMED_IAM --parameter-overrides PromtailAddress=<>,LogGroup=<>
+sam deploy --guided --capabilities CAPABILITY_IAM,CAPABILITY_NAMED_IAM --parameter-overrides ValitailAddress=<>,LogGroup=<>
 ```
 
 The command will package and deploy your application to AWS, with a series of prompts:
@@ -116,5 +116,5 @@ choco upgrade golang
 ```
 
 ## Limitations
-- Error handling: If promtail is unresponsive, `lambda-promtail` will drop logs after `retry_count`, which defaults to 2.
+- Error handling: If valitail is unresponsive, `lambda-valitail` will drop logs after `retry_count`, which defaults to 2.
 - AWS does not support passing log lines over 256kb to lambdas.

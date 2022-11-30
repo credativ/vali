@@ -1,20 +1,20 @@
 # Directories in this file are referenced from the root of the project not this folder
 # This file is intended to be called from the root like so:
-# docker build -t grafana/promtail -f cmd/promtail/Dockerfile.debug .
+# docker build -t ghcr.io/credativ/valitail -f cmd/valitail/Dockerfile.debug .
 
 FROM grafana/vali-build-image as build
 ARG GOARCH="amd64"
 COPY . /src/vali
 WORKDIR /src/vali
-RUN make clean && make BUILD_IN_CONTAINER=false promtail-debug
+RUN make clean && make BUILD_IN_CONTAINER=false valitail-debug
 
 
 FROM       alpine:3.9
 RUN        apk add --update --no-cache ca-certificates tzdata
-COPY       --from=build /src/vali/cmd/promtail/promtail-debug /usr/bin/promtail-debug
+COPY       --from=build /src/vali/cmd/valitail/valitail-debug /usr/bin/valitail-debug
 COPY       --from=build /go/bin/dlv /usr/bin/dlv
-COPY       cmd/promtail/promtail-local-config.yaml /etc/promtail/local-config.yaml
-COPY       cmd/promtail/promtail-docker-config.yaml /etc/promtail/config.yml
+COPY       cmd/valitail/valitail-local-config.yaml /etc/valitail/local-config.yaml
+COPY       cmd/valitail/valitail-docker-config.yaml /etc/valitail/config.yml
 
 # Expose 40000 for delve
 EXPOSE 40000
@@ -25,5 +25,5 @@ RUN apk add --no-cache libc6-compat
 # Run delve, ending with -- because we pass params via kubernetes, per the docs:
 #   Pass flags to the program you are debugging using --, for example:`
 #   dlv exec ./hello -- server --config conf/config.toml`
-ENTRYPOINT ["/usr/bin/dlv", "--listen=:40000", "--headless=true", "--api-version=2", "exec", "/usr/bin/promtail-debug", "--"]
-CMD ["-config.file=/etc/promtail/config.yml"]
+ENTRYPOINT ["/usr/bin/dlv", "--listen=:40000", "--headless=true", "--api-version=2", "exec", "/usr/bin/valitail-debug", "--"]
+CMD ["-config.file=/etc/valitail/config.yml"]

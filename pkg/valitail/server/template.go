@@ -14,7 +14,7 @@ import (
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/template"
 
-	"github.com/credativ/vali/pkg/promtail/server/ui"
+	"github.com/credativ/vali/pkg/valitail/server/ui"
 )
 
 // templateOptions is a set of options to render a template.

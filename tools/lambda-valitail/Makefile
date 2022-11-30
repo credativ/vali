@@ -12,4 +12,4 @@ build:
 	sam build
 
 dry-run:
-	echo $$(sam local generate-event cloudwatch logs) | sam local invoke LambdaPromtailFunction -e - --parameter-overrides PromtailAddress=$(LOCAL_ENDPOINT)
+	echo $$(sam local generate-event cloudwatch logs) | sam local invoke LambdaValitailFunction -e - --parameter-overrides ValitailAddress=$(LOCAL_ENDPOINT)

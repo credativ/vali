@@ -2,10 +2,10 @@
 
 ##########################################
 # Generate the scrape_config for the
-# promtail.sh script and the helm chart.
+# valitail.sh script and the helm chart.
 #
 # The scrape_config is built from the
-# scrape_config defined in the promtail
+# scrape_config defined in the valitail
 # ksonnet library.
 #########################################
 
@@ -15,7 +15,7 @@ target=${1:-shell}
 
 case $target in
     "shell")
-        (cd $BASE; jsonnet -e '((import "../production/ksonnet/promtail/scrape_config.libsonnet") + { _config:: { promtail_config: { pipeline_stages: ["<parser>"]}}}).promtail_config' | ytools 2>/dev/null)
+        (cd $BASE; jsonnet -e '((import "../production/ksonnet/valitail/scrape_config.libsonnet") + { _config:: { valitail_config: { pipeline_stages: ["<parser>"]}}}).valitail_config' | ytools 2>/dev/null)
         ;;
 
     *)

@@ -19,10 +19,10 @@ import (
 
 	"github.com/credativ/vali/pkg/helpers"
 	"github.com/credativ/vali/pkg/logentry/stages"
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/positions"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
-	"github.com/credativ/vali/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/positions"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/targets/target"
 )
 
 const (
@@ -80,7 +80,7 @@ func NewFileTargetManager(
 
 		// Add Source value to the static config target groups for unique identification
 		// within scrape pool. Also, default target label to localhost if target is not
-		// defined in promtail config.
+		// defined in valitail config.
 		// Just to make sure prometheus target group sync works fine.
 		for i, tg := range cfg.ServiceDiscoveryConfig.StaticConfigs {
 			tg.Source = fmt.Sprintf("%d", i)

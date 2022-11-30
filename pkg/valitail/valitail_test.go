@@ -1,4 +1,4 @@
-package promtail
+package valitail
 
 import (
 	"context"
@@ -33,16 +33,16 @@ import (
 
 	"github.com/credativ/vali/pkg/logentry/stages"
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/promtail/client"
-	"github.com/credativ/vali/pkg/promtail/config"
-	"github.com/credativ/vali/pkg/promtail/positions"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
-	file2 "github.com/credativ/vali/pkg/promtail/targets/file"
+	"github.com/credativ/vali/pkg/valitail/client"
+	"github.com/credativ/vali/pkg/valitail/config"
+	"github.com/credativ/vali/pkg/valitail/positions"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
+	file2 "github.com/credativ/vali/pkg/valitail/targets/file"
 )
 
 const httpTestPort = 9080
 
-func TestPromtail(t *testing.T) {
+func TestValitail(t *testing.T) {
 	// Setup.
 	w := log.NewSyncWriter(os.Stderr)
 	logger := log.NewLogfmtLogger(w)
@@ -50,7 +50,7 @@ func TestPromtail(t *testing.T) {
 	util_log.Logger = logger
 
 	initRandom()
-	dirName := "/tmp/promtail_test_" + randName()
+	dirName := "/tmp/valitail_test_" + randName()
 	positionsFileName := dirName + "/positions.yml"
 
 	err := os.MkdirAll(dirName, 0750)
@@ -102,7 +102,7 @@ func TestPromtail(t *testing.T) {
 
 	p, err := New(buildTestConfig(t, positionsFileName, testDir), false)
 	if err != nil {
-		t.Error("error creating promtail", err)
+		t.Error("error creating valitail", err)
 		return
 	}
 	wg.Add(1)
@@ -110,7 +110,7 @@ func TestPromtail(t *testing.T) {
 		defer wg.Done()
 		err = p.Run()
 		if err != nil {
-			err = errors.Wrap(err, "Failed to start promtail")
+			err = errors.Wrap(err, "Failed to start valitail")
 		}
 	}()
 
@@ -119,9 +119,9 @@ func TestPromtail(t *testing.T) {
 	startupMarkerFile := testDir + "/startupMarker.log"
 	expectedCounts[startupMarkerFile] = createStartupFile(t, startupMarkerFile)
 
-	// Wait for promtail to startup and send entry from our startup marker file.
+	// Wait for valitail to startup and send entry from our startup marker file.
 	if err := waitForEntries(10, handler, expectedCounts); err != nil {
-		t.Fatal("Timed out waiting for promtail to start")
+		t.Fatal("Timed out waiting for valitail to start")
 	}
 
 	// Run test file scenarios.
@@ -209,20 +209,20 @@ func TestPromtail(t *testing.T) {
 		t.Error("Somehow we ended up tailing more files than we were supposed to, this is likely a bug")
 	}
 
-	readBytesMetrics := parsePromMetrics(t, metricsBytes, contentType, "promtail_read_bytes_total", "path")
-	fileBytesMetrics := parsePromMetrics(t, metricsBytes, contentType, "promtail_file_bytes_total", "path")
+	readBytesMetrics := parsePromMetrics(t, metricsBytes, contentType, "valitail_read_bytes_total", "path")
+	fileBytesMetrics := parsePromMetrics(t, metricsBytes, contentType, "valitail_file_bytes_total", "path")
 
-	verifyMetricAbsent(t, readBytesMetrics, "promtail_read_bytes_total", logFile1)
-	verifyMetricAbsent(t, fileBytesMetrics, "promtail_file_bytes_total", logFile1)
+	verifyMetricAbsent(t, readBytesMetrics, "valitail_read_bytes_total", logFile1)
+	verifyMetricAbsent(t, fileBytesMetrics, "valitail_file_bytes_total", logFile1)
 
-	verifyMetric(t, readBytesMetrics, "promtail_read_bytes_total", logFile2, 800)
-	verifyMetric(t, fileBytesMetrics, "promtail_file_bytes_total", logFile2, 800)
+	verifyMetric(t, readBytesMetrics, "valitail_read_bytes_total", logFile2, 800)
+	verifyMetric(t, fileBytesMetrics, "valitail_file_bytes_total", logFile2, 800)
 
-	verifyMetric(t, readBytesMetrics, "promtail_read_bytes_total", logFile3, 700)
-	verifyMetric(t, fileBytesMetrics, "promtail_file_bytes_total", logFile3, 700)
+	verifyMetric(t, readBytesMetrics, "valitail_read_bytes_total", logFile3, 700)
+	verifyMetric(t, fileBytesMetrics, "valitail_file_bytes_total", logFile3, 700)
 
-	verifyMetric(t, readBytesMetrics, "promtail_read_bytes_total", logFile4, 590)
-	verifyMetric(t, fileBytesMetrics, "promtail_file_bytes_total", logFile4, 590)
+	verifyMetric(t, readBytesMetrics, "valitail_read_bytes_total", logFile4, 590)
+	verifyMetric(t, fileBytesMetrics, "valitail_file_bytes_total", logFile4, 590)
 }
 
 func createStartupFile(t *testing.T, filename string) int {

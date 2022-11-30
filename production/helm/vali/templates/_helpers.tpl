@@ -43,7 +43,7 @@ Create the name of the service account
 {{- end -}}
 
 {{/*
-Create the app name of vali clients. Defaults to the same logic as "vali.fullname", and default client expects "promtail".
+Create the app name of vali clients. Defaults to the same logic as "vali.fullname", and default client expects "valitail".
 */}}
 {{- define "client.name" -}}
 {{- if .Values.client.name -}}
@@ -51,7 +51,7 @@ Create the app name of vali clients. Defaults to the same logic as "vali.fullnam
 {{- else if .Values.client.fullnameOverride -}}
 {{- .Values.client.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default "promtail" .Values.client.nameOverride -}}
+{{- $name := default "valitail" .Values.client.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}

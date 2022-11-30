@@ -31,7 +31,7 @@ const (
 	WindowsTargetType = TargetType("WindowsEvent")
 )
 
-// Target is a promtail scrape target
+// Target is a valitail scrape target
 type Target interface {
 	// Type of the target
 	Type() TargetType

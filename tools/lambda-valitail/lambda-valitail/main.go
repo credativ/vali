@@ -28,15 +28,15 @@ const (
 	maxErrMsgLen = 1024
 )
 
-var promtailAddress *url.URL
+var valitailAddress *url.URL
 
 func init() {
-	addr := os.Getenv("PROMTAIL_ADDRESS")
+	addr := os.Getenv("VALITAIL_ADDRESS")
 	if addr == "" {
-		panic(errors.New("required environmental variable PROMTAIL_ADDRESS not present"))
+		panic(errors.New("required environmental variable VALITAIL_ADDRESS not present"))
 	}
 	var err error
-	promtailAddress, err = url.Parse(addr)
+	valitailAddress, err = url.Parse(addr)
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +61,7 @@ func handler(ctx context.Context, ev events.CloudwatchLogsEvent) error {
 	for _, entry := range data.LogEvents {
 		stream.Entries = append(stream.Entries, logproto.Entry{
 			Line: entry.Message,
-			// It's best practice to ignore timestamps from cloudwatch as promtail is responsible for adding those.
+			// It's best practice to ignore timestamps from cloudwatch as valitail is responsible for adding those.
 			Timestamp: util.TimeFromMillis(entry.Timestamp),
 		})
 	}
@@ -73,9 +73,9 @@ func handler(ctx context.Context, ev events.CloudwatchLogsEvent) error {
 		return err
 	}
 
-	// Push to promtail
+	// Push to valitail
 	buf = snappy.Encode(nil, buf)
-	req, err := http.NewRequest("POST", promtailAddress.String(), bytes.NewReader(buf))
+	req, err := http.NewRequest("POST", valitailAddress.String(), bytes.NewReader(buf))
 	if err != nil {
 		return err
 	}

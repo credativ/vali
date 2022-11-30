@@ -1,19 +1,19 @@
-# ⚠️  DEPRECATED - Promtail Helm Chart
+# ⚠️  DEPRECATED - Valitail Helm Chart
 
 This chart was moved to <https://github.com/grafana/helm-charts>.
 
-## Deploy Promtail only
+## Deploy Valitail only
 
 ```bash
-$ helm upgrade --install promtail vali/promtail --set "vali.serviceName=vali"
+$ helm upgrade --install valitail vali/valitail --set "vali.serviceName=vali"
 ```
 
 ## Run Vali behind https ingress
 
-If Vali and Promtail are deployed on different clusters you can add an Ingress in front of Vali.
+If Vali and Valitail are deployed on different clusters you can add an Ingress in front of Vali.
 By adding a certificate you create an https endpoint. For extra security enable basic authentication on the Ingress.
 
-In Promtail set the following values to communicate with https and basic auth
+In Valitail set the following values to communicate with https and basic auth
 
 ```
 vali:
@@ -22,13 +22,13 @@ vali:
   password: pass
 ```
 
-## Run promtail with syslog support
+## Run valitail with syslog support
 
-In order to receive and process syslog message into promtail, the following changes will be necessary:
+In order to receive and process syslog message into valitail, the following changes will be necessary:
 
-* Review the [promtail syslog-receiver configuration documentation](/docs/clients/promtail/scraping.md#syslog-receiver)
+* Review the [valitail syslog-receiver configuration documentation](/docs/clients/valitail/scraping.md#syslog-receiver)
 
-* Configure the promtail helm chart with the syslog configuration added to the `extraScrapeConfigs` section and associated service definition to listen for syslog messages. For example:
+* Configure the valitail helm chart with the syslog configuration added to the `extraScrapeConfigs` section and associated service definition to listen for syslog messages. For example:
 
 ```yaml
 extraScrapeConfigs:
@@ -46,13 +46,13 @@ syslogService:
   port: 1514
 ```
 
-## Run promtail with systemd-journal support
+## Run valitail with systemd-journal support
 
-In order to receive and process syslog message into promtail, the following changes will be necessary:
+In order to receive and process syslog message into valitail, the following changes will be necessary:
 
-* Review the [promtail systemd-journal configuration documentation](/docs/clients/promtail/scraping.md#journal-scraping-linux-only)
+* Review the [valitail systemd-journal configuration documentation](/docs/clients/valitail/scraping.md#journal-scraping-linux-only)
 
-* Configure the promtail helm chart with the systemd-journal configuration added to the `extraScrapeConfigs` section and volume mounts for the promtail pods to access the log files. For example:
+* Configure the valitail helm chart with the systemd-journal configuration added to the `extraScrapeConfigs` section and volume mounts for the valitail pods to access the log files. For example:
 
 ```yaml
 # Add additional scrape config
@@ -69,7 +69,7 @@ extraScrapeConfigs:
       - source_labels: ['__journal__hostname']
         target_label: 'hostname'
 
-# Mount journal directory into promtail pods
+# Mount journal directory into valitail pods
 extraVolumes:
   - name: journal
     hostPath:

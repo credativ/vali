@@ -3,14 +3,14 @@ package config
 import (
 	"flag"
 
-	"github.com/credativ/vali/pkg/promtail/client"
-	"github.com/credativ/vali/pkg/promtail/positions"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
-	"github.com/credativ/vali/pkg/promtail/server"
-	"github.com/credativ/vali/pkg/promtail/targets/file"
+	"github.com/credativ/vali/pkg/valitail/client"
+	"github.com/credativ/vali/pkg/valitail/positions"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/server"
+	"github.com/credativ/vali/pkg/valitail/targets/file"
 )
 
-// Config for promtail, describing what files to watch.
+// Config for valitail, describing what files to watch.
 type Config struct {
 	ServerConfig server.Config `yaml:"server,omitempty"`
 	// deprecated use ClientConfigs instead

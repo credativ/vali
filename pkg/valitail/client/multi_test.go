@@ -15,10 +15,10 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/valitail/api"
 	valiflag "github.com/credativ/vali/pkg/util/flagext"
 
-	"github.com/credativ/vali/pkg/promtail/client/fake"
+	"github.com/credativ/vali/pkg/valitail/client/fake"
 )
 
 func TestNewMulti(t *testing.T) {

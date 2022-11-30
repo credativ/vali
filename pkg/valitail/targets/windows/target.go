@@ -16,10 +16,10 @@ import (
 	"github.com/spf13/afero"
 	"golang.org/x/sys/windows"
 
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
-	"github.com/credativ/vali/pkg/promtail/targets/target"
-	"github.com/credativ/vali/pkg/promtail/targets/windows/win_eventlog"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/targets/target"
+	"github.com/credativ/vali/pkg/valitail/targets/windows/win_eventlog"
 	"github.com/prometheus/prometheus/pkg/labels"
 )
 

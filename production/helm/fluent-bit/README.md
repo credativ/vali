@@ -42,7 +42,7 @@ Alternatively you can install the full [Vali stack](../vali-stack) (Vali + Fluen
 
 ```bash
 helm upgrade --install my-release vali/vali-stack \
-    --set fluent-bit.enabled=true,promtail.enabled=false
+    --set fluent-bit.enabled=true,valitail.enabled=false
 ```
 
 This will automatically configured the `vali.serviceName` configuration field to the newly created Vali instance.

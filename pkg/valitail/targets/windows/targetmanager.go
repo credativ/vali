@@ -7,9 +7,9 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
-	"github.com/credativ/vali/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/targets/target"
 )
 
 // TargetManager manages a series of windows event targets.
@@ -22,7 +22,7 @@ func NewTargetManager(
 	client api.EntryHandler,
 	scrapeConfigs []scrapeconfig.Config,
 ) (*TargetManager, error) {
-	level.Warn(logger).Log("msg", "WARNING!!! Windows target was configured but support for reading the windows event is not compiled into this build of promtail!")
+	level.Warn(logger).Log("msg", "WARNING!!! Windows target was configured but support for reading the windows event is not compiled into this build of valitail!")
 	return &TargetManager{}, nil
 }
 

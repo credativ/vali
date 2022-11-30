@@ -3,7 +3,7 @@ package fake
 import (
 	"sync"
 
-	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/valitail/api"
 )
 
 // Client is a fake client used for testing.

@@ -1,16 +1,16 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  lambda-promtail:
+  lambda-valitail:
   
-  propagate Cloudwatch Logs to Vali via Promtail.
+  propagate Cloudwatch Logs to Vali via Valitail.
 
 Parameters:
   LogGroup:
-    Description: 'Required. The Log Group to forward to Promtail.'
+    Description: 'Required. The Log Group to forward to Valitail.'
     Type: String
-  PromtailAddress:
-    Description: 'address for promtail in the form of: http<s>://<location><:port>/vali/api/v1/push'
+  ValitailAddress:
+    Description: 'address for valitail in the form of: http<s>://<location><:port>/vali/api/v1/push'
     Type: String
     Default: 'http://localhost:8080/vali/api/v1/push'
   ReservedConcurrency:
@@ -19,10 +19,10 @@ Parameters:
     Default: 2
 
 Resources:
-  LambdaPromtailFunction:
+  LambdaValitailFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-promtail/
+      CodeUri: lambda-valitail/
       Handler: handler
       MemorySize: 128
       Timeout: 60
@@ -49,13 +49,13 @@ Resources:
             FilterPattern: ''
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
-          PROMTAIL_ADDRESS: !Ref PromtailAddress
+          VALITAIL_ADDRESS: !Ref ValitailAddress
 
 Outputs:
-  LambdaPromtailFunction:
-    Description: "Lambda Promtail Function ARN"
-    Value: !GetAtt LambdaPromtailFunction.Arn
-  LambdaPromtailFunctionIamRole:
-    Description: "Implicit IAM Role created for LambdaPromtail function"
-    Value: !GetAtt LambdaPromtailFunctionRole.Arn
+  LambdaValitailFunction:
+    Description: "Lambda Valitail Function ARN"
+    Value: !GetAtt LambdaValitailFunction.Arn
+  LambdaValitailFunctionIamRole:
+    Description: "Implicit IAM Role created for LambdaValitail function"
+    Value: !GetAtt LambdaValitailFunctionRole.Arn
 

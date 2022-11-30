@@ -6,7 +6,7 @@ INSTANCEURL="${3:-}"
 NAMESPACE="${4:-default}"
 CONTAINERROOT="${5:-/var/lib/docker}"
 PARSER="${6:-- docker:}"
-VERSION="${PROMTAIL_VERSION:-2.1.0}"
+VERSION="${VALITAIL_VERSION:-2.1.0}"
 
 if [ -z "$INSTANCEID" -o -z "$APIKEY" -o -z "$INSTANCEURL" -o -z "$NAMESPACE" -o -z "$CONTAINERROOT" -o -z "$PARSER" ]; then
     echo "usage: $0 <instanceId> <apiKey> <url> [<namespace>[<container_root_path>[<parser>]]]"
@@ -16,7 +16,7 @@ fi
 TEMPLATE=$(cat <<'YAML'
 apiVersion: v1
 data:
-  promtail.yml: |
+  valitail.yml: |
     scrape_configs:
     - pipeline_stages:
       <parser>
@@ -257,26 +257,26 @@ data:
 
 kind: ConfigMap
 metadata:
-  name: promtail
+  name: valitail
 ---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: promtail
+  name: valitail
 spec:
   minReadySeconds: 10
   selector:
     matchLabels:
-      name: promtail
+      name: valitail
   template:
     metadata:
       labels:
-        name: promtail
+        name: valitail
     spec:
       containers:
       - args:
         - -client.url=https://<instanceId>:<apiKey>@<instanceUrl>/api/prom/push
-        - -config.file=/etc/promtail/promtail.yml
+        - -config.file=/etc/valitail/valitail.yml
         env:
         - name: HOSTNAME
           valueFrom:
@@ -284,7 +284,7 @@ spec:
               fieldPath: spec.nodeName
         image: ghcr.io/credativ/valitail:<version>
         imagePullPolicy: Always
-        name: promtail
+        name: valitail
         readinessProbe:
           httpGet:
             path: /ready
@@ -298,21 +298,21 @@ spec:
           privileged: true
           runAsUser: 0
         volumeMounts:
-        - mountPath: /etc/promtail
-          name: promtail
+        - mountPath: /etc/valitail
+          name: valitail
         - mountPath: /var/log
           name: varlog
         - mountPath: /var/lib/docker/containers
           name: varlibdockercontainers
           readOnly: true
-      serviceAccount: promtail
+      serviceAccount: valitail
       tolerations:
       - effect: NoSchedule
         operator: Exists
       volumes:
       - configMap:
-          name: promtail
-        name: promtail
+          name: valitail
+        name: valitail
       - hostPath:
           path: /var/log
         name: varlog
@@ -325,12 +325,12 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: promtail
+  name: valitail
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: promtail
+  name: valitail
 rules:
 - apiGroups:
   - ""
@@ -348,14 +348,14 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: promtail
+  name: valitail
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: promtail
+  name: valitail
 subjects:
 - kind: ServiceAccount
-  name: promtail
+  name: valitail
   namespace: <namespace>
 YAML
 )

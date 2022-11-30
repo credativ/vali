@@ -16,8 +16,8 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/client/fake"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/client/fake"
 )
 
 var (

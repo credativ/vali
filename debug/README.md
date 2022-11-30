@@ -9,33 +9,33 @@ make debug
 You can use the `docker-compose.yaml` in this directory to launch the debug versions of the image in docker
 
 
-## Promtail in kubernetes
+## Valitail in kubernetes
 
-If you want to debug Promtail in kubernetes, I have done so with the ksonnet setup:
+If you want to debug Valitail in kubernetes, I have done so with the ksonnet setup:
 
 ```shell
-ks init promtail
-cd promtail
-ks env add promtail
+ks init valitail
+cd valitail
+ks env add valitail
 jb init
-jb install github.com/credativ/vali/production/ksonnet/promtail
-vi environments/promtail/main.jsonnet
+jb install github.com/credativ/vali/production/ksonnet/valitail
+vi environments/valitail/main.jsonnet
 ```
 
 Replace the contents with:
 
 ```jsonnet
-local promtail = import 'promtail/promtail.libsonnet';
+local valitail = import 'valitail/valitail.libsonnet';
 
 
-promtail + {
+valitail + {
   _images+:: {
-    promtail: 'grafana/promtail-debug:latest',
+    valitail: 'ghcr.io/credativ/valitail-debug:latest',
   },
   _config+:: {
     namespace: 'default',
 
-    promtail_config+: {
+    valitail_config+: {
       external_labels+: {
         cluster: 'some_cluster_name',
       },

@@ -12,14 +12,14 @@ services:
     networks:
       - vali
 
-  promtail:
+  valitail:
     image: ghcr.io/credativ/valitail:2.0.0
     volumes:
       - /var/log:/var/log
-      - ./config:/etc/promtail/
+      - ./config:/etc/valitail/
     ports:
       - "9080:9080"
-    command: -config.file=/etc/promtail/promtail-gateway.yaml
+    command: -config.file=/etc/valitail/valitail-gateway.yaml
     networks:
       - vali
 

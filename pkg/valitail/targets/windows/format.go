@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"syscall"
 
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
-	"github.com/credativ/vali/pkg/promtail/targets/windows/win_eventlog"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/targets/windows/win_eventlog"
 	jsoniter "github.com/json-iterator/go"
 )
 

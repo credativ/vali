@@ -12,9 +12,9 @@ import (
 	"github.com/go-kit/kit/log"
 	"gopkg.in/yaml.v2"
 
-	"github.com/credativ/vali/pkg/promtail/client/fake"
-	"github.com/credativ/vali/pkg/promtail/positions"
-	"github.com/credativ/vali/pkg/promtail/targets/testutils"
+	"github.com/credativ/vali/pkg/valitail/client/fake"
+	"github.com/credativ/vali/pkg/valitail/positions"
+	"github.com/credativ/vali/pkg/valitail/targets/testutils"
 )
 
 func TestLongPositionsSyncDelayStillSavesCorrectPosition(t *testing.T) {

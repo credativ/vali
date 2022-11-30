@@ -19,9 +19,9 @@ import (
 	"github.com/credativ/vali/pkg/distributor"
 	"github.com/credativ/vali/pkg/logproto"
 	"github.com/credativ/vali/pkg/logql"
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
-	"github.com/credativ/vali/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/targets/target"
 )
 
 type PushTarget struct {
@@ -77,7 +77,7 @@ func NewPushTarget(logger log.Logger,
 func (t *PushTarget) run() error {
 	level.Info(t.logger).Log("msg", "starting push server", "job", t.jobName)
 	// To prevent metric collisions because all metrics are going to be registered in the global Prometheus registry.
-	t.config.Server.MetricsNamespace = "promtail_" + t.jobName
+	t.config.Server.MetricsNamespace = "valitail_" + t.jobName
 
 	// We don't want the /debug and /metrics endpoints running
 	t.config.Server.RegisterInstrumentation = false

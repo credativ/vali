@@ -1,11 +1,11 @@
 {
   _images+:: {
-    promtail: 'ghcr.io/credativ/valitail:2.1.0',
+    valitail: 'ghcr.io/credativ/valitail:2.1.0',
   },
 
   _config+:: {
     prometheus_insecure_skip_verify: false,
-    promtail_config: {
+    valitail_config: {
       clients: [{
         username:: '',
         password:: '',
@@ -18,8 +18,8 @@
         docker: {},
       }],
     },
-    promtail_cluster_role_name: 'promtail',
-    promtail_configmap_name: 'promtail',
-    promtail_pod_name: 'promtail',
+    valitail_cluster_role_name: 'valitail',
+    valitail_configmap_name: 'valitail',
+    valitail_pod_name: 'valitail',
   },
 }

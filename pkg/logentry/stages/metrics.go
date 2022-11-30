@@ -103,7 +103,7 @@ func newMetricStage(logger log.Logger, config interface{}, registry prometheus.R
 		if cfg.Prefix != "" {
 			customPrefix = cfg.Prefix
 		} else {
-			customPrefix = "promtail_custom_"
+			customPrefix = "valitail_custom_"
 		}
 
 		switch strings.ToLower(cfg.MetricType) {

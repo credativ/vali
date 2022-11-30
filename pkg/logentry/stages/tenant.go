@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
 
-	"github.com/credativ/vali/pkg/promtail/client"
+	"github.com/credativ/vali/pkg/valitail/client"
 )
 
 const (

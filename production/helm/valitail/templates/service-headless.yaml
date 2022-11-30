@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "promtail.fullname" . }}-headless
+  name: {{ template "valitail.fullname" . }}-headless
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "promtail.name" . }}
-    chart: {{ template "promtail.chart" . }}
+    app: {{ template "valitail.name" . }}
+    chart: {{ template "valitail.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -17,6 +17,6 @@ spec:
       name: http-metrics
       targetPort: http-metrics
   selector:
-    app: {{ template "promtail.name" . }}
+    app: {{ template "valitail.name" . }}
     release: {{ .Release.Name }}
 {{- end }}

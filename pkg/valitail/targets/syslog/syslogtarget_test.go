@@ -15,8 +15,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v2"
 
-	"github.com/credativ/vali/pkg/promtail/client/fake"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/client/fake"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
 )
 
 func TestSyslogTarget_NewlineSeparatedMessages(t *testing.T) {

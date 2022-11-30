@@ -7,9 +7,9 @@ import (
 	"github.com/go-kit/kit/log/level"
 
 	"github.com/credativ/vali/pkg/logentry/stages"
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
-	"github.com/credativ/vali/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/targets/target"
 )
 
 // nolint: golint

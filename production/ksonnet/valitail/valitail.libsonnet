@@ -11,15 +11,15 @@ k + config + scrape_config {
 
   local policyRule = $.rbac.v1beta1.policyRule,
 
-  promtail_rbac:
-    $.util.rbac($._config.promtail_cluster_role_name, [
+  valitail_rbac:
+    $.util.rbac($._config.valitail_cluster_role_name, [
       policyRule.new() +
       policyRule.withApiGroups(['']) +
       policyRule.withResources(['nodes', 'nodes/proxy', 'services', 'endpoints', 'pods']) +
       policyRule.withVerbs(['get', 'list', 'watch']),
     ]),
 
-  promtail_config+:: {
+  valitail_config+:: {
     local service_url(client) =
       if std.objectHasAll(client, 'username') then
         '%(scheme)s://%(username)s:%(password)s@%(hostname)s/vali/api/v1/push' % client
@@ -30,27 +30,27 @@ k + config + scrape_config {
       url: service_url(client),
     },
 
-    clients: std.map(client_config, $._config.promtail_config.clients),
+    clients: std.map(client_config, $._config.valitail_config.clients),
   },
 
   local configMap = $.core.v1.configMap,
 
-  promtail_config_map:
-    configMap.new($._config.promtail_configmap_name) +
+  valitail_config_map:
+    configMap.new($._config.valitail_configmap_name) +
     configMap.withData({
-      'promtail.yml': $.util.manifestYaml($.promtail_config),
+      'valitail.yml': $.util.manifestYaml($.valitail_config),
     }),
 
-  promtail_args:: {
-    'config.file': '/etc/promtail/promtail.yml',
+  valitail_args:: {
+    'config.file': '/etc/valitail/valitail.yml',
   },
 
   local container = $.core.v1.container,
 
-  promtail_container::
-    container.new('promtail', $._images.promtail) +
+  valitail_container::
+    container.new('valitail', $._images.valitail) +
     container.withPorts($.core.v1.containerPort.new(name='http-metrics', port=80)) +
-    container.withArgsMixin($.util.mapToFlags($.promtail_args)) +
+    container.withArgsMixin($.util.mapToFlags($.valitail_args)) +
     container.withEnv([
       envVar.fromFieldPath('HOSTNAME', 'spec.nodeName'),
     ]) +
@@ -63,10 +63,10 @@ k + config + scrape_config {
 
   local daemonSet = $.apps.v1.daemonSet,
 
-  promtail_daemonset:
-    daemonSet.new($._config.promtail_pod_name, [$.promtail_container]) +
-    daemonSet.mixin.spec.template.spec.withServiceAccount($._config.promtail_cluster_role_name) +
-    $.util.configMapVolumeMount($.promtail_config_map, '/etc/promtail') +
+  valitail_daemonset:
+    daemonSet.new($._config.valitail_pod_name, [$.valitail_container]) +
+    daemonSet.mixin.spec.template.spec.withServiceAccount($._config.valitail_cluster_role_name) +
+    $.util.configMapVolumeMount($.valitail_config_map, '/etc/valitail') +
     $.util.hostVolumeMount('varlog', '/var/log', '/var/log') +
-    $.util.hostVolumeMount('varlibdockercontainers', $._config.promtail_config.container_root_path + '/containers', $._config.promtail_config.container_root_path + '/containers', readOnly=true),
+    $.util.hostVolumeMount('varlibdockercontainers', $._config.valitail_config.container_root_path + '/containers', $._config.valitail_config.container_root_path + '/containers', readOnly=true),
 }

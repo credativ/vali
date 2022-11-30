@@ -18,7 +18,7 @@ You can update the chart repository by running:
 $ helm repo update
 ```
 
-## Deploy Vali and Promtail to your cluster
+## Deploy Vali and Valitail to your cluster
 
 ### Deploy with default config
 
@@ -44,16 +44,16 @@ $ helm upgrade --install vali vali/vali-stack --set "key1=val1,key2=val2,..."
 $ helm upgrade --install vali vali/vali
 ```
 
-## Deploy Promtail only
+## Deploy Valitail only
 
-We recommend Promtail to ship your logs to Vali as the configuration is very similar to Prometheus.
+We recommend Valitail to ship your logs to Vali as the configuration is very similar to Prometheus.
 This allows you to ensure that labels for metrics and logs are equivalent by re-using the same `scrape_configs` and `relabeling` configuration.
 When using Grafana having the same labels will allows you to pivot from Metrics to Logs verify easily by simply switching datasource.
 
-To only install Promtail use the following command:
+To only install Valitail use the following command:
 
 ```bash
-$ helm upgrade --install promtail vali/promtail --set "vali.serviceName=vali"
+$ helm upgrade --install valitail vali/valitail --set "vali.serviceName=vali"
 ```
 
 If you're not familiar with Prometheus and you don't want to migrate your current agent configs from the start,
@@ -63,7 +63,7 @@ If you're not familiar with Prometheus and you don't want to migrate your curren
 
 ```bash
 $ helm upgrade --install vali vali/vali-stack \
-    --set fluent-bit.enabled=true,promtail.enabled=false
+    --set fluent-bit.enabled=true,valitail.enabled=false
 ```
 
 ## Deploy Fluent Bit only
@@ -77,7 +77,7 @@ $ helm upgrade --install fluent-bit vali/fluent-bit \
 
 ```bash
 $ helm upgrade --install vali vali/vali-stack \
-    --set filebeat.enabled=true,logstash.enabled=true,promtail.enabled=false \
+    --set filebeat.enabled=true,logstash.enabled=true,valitail.enabled=false \
     --set vali.fullnameOverride=vali,logstash.fullnameOverride=logstash-vali
 ```
 
@@ -112,10 +112,10 @@ Then follow the [instructions for adding the vali datasource](/docs/getting-star
 
 ## Run Vali behind https ingress
 
-If Vali and Promtail are deployed on different clusters you can add an Ingress in front of Vali.
+If Vali and Valitail are deployed on different clusters you can add an Ingress in front of Vali.
 By adding a certificate you create an https endpoint. For extra security enable basic authentication on the Ingress.
 
-In Promtail set the following values to communicate with https and basic auth
+In Valitail set the following values to communicate with https and basic auth
 
 ```
 vali:
@@ -148,13 +148,13 @@ tls:
     - {{ .Values.ingress.host }}
 ```
 
-## Run promtail with syslog support
+## Run valitail with syslog support
 
-In order to receive and process syslog message into promtail, the following changes will be necessary:
+In order to receive and process syslog message into valitail, the following changes will be necessary:
 
-* Review the [promtail syslog-receiver configuration documentation](/docs/clients/promtail/scraping.md#syslog-receiver)
+* Review the [valitail syslog-receiver configuration documentation](/docs/clients/valitail/scraping.md#syslog-receiver)
 
-* Configure the promtail helm chart with the syslog configuration added to the `extraScrapeConfigs` section and associated service definition to listen for syslog messages. For example:
+* Configure the valitail helm chart with the syslog configuration added to the `extraScrapeConfigs` section and associated service definition to listen for syslog messages. For example:
 
 ```yaml
 extraScrapeConfigs:
@@ -172,13 +172,13 @@ syslogService:
   port: 1514
 ```
 
-## Run promtail with systemd-journal support
+## Run valitail with systemd-journal support
 
-In order to receive and process syslog message into promtail, the following changes will be necessary:
+In order to receive and process syslog message into valitail, the following changes will be necessary:
 
-* Review the [promtail systemd-journal configuration documentation](/docs/clients/promtail/scraping.md#journal-scraping-linux-only)
+* Review the [valitail systemd-journal configuration documentation](/docs/clients/valitail/scraping.md#journal-scraping-linux-only)
 
-* Configure the promtail helm chart with the systemd-journal configuration added to the `extraScrapeConfigs` section and volume mounts for the promtail pods to access the log files. For example:
+* Configure the valitail helm chart with the systemd-journal configuration added to the `extraScrapeConfigs` section and volume mounts for the valitail pods to access the log files. For example:
 
 ```yaml
 # Add additional scrape config
@@ -195,7 +195,7 @@ extraScrapeConfigs:
       - source_labels: ['__journal__hostname']
         target_label: 'hostname'
 
-# Mount journal directory into promtail pods
+# Mount journal directory into valitail pods
 extraVolumes:
   - name: journal
     hostPath:

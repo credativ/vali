@@ -192,7 +192,7 @@ type WindowsEventsTargetConfig struct {
 
 	// BookmarkPath sets the bookmark location on the filesystem.
 	// The bookmark contains the current position of the target in XML.
-	// When restarting or rollingout promtail, the target will continue to scrape events where it left off based on the bookmark position.
+	// When restarting or rollingout valitail, the target will continue to scrape events where it left off based on the bookmark position.
 	// The position is updated after each entry processed.
 	BookmarkPath string `yaml:"bookmark_path"`
 
@@ -234,7 +234,7 @@ type PushTargetConfig struct {
 	// Labels optionally holds labels to associate with each record received on the push api.
 	Labels model.LabelSet `yaml:"labels"`
 
-	// If promtail should maintain the incoming log timestamp or replace it with the current time.
+	// If valitail should maintain the incoming log timestamp or replace it with the current time.
 	KeepTimestamp bool `yaml:"use_incoming_timestamp"`
 }
 

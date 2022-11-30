@@ -2,10 +2,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "promtail.fullname" . }}
+  name: {{ template "valitail.fullname" . }}
   labels:
-    app: {{ template "promtail.name" . }}
-    chart: {{ template "promtail.chart" . }}
+    app: {{ template "valitail.name" . }}
+    chart: {{ template "valitail.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     {{- if .Values.serviceMonitor.additionalLabels }}
@@ -18,7 +18,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ template "promtail.name" . }}
+      app: {{ template "valitail.name" . }}
       release: {{ .Release.Name | quote }}
   namespaceSelector:
     matchNames:

@@ -2,14 +2,14 @@
   prometheusAlerts+:: {
     groups+: [
       {
-        name: 'promtail_alerts',
+        name: 'valitail_alerts',
         rules: [
           {
-            alert: 'PromtailRequestsErrors',
+            alert: 'ValitailRequestsErrors',
             expr: |||
-              100 * sum(rate(promtail_request_duration_seconds_count{status_code=~"5..|failed"}[1m])) by (namespace, job, route, instance)
+              100 * sum(rate(valitail_request_duration_seconds_count{status_code=~"5..|failed"}[1m])) by (namespace, job, route, instance)
                 /
-              sum(rate(promtail_request_duration_seconds_count[1m])) by (namespace, job, route, instance)
+              sum(rate(valitail_request_duration_seconds_count[1m])) by (namespace, job, route, instance)
                 > 10
             |||,
             'for': '15m',
@@ -23,9 +23,9 @@
             },
           },
           {
-            alert: 'PromtailRequestLatency',
+            alert: 'ValitailRequestLatency',
             expr: |||
-              job_status_code_namespace:promtail_request_duration_seconds:99quantile > 1
+              job_status_code_namespace:valitail_request_duration_seconds:99quantile > 1
             |||,
             'for': '15m',
             labels: {
@@ -38,9 +38,9 @@
             },
           },
           {
-            alert: 'PromtailFileLagging',
+            alert: 'ValitailFileLagging',
             expr: |||
-              abs(promtail_file_bytes_total - promtail_read_bytes_total) > 1e6
+              abs(valitail_file_bytes_total - valitail_read_bytes_total) > 1e6
             |||,
             'for': '15m',
             labels: {
@@ -53,9 +53,9 @@
             },
           },
           {
-            alert: 'PromtailFileMissing',
+            alert: 'ValitailFileMissing',
             expr: |||
-              promtail_file_bytes_total unless promtail_read_bytes_total
+              valitail_file_bytes_total unless valitail_read_bytes_total
             |||,
             'for': '15m',
             labels: {

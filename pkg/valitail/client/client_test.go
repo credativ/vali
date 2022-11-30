@@ -20,7 +20,7 @@ import (
 	"github.com/prometheus/common/model"
 
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/valitail/api"
 	valiflag "github.com/credativ/vali/pkg/util/flagext"
 )
 
@@ -67,12 +67,12 @@ func TestClient_Handle(t *testing.T) {
 				},
 			},
 			expectedMetrics: `
-				# HELP promtail_sent_entries_total Number of log entries sent to the ingester.
-				# TYPE promtail_sent_entries_total counter
-				promtail_sent_entries_total{host="__HOST__"} 3.0
-				# HELP promtail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
-				# TYPE promtail_dropped_entries_total counter
-				promtail_dropped_entries_total{host="__HOST__"} 0
+				# HELP valitail_sent_entries_total Number of log entries sent to the ingester.
+				# TYPE valitail_sent_entries_total counter
+				valitail_sent_entries_total{host="__HOST__"} 3.0
+				# HELP valitail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
+				# TYPE valitail_dropped_entries_total counter
+				valitail_dropped_entries_total{host="__HOST__"} 0
 			`,
 		},
 		"batch log entries together until the batch wait time is reached": {
@@ -93,12 +93,12 @@ func TestClient_Handle(t *testing.T) {
 				},
 			},
 			expectedMetrics: `
-				# HELP promtail_sent_entries_total Number of log entries sent to the ingester.
-				# TYPE promtail_sent_entries_total counter
-				promtail_sent_entries_total{host="__HOST__"} 2.0
-				# HELP promtail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
-				# TYPE promtail_dropped_entries_total counter
-				promtail_dropped_entries_total{host="__HOST__"} 0
+				# HELP valitail_sent_entries_total Number of log entries sent to the ingester.
+				# TYPE valitail_sent_entries_total counter
+				valitail_sent_entries_total{host="__HOST__"} 2.0
+				# HELP valitail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
+				# TYPE valitail_dropped_entries_total counter
+				valitail_dropped_entries_total{host="__HOST__"} 0
 			`,
 		},
 		"retry send a batch up to backoff's max retries in case the server responds with a 5xx": {
@@ -122,12 +122,12 @@ func TestClient_Handle(t *testing.T) {
 				},
 			},
 			expectedMetrics: `
-				# HELP promtail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
-				# TYPE promtail_dropped_entries_total counter
-				promtail_dropped_entries_total{host="__HOST__"} 1.0
-				# HELP promtail_sent_entries_total Number of log entries sent to the ingester.
-				# TYPE promtail_sent_entries_total counter
-				promtail_sent_entries_total{host="__HOST__"} 0
+				# HELP valitail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
+				# TYPE valitail_dropped_entries_total counter
+				valitail_dropped_entries_total{host="__HOST__"} 1.0
+				# HELP valitail_sent_entries_total Number of log entries sent to the ingester.
+				# TYPE valitail_sent_entries_total counter
+				valitail_sent_entries_total{host="__HOST__"} 0
 			`,
 		},
 		"do not retry send a batch in case the server responds with a 4xx": {
@@ -143,12 +143,12 @@ func TestClient_Handle(t *testing.T) {
 				},
 			},
 			expectedMetrics: `
-				# HELP promtail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
-				# TYPE promtail_dropped_entries_total counter
-				promtail_dropped_entries_total{host="__HOST__"} 1.0
-				# HELP promtail_sent_entries_total Number of log entries sent to the ingester.
-				# TYPE promtail_sent_entries_total counter
-				promtail_sent_entries_total{host="__HOST__"} 0
+				# HELP valitail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
+				# TYPE valitail_dropped_entries_total counter
+				valitail_dropped_entries_total{host="__HOST__"} 1.0
+				# HELP valitail_sent_entries_total Number of log entries sent to the ingester.
+				# TYPE valitail_sent_entries_total counter
+				valitail_sent_entries_total{host="__HOST__"} 0
 			`,
 		},
 		"do retry sending a batch in case the server responds with a 429": {
@@ -172,12 +172,12 @@ func TestClient_Handle(t *testing.T) {
 				},
 			},
 			expectedMetrics: `
-				# HELP promtail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
-				# TYPE promtail_dropped_entries_total counter
-				promtail_dropped_entries_total{host="__HOST__"} 1.0
-				# HELP promtail_sent_entries_total Number of log entries sent to the ingester.
-				# TYPE promtail_sent_entries_total counter
-				promtail_sent_entries_total{host="__HOST__"} 0
+				# HELP valitail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
+				# TYPE valitail_dropped_entries_total counter
+				valitail_dropped_entries_total{host="__HOST__"} 1.0
+				# HELP valitail_sent_entries_total Number of log entries sent to the ingester.
+				# TYPE valitail_sent_entries_total counter
+				valitail_sent_entries_total{host="__HOST__"} 0
 			`,
 		},
 		"batch log entries together honoring the client tenant ID": {
@@ -194,12 +194,12 @@ func TestClient_Handle(t *testing.T) {
 				},
 			},
 			expectedMetrics: `
-				# HELP promtail_sent_entries_total Number of log entries sent to the ingester.
-				# TYPE promtail_sent_entries_total counter
-				promtail_sent_entries_total{host="__HOST__"} 2.0
-				# HELP promtail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
-				# TYPE promtail_dropped_entries_total counter
-				promtail_dropped_entries_total{host="__HOST__"} 0
+				# HELP valitail_sent_entries_total Number of log entries sent to the ingester.
+				# TYPE valitail_sent_entries_total counter
+				valitail_sent_entries_total{host="__HOST__"} 2.0
+				# HELP valitail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
+				# TYPE valitail_dropped_entries_total counter
+				valitail_dropped_entries_total{host="__HOST__"} 0
 			`,
 		},
 		"batch log entries together honoring the tenant ID overridden while processing the pipeline stages": {
@@ -224,12 +224,12 @@ func TestClient_Handle(t *testing.T) {
 				},
 			},
 			expectedMetrics: `
-				# HELP promtail_sent_entries_total Number of log entries sent to the ingester.
-				# TYPE promtail_sent_entries_total counter
-				promtail_sent_entries_total{host="__HOST__"} 4.0
-				# HELP promtail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
-				# TYPE promtail_dropped_entries_total counter
-				promtail_dropped_entries_total{host="__HOST__"} 0
+				# HELP valitail_sent_entries_total Number of log entries sent to the ingester.
+				# TYPE valitail_sent_entries_total counter
+				valitail_sent_entries_total{host="__HOST__"} 4.0
+				# HELP valitail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
+				# TYPE valitail_dropped_entries_total counter
+				valitail_dropped_entries_total{host="__HOST__"} 0
 			`,
 		},
 	}
@@ -297,7 +297,7 @@ func TestClient_Handle(t *testing.T) {
 			require.ElementsMatch(t, testData.expectedReqs, receivedReqs)
 
 			expectedMetrics := strings.Replace(testData.expectedMetrics, "__HOST__", serverURL.Host, -1)
-			err = testutil.GatherAndCompare(reg, strings.NewReader(expectedMetrics), "promtail_sent_entries_total", "promtail_dropped_entries_total")
+			err = testutil.GatherAndCompare(reg, strings.NewReader(expectedMetrics), "valitail_sent_entries_total", "valitail_dropped_entries_total")
 			assert.NoError(t, err)
 		})
 	}
@@ -334,12 +334,12 @@ func TestClient_StopNow(t *testing.T) {
 				},
 			},
 			expectedMetrics: `
-				# HELP promtail_sent_entries_total Number of log entries sent to the ingester.
-				# TYPE promtail_sent_entries_total counter
-				promtail_sent_entries_total{host="__HOST__"} 3.0
-				# HELP promtail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
-				# TYPE promtail_dropped_entries_total counter
-				promtail_dropped_entries_total{host="__HOST__"} 0
+				# HELP valitail_sent_entries_total Number of log entries sent to the ingester.
+				# TYPE valitail_sent_entries_total counter
+				valitail_sent_entries_total{host="__HOST__"} 3.0
+				# HELP valitail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
+				# TYPE valitail_dropped_entries_total counter
+				valitail_dropped_entries_total{host="__HOST__"} 0
 			`,
 		},
 		{
@@ -356,12 +356,12 @@ func TestClient_StopNow(t *testing.T) {
 				},
 			},
 			expectedMetrics: `
-				# HELP promtail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
-				# TYPE promtail_dropped_entries_total counter
-				promtail_dropped_entries_total{host="__HOST__"} 1.0
-				# HELP promtail_sent_entries_total Number of log entries sent to the ingester.
-				# TYPE promtail_sent_entries_total counter
-				promtail_sent_entries_total{host="__HOST__"} 0
+				# HELP valitail_dropped_entries_total Number of log entries dropped because failed to be sent to the ingester after all retries.
+				# TYPE valitail_dropped_entries_total counter
+				valitail_dropped_entries_total{host="__HOST__"} 1.0
+				# HELP valitail_sent_entries_total Number of log entries sent to the ingester.
+				# TYPE valitail_sent_entries_total counter
+				valitail_sent_entries_total{host="__HOST__"} 0
 			`,
 		},
 	}
@@ -435,7 +435,7 @@ func TestClient_StopNow(t *testing.T) {
 			require.ElementsMatch(t, c.expectedReqs, receivedReqs)
 
 			expectedMetrics := strings.Replace(c.expectedMetrics, "__HOST__", serverURL.Host, -1)
-			err = testutil.GatherAndCompare(reg, strings.NewReader(expectedMetrics), "promtail_sent_entries_total", "promtail_dropped_entries_total")
+			err = testutil.GatherAndCompare(reg, strings.NewReader(expectedMetrics), "valitail_sent_entries_total", "valitail_dropped_entries_total")
 			assert.NoError(t, err)
 		})
 	}

@@ -12,7 +12,7 @@ import (
 	"github.com/prometheus/prometheus/pkg/relabel"
 
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/valitail/api"
 	"github.com/credativ/vali/pkg/util"
 )
 

@@ -26,39 +26,39 @@ func NewMetrics(reg prometheus.Registerer) *Metrics {
 	m.reg = reg
 
 	m.readBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "read_bytes_total",
 		Help:      "Number of bytes read.",
 	}, []string{"path"})
 	m.totalBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "file_bytes_total",
 		Help:      "Number of bytes total.",
 	}, []string{"path"})
 	m.readLines = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "read_lines_total",
 		Help:      "Number of lines read.",
 	}, []string{"path"})
 	m.filesActive = prometheus.NewGauge(prometheus.GaugeOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "files_active_total",
 		Help:      "Number of active files.",
 	})
 	m.logLengthHistogram = prometheus.NewHistogramVec(prometheus.HistogramOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "log_entries_bytes",
 		Help:      "the total count of bytes",
 		Buckets:   prometheus.ExponentialBuckets(16, 2, 8),
 	}, []string{"path"})
 
 	m.failedTargets = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "targets_failed_total",
 		Help:      "Number of failed targets.",
 	}, []string{"reason"})
 	m.targetsActive = prometheus.NewGauge(prometheus.GaugeOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "targets_active_total",
 		Help:      "Number of active total.",
 	})

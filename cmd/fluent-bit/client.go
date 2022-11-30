@@ -4,7 +4,7 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/credativ/vali/pkg/promtail/client"
+	"github.com/credativ/vali/pkg/valitail/client"
 )
 
 // NewClient creates a new client based on the fluentbit configuration.

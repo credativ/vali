@@ -15,7 +15,7 @@ import (
 	"github.com/prometheus/prometheus/promql/parser"
 
 	"github.com/credativ/vali/pkg/logentry/metric"
-	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/valitail/api"
 
 	"github.com/cortexproject/cortex/pkg/util"
 	"github.com/go-kit/kit/log"
@@ -41,7 +41,7 @@ const (
 	HostLabel    = "host"
 )
 
-var UserAgent = fmt.Sprintf("promtail/%s", version.Version)
+var UserAgent = fmt.Sprintf("valitail/%s", version.Version)
 
 type metrics struct {
 	encodedBytes     *prometheus.CounterVec
@@ -59,43 +59,43 @@ func newMetrics(reg prometheus.Registerer) *metrics {
 	var m metrics
 
 	m.encodedBytes = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "encoded_bytes_total",
 		Help:      "Number of bytes encoded and ready to send.",
 	}, []string{HostLabel})
 	m.sentBytes = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "sent_bytes_total",
 		Help:      "Number of bytes sent.",
 	}, []string{HostLabel})
 	m.droppedBytes = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "dropped_bytes_total",
 		Help:      "Number of bytes dropped because failed to be sent to the ingester after all retries.",
 	}, []string{HostLabel})
 	m.sentEntries = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "sent_entries_total",
 		Help:      "Number of log entries sent to the ingester.",
 	}, []string{HostLabel})
 	m.droppedEntries = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "dropped_entries_total",
 		Help:      "Number of log entries dropped because failed to be sent to the ingester after all retries.",
 	}, []string{HostLabel})
 	m.requestDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "request_duration_seconds",
 		Help:      "Duration of send requests.",
 	}, []string{"status_code", HostLabel})
 	m.batchRetries = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "batch_retries_total",
 		Help:      "Number of times batches has had to be retried.",
 	}, []string{HostLabel})
 
 	var err error
-	m.streamLag, err = metric.NewGauges("promtail_stream_lag_seconds",
+	m.streamLag, err = metric.NewGauges("valitail_stream_lag_seconds",
 		"Difference between current time and last batch timestamp for successful sends",
 		metric.GaugeConfig{Action: "set"},
 		int64(1*time.Minute.Seconds()), // This strips out files which update slowly and reduces noise in this metric.
@@ -181,7 +181,7 @@ func New(reg prometheus.Registerer, cfg Config, logger log.Logger) (Client, erro
 		return nil, err
 	}
 
-	c.client, err = config.NewClientFromConfig(cfg.Client, "promtail", false, false)
+	c.client, err = config.NewClientFromConfig(cfg.Client, "valitail", false, false)
 	if err != nil {
 		return nil, err
 	}
@@ -348,7 +348,7 @@ func (c *client) send(ctx context.Context, tenantID string, buf []byte) (int, er
 	req.Header.Set("Content-Type", contentType)
 	req.Header.Set("User-Agent", UserAgent)
 
-	// If the tenant ID is not empty promtail is running in multi-tenant mode, so
+	// If the tenant ID is not empty valitail is running in multi-tenant mode, so
 	// we should send it to Vali
 	if tenantID != "" {
 		req.Header.Set("X-Scope-OrgID", tenantID)

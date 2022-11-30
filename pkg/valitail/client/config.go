@@ -11,7 +11,7 @@ import (
 	valiflag "github.com/credativ/vali/pkg/util/flagext"
 )
 
-// NOTE the helm chart for promtail and fluent-bit also have defaults for these values, please update to match if you make changes here.
+// NOTE the helm chart for valitail and fluent-bit also have defaults for these values, please update to match if you make changes here.
 const (
 	BatchWait      = 1 * time.Second
 	BatchSize  int = 1024 * 1024

@@ -3,13 +3,13 @@ local config = import 'config.libsonnet';
 config {
   local gen_scrape_config(job_name, pod_uid) = {
     job_name: job_name,
-    pipeline_stages: $._config.promtail_config.pipeline_stages,
+    pipeline_stages: $._config.valitail_config.pipeline_stages,
     kubernetes_sd_configs: [{
       role: 'pod',
     }],
 
     relabel_configs: self.prelabel_config + [
-      // Only scrape local pods; Promtail will drop targets with a __host__ label
+      // Only scrape local pods; Valitail will drop targets with a __host__ label
       // that does not match the current host name.
       {
         source_labels: ['__meta_kubernetes_pod_node_name'],
@@ -70,7 +70,7 @@ config {
     ],
   },
 
-  promtail_config:: {
+  valitail_config:: {
     scrape_configs: [
       // Scrape config to scrape any pods with a 'name' label.
       gen_scrape_config('kubernetes-pods-name', '__meta_kubernetes_pod_uid') {

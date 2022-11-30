@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/credativ/vali/pkg/promtail/client"
+	"github.com/credativ/vali/pkg/valitail/client"
 	valiutil "github.com/credativ/vali/pkg/util"
 )
 

@@ -17,13 +17,13 @@ func NewMetrics(reg prometheus.Registerer) *Metrics {
 	m.reg = reg
 
 	m.gcplogEntries = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "gcplog_target_entries_total",
 		Help:      "Help number of successful entries sent to the gcplog target",
 	}, []string{"project"})
 
 	m.gcplogErrors = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "promtail",
+		Namespace: "valitail",
 		Name:      "gcplog_target_parsing_errors_total",
 		Help:      "Total number of parsing errors while receiving gcplog messages",
 	}, []string{"project"})

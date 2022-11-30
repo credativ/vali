@@ -12,8 +12,8 @@ import (
 	"go.uber.org/atomic"
 
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/positions"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/positions"
 	"github.com/credativ/vali/pkg/util"
 )
 

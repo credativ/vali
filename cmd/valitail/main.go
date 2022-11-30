@@ -21,13 +21,13 @@ import (
 	_ "github.com/credativ/vali/pkg/build"
 	"github.com/credativ/vali/pkg/cfg"
 	"github.com/credativ/vali/pkg/logentry/stages"
-	"github.com/credativ/vali/pkg/promtail"
-	"github.com/credativ/vali/pkg/promtail/config"
+	"github.com/credativ/vali/pkg/valitail"
+	"github.com/credativ/vali/pkg/valitail/config"
 	logutil "github.com/credativ/vali/pkg/util"
 )
 
 func init() {
-	prometheus.MustRegister(version.NewCollector("promtail"))
+	prometheus.MustRegister(version.NewCollector("valitail"))
 }
 
 type Config struct {
@@ -45,7 +45,7 @@ func (c *Config) RegisterFlags(f *flag.FlagSet) {
 	f.BoolVar(&c.printConfig, "print-config-stderr", false, "Dump the entire Vali config object to stderr")
 	f.BoolVar(&c.logConfig, "log-config-reverse-order", false, "Dump the entire Vali config object at Info log "+
 		"level with the order reversed, reversing the order makes viewing the entries easier in Grafana.")
-	f.BoolVar(&c.dryRun, "dry-run", false, "Start Promtail but print entries instead of sending them to Vali.")
+	f.BoolVar(&c.dryRun, "dry-run", false, "Start Valitail but print entries instead of sending them to Vali.")
 	f.StringVar(&c.configFile, "config.file", "", "yaml file to load")
 	f.BoolVar(&c.configExpandEnv, "config.expand-env", false, "Expands ${var} in config according to the values of the environment variables.")
 	c.Config.RegisterFlags(f)
@@ -69,7 +69,7 @@ func main() {
 
 	// Handle -version CLI flag
 	if config.printVersion {
-		fmt.Println(version.Print("promtail"))
+		fmt.Println(version.Print("valitail"))
 		os.Exit(0)
 	}
 
@@ -103,17 +103,17 @@ func main() {
 		}
 	}
 
-	p, err := promtail.New(config.Config, config.dryRun)
+	p, err := valitail.New(config.Config, config.dryRun)
 	if err != nil {
-		level.Error(util_log.Logger).Log("msg", "error creating promtail", "error", err)
+		level.Error(util_log.Logger).Log("msg", "error creating valitail", "error", err)
 		os.Exit(1)
 	}
 
-	level.Info(util_log.Logger).Log("msg", "Starting Promtail", "version", version.Info())
+	level.Info(util_log.Logger).Log("msg", "Starting Valitail", "version", version.Info())
 	defer p.Shutdown()
 
 	if err := p.Run(); err != nil {
-		level.Error(util_log.Logger).Log("msg", "error starting promtail", "error", err)
+		level.Error(util_log.Logger).Log("msg", "error starting valitail", "error", err)
 		os.Exit(1)
 	}
 }

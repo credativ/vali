@@ -1,7 +1,7 @@
 vali:
   enabled: true
 
-promtail:
+valitail:
   enabled: true
 
 fluent-bit:

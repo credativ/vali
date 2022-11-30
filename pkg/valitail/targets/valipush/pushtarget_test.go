@@ -17,10 +17,10 @@ import (
 	"github.com/weaveworks/common/server"
 
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/client"
-	"github.com/credativ/vali/pkg/promtail/client/fake"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/client"
+	"github.com/credativ/vali/pkg/valitail/client/fake"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
 )
 
 func TestPushTarget(t *testing.T) {

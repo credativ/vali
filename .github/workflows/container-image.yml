@@ -75,7 +75,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: cmd/promtail/Dockerfile
+          file: cmd/valitail/Dockerfile
           build-args: |
             TOUCH_PROTOS=1
           push: true

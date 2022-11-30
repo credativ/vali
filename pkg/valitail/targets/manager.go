@@ -6,17 +6,17 @@ import (
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/positions"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
-	"github.com/credativ/vali/pkg/promtail/targets/file"
-	"github.com/credativ/vali/pkg/promtail/targets/gcplog"
-	"github.com/credativ/vali/pkg/promtail/targets/journal"
-	"github.com/credativ/vali/pkg/promtail/targets/stdin"
-	"github.com/credativ/vali/pkg/promtail/targets/syslog"
-	"github.com/credativ/vali/pkg/promtail/targets/target"
-	"github.com/credativ/vali/pkg/promtail/targets/valipush"
-	"github.com/credativ/vali/pkg/promtail/targets/windows"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/positions"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/targets/file"
+	"github.com/credativ/vali/pkg/valitail/targets/gcplog"
+	"github.com/credativ/vali/pkg/valitail/targets/journal"
+	"github.com/credativ/vali/pkg/valitail/targets/stdin"
+	"github.com/credativ/vali/pkg/valitail/targets/syslog"
+	"github.com/credativ/vali/pkg/valitail/targets/target"
+	"github.com/credativ/vali/pkg/valitail/targets/valipush"
+	"github.com/credativ/vali/pkg/valitail/targets/windows"
 )
 
 const (

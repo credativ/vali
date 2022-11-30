@@ -14,10 +14,10 @@ import (
 	fsnotify "gopkg.in/fsnotify.v1"
 
 	"github.com/credativ/vali/pkg/helpers"
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/client"
-	"github.com/credativ/vali/pkg/promtail/positions"
-	"github.com/credativ/vali/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/client"
+	"github.com/credativ/vali/pkg/valitail/positions"
+	"github.com/credativ/vali/pkg/valitail/targets/target"
 )
 
 const (
@@ -34,7 +34,7 @@ type Config struct {
 // prefix. If prefix is a non-empty string, prefix should end with a period.
 func (cfg *Config) RegisterFlagsWithPrefix(prefix string, f *flag.FlagSet) {
 	f.DurationVar(&cfg.SyncPeriod, prefix+"target.sync-period", 10*time.Second, "Period to resync directories being watched and files being tailed.")
-	f.BoolVar(&cfg.Stdin, prefix+"stdin", false, "Set to true to pipe logs to promtail.")
+	f.BoolVar(&cfg.Stdin, prefix+"stdin", false, "Set to true to pipe logs to valitail.")
 }
 
 // RegisterFlags register flags.

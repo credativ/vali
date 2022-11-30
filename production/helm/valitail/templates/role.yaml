@@ -2,11 +2,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "promtail.fullname" . }}
+  name: {{ template "valitail.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "promtail.name" . }}
-    chart: {{ template "promtail.chart" . }}
+    app: {{ template "valitail.name" . }}
+    chart: {{ template "valitail.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 {{- if .Values.rbac.pspEnabled }}
@@ -14,6 +14,6 @@ rules:
 - apiGroups:      ['extensions']
   resources:      ['podsecuritypolicies']
   verbs:          ['use']
-  resourceNames:  [{{ template "promtail.fullname" . }}]
+  resourceNames:  [{{ template "valitail.fullname" . }}]
 {{- end }}
 {{- end }}

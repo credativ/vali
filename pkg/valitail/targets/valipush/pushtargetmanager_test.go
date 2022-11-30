@@ -5,7 +5,7 @@ import (
 
 	"github.com/weaveworks/common/server"
 
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
 )
 
 func Test_validateJobName(t *testing.T) {

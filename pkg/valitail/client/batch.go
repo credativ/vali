@@ -11,12 +11,12 @@ import (
 	"github.com/prometheus/common/model"
 
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/valitail/api"
 )
 
 // batch holds pending log streams waiting to be sent to Vali, and it's used
 // to reduce the number of push requests to Vali aggregating multiple log streams
-// and entries in a single batch request. In case of multi-tenant Promtail, log
+// and entries in a single batch request. In case of multi-tenant Valitail, log
 // streams for each tenant are stored in a dedicated batch.
 type batch struct {
 	streams   map[string]*logproto.Stream

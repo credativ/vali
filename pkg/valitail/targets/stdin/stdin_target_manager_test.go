@@ -15,9 +15,9 @@ import (
 
 	"github.com/credativ/vali/pkg/logentry/stages"
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/promtail/api"
-	"github.com/credativ/vali/pkg/promtail/client/fake"
-	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/valitail/api"
+	"github.com/credativ/vali/pkg/valitail/client/fake"
+	"github.com/credativ/vali/pkg/valitail/scrapeconfig"
 )
 
 func Test_newReaderTarget(t *testing.T) {

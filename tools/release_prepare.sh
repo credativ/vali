@@ -61,9 +61,9 @@ if [[ "${CONTINUE}" != "y" ]]; then
 fi
 
 echo "Updating helm and ksonnet image versions"
-sed-wrap "s/.*valitail:.*/    valitail: 'grafana\/valitail:${VERSION}',/" production/ksonnet/valitail/config.libsonnet
-sed-wrap "s/.*vali_canary:.*/    vali_canary: 'grafana\/vali-canary:${VERSION}',/" production/ksonnet/vali-canary/config.libsonnet
-sed-wrap "s/.*vali:.*/    vali: 'grafana\/vali:${VERSION}',/" production/ksonnet/vali/images.libsonnet
+sed-wrap "s/.*valitail:.*/    valitail: 'ghcr.io\/credativ\/valitail:${VERSION}',/" production/ksonnet/valitail/config.libsonnet
+sed-wrap "s/.*vali_canary:.*/    vali_canary: 'ghcr.io\/credativ\/vali-canary:${VERSION}',/" production/ksonnet/vali-canary/config.libsonnet
+sed-wrap "s/.*vali:.*/    vali: 'ghcr.io\/credativ\/vali:${VERSION}',/" production/ksonnet/vali/images.libsonnet
 sed-wrap "s/.*tag:.*/  tag: ${VERSION}/" production/helm/vali/values.yaml
 sed-wrap "s/.*tag:.*/  tag: ${VERSION}/" production/helm/valitail/values.yaml
 

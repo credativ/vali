@@ -20,7 +20,7 @@ Useful additions:
 Start Vali using:
 
 ```bash
-docker run -it -p 3100:3100 grafana/vali:latest
+docker run -it -p 3100:3100 ghcr.io/credativ/vali:latest
 ```
 
 Verify that Vali accept and stores logs:

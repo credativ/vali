@@ -8,11 +8,11 @@ This is release `${CIRCLE_TAG}` of Vali.
 The components of Vali are currently distributed in plain binary form and as Docker container images. Choose what fits your use-case best.
 
 #### Docker container:
-* https://hub.docker.com/r/credativ/vali
-* https://hub.docker.com/r/credativ/promtail
+* https://github.com/credativ/vali/pkgs/container/vali
+* https://github.com/credativ/vali/pkgs/container/valitail
 ```bash
-$ docker pull "grafana/vali:${CIRCLE_TAG}"
-$ docker pull "grafana/promtail:${CIRCLE_TAG}"
+$ docker pull "ghcr.io/credativ/vali:${CIRCLE_TAG}"
+$ docker pull "ghcr.io/credativ/valitail:${CIRCLE_TAG}"
 ```
 
 #### Binary

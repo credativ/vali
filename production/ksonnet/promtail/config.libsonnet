@@ -1,6 +1,6 @@
 {
   _images+:: {
-    promtail: 'grafana/promtail:2.1.0',
+    promtail: 'ghcr.io/credativ/valitail:2.1.0',
   },
 
   _config+:: {

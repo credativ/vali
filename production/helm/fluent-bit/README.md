@@ -36,7 +36,7 @@ helm upgrade --install my-release vali/fluent-bit \
     --set image.tag=<custom tag>
 ```
 
-The full list of available tags on [docker hub](https://hub.docker.com/r/credativ/fluent-bit-plugin-vali).
+The full list of available tags on [docker hub](https://github.com/credativ/vali/pkgs/container/fluent-bit-plugin-vali).
 
 Alternatively you can install the full [Vali stack](../vali-stack) (Vali + Fluent Bit) using:
 

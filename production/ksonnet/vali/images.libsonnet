@@ -4,7 +4,7 @@
     memcached: 'memcached:1.5.17-alpine',
     memcachedExporter: 'prom/memcached-exporter:v0.6.0',
 
-    vali: 'grafana/vali:2.1.0',
+    vali: 'ghcr.io/credativ/vali:2.1.0',
 
     distributor: self.vali,
     ingester: self.vali,

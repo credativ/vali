@@ -20,9 +20,9 @@ import (
 
 	"github.com/credativ/vali/pkg/helpers"
 	"github.com/credativ/vali/pkg/logentry/stages"
-	"github.com/credativ/vali/pkg/promtail/client"
-	"github.com/credativ/vali/pkg/promtail/targets/file"
 	"github.com/credativ/vali/pkg/util"
+	"github.com/credativ/vali/pkg/valitail/client"
+	"github.com/credativ/vali/pkg/valitail/targets/file"
 )
 
 const (

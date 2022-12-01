@@ -18,7 +18,7 @@ You can update the chart repository by running:
 $ helm repo update
 ```
 
-## Deploy Vali and Promtail to your cluster
+## Deploy Vali and Valitail to your cluster
 
 ### Deploy with default config
 
@@ -42,7 +42,7 @@ $ helm upgrade --install vali vali/vali-stack --set "key1=val1,key2=val2,..."
 
 ```bash
 $ helm upgrade --install vali vali/vali-stack \
-    --set fluent-bit.enabled=true,promtail.enabled=false
+    --set fluent-bit.enabled=true,valitail.enabled=false
 ```
 
 ## Deploy Grafana to your cluster

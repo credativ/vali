@@ -27,7 +27,7 @@ pipeline_stages:
     vali_count:
       type: Counter
       description: uhhhhhhh
-      prefix: my_promtail_custom_
+      prefix: my_valitail_custom_
       source: app
       config:
         value: vali
@@ -87,25 +87,25 @@ var testMetricLogLineWithMissingKey = `
 }
 `
 
-const expectedMetrics = `# HELP my_promtail_custom_vali_count uhhhhhhh
-# TYPE my_promtail_custom_vali_count counter
-my_promtail_custom_vali_count{test="app"} 1
-# HELP promtail_custom_bvali_count blerrrgh
-# TYPE promtail_custom_bvali_count gauge
-promtail_custom_bvali_count{test="app"} -1
-# HELP promtail_custom_payload_size_bytes grrrragh
-# TYPE promtail_custom_payload_size_bytes histogram
-promtail_custom_payload_size_bytes_bucket{test="app",le="10"} 1
-promtail_custom_payload_size_bytes_bucket{test="app",le="20"} 2
-promtail_custom_payload_size_bytes_bucket{test="app",le="+Inf"} 2
-promtail_custom_payload_size_bytes_sum{test="app"} 30
-promtail_custom_payload_size_bytes_count{test="app"} 2
-# HELP promtail_custom_total_bytes_count nothing to see here...
-# TYPE promtail_custom_total_bytes_count counter
-promtail_custom_total_bytes_count{test="app"} 255
-# HELP promtail_custom_total_lines_count nothing to see here...
-# TYPE promtail_custom_total_lines_count counter
-promtail_custom_total_lines_count{test="app"} 2
+const expectedMetrics = `# HELP my_valitail_custom_vali_count uhhhhhhh
+# TYPE my_valitail_custom_vali_count counter
+my_valitail_custom_vali_count{test="app"} 1
+# HELP valitail_custom_bvali_count blerrrgh
+# TYPE valitail_custom_bvali_count gauge
+valitail_custom_bvali_count{test="app"} -1
+# HELP valitail_custom_payload_size_bytes grrrragh
+# TYPE valitail_custom_payload_size_bytes histogram
+valitail_custom_payload_size_bytes_bucket{test="app",le="10"} 1
+valitail_custom_payload_size_bytes_bucket{test="app",le="20"} 2
+valitail_custom_payload_size_bytes_bucket{test="app",le="+Inf"} 2
+valitail_custom_payload_size_bytes_sum{test="app"} 30
+valitail_custom_payload_size_bytes_count{test="app"} 2
+# HELP valitail_custom_total_bytes_count nothing to see here...
+# TYPE valitail_custom_total_bytes_count counter
+valitail_custom_total_bytes_count{test="app"} 255
+# HELP valitail_custom_total_lines_count nothing to see here...
+# TYPE valitail_custom_total_lines_count counter
+valitail_custom_total_lines_count{test="app"} 2
 `
 
 func TestMetricsPipeline(t *testing.T) {
@@ -162,9 +162,9 @@ pipeline_stages:
 const expectedDropMetrics = `# HELP logentry_dropped_lines_total A count of all log lines dropped as a result of a pipeline stage
 # TYPE logentry_dropped_lines_total counter
 logentry_dropped_lines_total{reason="match_stage"} 1
-# HELP promtail_custom_vali_count should only inc on non dropped labels
-# TYPE promtail_custom_vali_count counter
-promtail_custom_vali_count 1
+# HELP valitail_custom_vali_count should only inc on non dropped labels
+# TYPE valitail_custom_vali_count counter
+valitail_custom_vali_count 1
 `
 
 func TestMetricsWithDropInPipeline(t *testing.T) {
@@ -391,65 +391,65 @@ func metricNames(cfg MetricsConfig) []string {
 		if config.Prefix != "" {
 			customPrefix = config.Prefix
 		} else {
-			customPrefix = "promtail_custom_"
+			customPrefix = "valitail_custom_"
 		}
 		result = append(result, customPrefix+name)
 	}
 	return result
 }
 
-const goldenMetrics = `# HELP promtail_custom_contains_warn contains_warn
-# TYPE promtail_custom_contains_warn counter
-promtail_custom_contains_warn{bar="foo",foo="bar"} 1.0
-promtail_custom_contains_warn{baz="fu",fu="baz"} 1.0
-# HELP promtail_custom_keys_per_line keys per doc
-# TYPE promtail_custom_keys_per_line histogram
-promtail_custom_keys_per_line_bucket{bar="foo",foo="bar",le="1.0"} 0.0
-promtail_custom_keys_per_line_bucket{bar="foo",foo="bar",le="3.0"} 0.0
-promtail_custom_keys_per_line_bucket{bar="foo",foo="bar",le="5.0"} 0.0
-promtail_custom_keys_per_line_bucket{bar="foo",foo="bar",le="10.0"} 1.0
-promtail_custom_keys_per_line_bucket{bar="foo",foo="bar",le="+Inf"} 1.0
-promtail_custom_keys_per_line_sum{bar="foo",foo="bar"} 8.0
-promtail_custom_keys_per_line_count{bar="foo",foo="bar"} 1.0
-promtail_custom_keys_per_line_bucket{baz="fu",fu="baz",le="1.0"} 0.0
-promtail_custom_keys_per_line_bucket{baz="fu",fu="baz",le="3.0"} 0.0
-promtail_custom_keys_per_line_bucket{baz="fu",fu="baz",le="5.0"} 0.0
-promtail_custom_keys_per_line_bucket{baz="fu",fu="baz",le="10.0"} 1.0
-promtail_custom_keys_per_line_bucket{baz="fu",fu="baz",le="+Inf"} 1.0
-promtail_custom_keys_per_line_sum{baz="fu",fu="baz"} 8.0
-promtail_custom_keys_per_line_count{baz="fu",fu="baz"} 1.0
-# HELP promtail_custom_matches all matches
-# TYPE promtail_custom_matches counter
-promtail_custom_matches{bar="foo",foo="bar"} 1.0
-promtail_custom_matches{baz="fu",fu="baz"} 1.0
-# HELP promtail_custom_numeric_float numeric_float
-# TYPE promtail_custom_numeric_float gauge
-promtail_custom_numeric_float{bar="foo",foo="bar"} 12.34
-promtail_custom_numeric_float{baz="fu",fu="baz"} 12.34
-# HELP promtail_custom_numeric_integer numeric.integer
-# TYPE promtail_custom_numeric_integer gauge
-promtail_custom_numeric_integer{bar="foo",foo="bar"} 123.0
-promtail_custom_numeric_integer{baz="fu",fu="baz"} 123.0
-# HELP promtail_custom_numeric_string numeric.string
-# TYPE promtail_custom_numeric_string gauge
-promtail_custom_numeric_string{bar="foo",foo="bar"} 123.0
-promtail_custom_numeric_string{baz="fu",fu="baz"} 123.0
-# HELP promtail_custom_response_time_ms response time in ms
-# TYPE promtail_custom_response_time_ms histogram
-promtail_custom_response_time_ms_bucket{bar="foo",foo="bar",le="1.0"} 0.0
-promtail_custom_response_time_ms_bucket{bar="foo",foo="bar",le="2.0"} 0.0
-promtail_custom_response_time_ms_bucket{bar="foo",foo="bar",le="3.0"} 0.0
-promtail_custom_response_time_ms_bucket{bar="foo",foo="bar",le="+Inf"} 1.0
-promtail_custom_response_time_ms_sum{bar="foo",foo="bar"} 932.0
-promtail_custom_response_time_ms_count{bar="foo",foo="bar"} 1.0
-promtail_custom_response_time_ms_bucket{baz="fu",fu="baz",le="1.0"} 0.0
-promtail_custom_response_time_ms_bucket{baz="fu",fu="baz",le="2.0"} 0.0
-promtail_custom_response_time_ms_bucket{baz="fu",fu="baz",le="3.0"} 0.0
-promtail_custom_response_time_ms_bucket{baz="fu",fu="baz",le="+Inf"} 1.0
-promtail_custom_response_time_ms_sum{baz="fu",fu="baz"} 932.0
-promtail_custom_response_time_ms_count{baz="fu",fu="baz"} 1.0
-# HELP promtail_custom_total_keys the total keys per doc
-# TYPE promtail_custom_total_keys counter
-promtail_custom_total_keys{bar="foo",foo="bar"} 8.0
-promtail_custom_total_keys{baz="fu",fu="baz"} 8.0
+const goldenMetrics = `# HELP valitail_custom_contains_warn contains_warn
+# TYPE valitail_custom_contains_warn counter
+valitail_custom_contains_warn{bar="foo",foo="bar"} 1.0
+valitail_custom_contains_warn{baz="fu",fu="baz"} 1.0
+# HELP valitail_custom_keys_per_line keys per doc
+# TYPE valitail_custom_keys_per_line histogram
+valitail_custom_keys_per_line_bucket{bar="foo",foo="bar",le="1.0"} 0.0
+valitail_custom_keys_per_line_bucket{bar="foo",foo="bar",le="3.0"} 0.0
+valitail_custom_keys_per_line_bucket{bar="foo",foo="bar",le="5.0"} 0.0
+valitail_custom_keys_per_line_bucket{bar="foo",foo="bar",le="10.0"} 1.0
+valitail_custom_keys_per_line_bucket{bar="foo",foo="bar",le="+Inf"} 1.0
+valitail_custom_keys_per_line_sum{bar="foo",foo="bar"} 8.0
+valitail_custom_keys_per_line_count{bar="foo",foo="bar"} 1.0
+valitail_custom_keys_per_line_bucket{baz="fu",fu="baz",le="1.0"} 0.0
+valitail_custom_keys_per_line_bucket{baz="fu",fu="baz",le="3.0"} 0.0
+valitail_custom_keys_per_line_bucket{baz="fu",fu="baz",le="5.0"} 0.0
+valitail_custom_keys_per_line_bucket{baz="fu",fu="baz",le="10.0"} 1.0
+valitail_custom_keys_per_line_bucket{baz="fu",fu="baz",le="+Inf"} 1.0
+valitail_custom_keys_per_line_sum{baz="fu",fu="baz"} 8.0
+valitail_custom_keys_per_line_count{baz="fu",fu="baz"} 1.0
+# HELP valitail_custom_matches all matches
+# TYPE valitail_custom_matches counter
+valitail_custom_matches{bar="foo",foo="bar"} 1.0
+valitail_custom_matches{baz="fu",fu="baz"} 1.0
+# HELP valitail_custom_numeric_float numeric_float
+# TYPE valitail_custom_numeric_float gauge
+valitail_custom_numeric_float{bar="foo",foo="bar"} 12.34
+valitail_custom_numeric_float{baz="fu",fu="baz"} 12.34
+# HELP valitail_custom_numeric_integer numeric.integer
+# TYPE valitail_custom_numeric_integer gauge
+valitail_custom_numeric_integer{bar="foo",foo="bar"} 123.0
+valitail_custom_numeric_integer{baz="fu",fu="baz"} 123.0
+# HELP valitail_custom_numeric_string numeric.string
+# TYPE valitail_custom_numeric_string gauge
+valitail_custom_numeric_string{bar="foo",foo="bar"} 123.0
+valitail_custom_numeric_string{baz="fu",fu="baz"} 123.0
+# HELP valitail_custom_response_time_ms response time in ms
+# TYPE valitail_custom_response_time_ms histogram
+valitail_custom_response_time_ms_bucket{bar="foo",foo="bar",le="1.0"} 0.0
+valitail_custom_response_time_ms_bucket{bar="foo",foo="bar",le="2.0"} 0.0
+valitail_custom_response_time_ms_bucket{bar="foo",foo="bar",le="3.0"} 0.0
+valitail_custom_response_time_ms_bucket{bar="foo",foo="bar",le="+Inf"} 1.0
+valitail_custom_response_time_ms_sum{bar="foo",foo="bar"} 932.0
+valitail_custom_response_time_ms_count{bar="foo",foo="bar"} 1.0
+valitail_custom_response_time_ms_bucket{baz="fu",fu="baz",le="1.0"} 0.0
+valitail_custom_response_time_ms_bucket{baz="fu",fu="baz",le="2.0"} 0.0
+valitail_custom_response_time_ms_bucket{baz="fu",fu="baz",le="3.0"} 0.0
+valitail_custom_response_time_ms_bucket{baz="fu",fu="baz",le="+Inf"} 1.0
+valitail_custom_response_time_ms_sum{baz="fu",fu="baz"} 932.0
+valitail_custom_response_time_ms_count{baz="fu",fu="baz"} 1.0
+# HELP valitail_custom_total_keys the total keys per doc
+# TYPE valitail_custom_total_keys counter
+valitail_custom_total_keys{bar="foo",foo="bar"} 8.0
+valitail_custom_total_keys{baz="fu",fu="baz"} 8.0
 `

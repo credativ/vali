@@ -18,7 +18,7 @@ Compared to other log aggregation systems, Vali:
 
 A Vali-based logging stack consists of 3 components:
 
-- `promtail` is the agent, responsible for gathering logs and sending them to Vali.
+- `valitail` is the agent, responsible for gathering logs and sending them to Vali.
 - `vali` is the main server, responsible for storing logs and processing queries.
 - [Plutono](https://github.com/credativ/plutono) for querying and displaying the logs.
 
@@ -42,34 +42,34 @@ $ ./vali -config.file=./cmd/vali/vali-local-config.yaml
 ...
 ```
 
-To build Promtail on non-Linux platforms, use the following command:
+To build Valitail on non-Linux platforms, use the following command:
 
 ```bash
-$ go build ./cmd/promtail
+$ go build ./cmd/valitail
 ```
 
-On Linux, Promtail requires the systemd headers to be installed for
+On Linux, Valitail requires the systemd headers to be installed for
 Journal support.
 
 With Journal support on Ubuntu, run with the following commands:
 
 ```bash
 $ sudo apt install -y libsystemd-dev
-$ go build ./cmd/promtail
+$ go build ./cmd/valitail
 ```
 
 With Journal support on CentOS, run with the following commands:
 
 ```bash
 $ sudo yum install -y systemd-devel
-$ go build ./cmd/promtail
+$ go build ./cmd/valitail
 ```
 
-Otherwise, to build Promtail without Journal support, run `go build`
+Otherwise, to build Valitail without Journal support, run `go build`
 with CGO disabled:
 
 ```bash
-$ CGO_ENABLED=0 go build ./cmd/promtail
+$ CGO_ENABLED=0 go build ./cmd/valitail
 ```
 
 ## License

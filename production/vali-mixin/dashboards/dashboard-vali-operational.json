@@ -56,9 +56,9 @@
       "keepTime": true,
       "tags": [],
       "targetBlank": true,
-      "title": "Promtail",
+      "title": "Valitail",
       "type": "link",
-      "url": "/grafana/d/739c15a23c04c6ace0d03f6e14ba26e8/vali-promtail?var-datasource=$datasource&var-cluster=$cluster&var-namespace=default"
+      "url": "/grafana/d/739c15a23c04c6ace0d03f6e14ba26e8/vali-valitail?var-datasource=$datasource&var-cluster=$cluster&var-namespace=default"
     },
     {
       "icon": "dashboard",
@@ -334,7 +334,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(5, sum by (name,level) (rate(promtail_custom_bad_words_total{cluster=\"$cluster\", exported_namespace=\"$namespace\"}[$__interval])) - \nsum by (name,level) (rate(promtail_custom_bad_words_total{cluster=\"$cluster\", exported_namespace=\"$namespace\"}[$__interval] offset 1h)))",
+          "expr": "topk(5, sum by (name,level) (rate(valitail_custom_bad_words_total{cluster=\"$cluster\", exported_namespace=\"$namespace\"}[$__interval])) - \nsum by (name,level) (rate(valitail_custom_bad_words_total{cluster=\"$cluster\", exported_namespace=\"$namespace\"}[$__interval] offset 1h)))",
           "legendFormat": "{{name}}-{{level}}",
           "refId": "A"
         }

@@ -1,6 +1,6 @@
 # Cloud provisioning for GCP logs
 
-This document covers how to configure your GCP via Terraform to make cloud logs available for `promtail` to consume.
+This document covers how to configure your GCP via Terraform to make cloud logs available for `valitail` to consume.
 
 To choose what logs need to exported from Google Cloud, we use log filters. Log filters are normal GCP logging queries except the goal is export logs from specific set Google cloud resources
 

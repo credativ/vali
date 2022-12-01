@@ -14,7 +14,7 @@ import (
 
 	"github.com/credativ/vali/pkg/logproto"
 	logql_log "github.com/credativ/vali/pkg/logql/log"
-	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/valitail/api"
 )
 
 // Not all these are tested but are here to make sure the different types marshal without error

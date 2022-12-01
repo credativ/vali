@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-kit/kit/log"
 
-	"github.com/credativ/vali/pkg/promtail/client"
+	"github.com/credativ/vali/pkg/valitail/client"
 )
 
 type bufferConfig struct {

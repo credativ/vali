@@ -1,9 +1,9 @@
 .DEFAULT_GOAL := all
-.PHONY: all images check-generated-files logcli vali vali-debug promtail promtail-debug vali-canary lint test clean yacc protos touch-protobuf-sources touch-protos
+.PHONY: all images check-generated-files logcli vali vali-debug valitail valitail-debug vali-canary lint test clean yacc protos touch-protobuf-sources touch-protos
 .PHONY: docker-driver docker-driver-clean docker-driver-enable docker-driver-push
 .PHONY: fluent-bit-image, fluent-bit-push, fluent-bit-test
 .PHONY: fluentd-image, fluentd-push, fluentd-test
-.PHONY: push-images push-latest save-images load-images promtail-image vali-image build-image
+.PHONY: push-images push-latest save-images load-images valitail-image vali-image build-image
 .PHONY: bigtable-backup, push-bigtable-backup
 .PHONY: benchmark-store, drone, check-mod
 .PHONY: migrate migrate-image
@@ -88,9 +88,9 @@ PROTO_GOS := $(patsubst %.proto,%.pb.go,$(PROTO_DEFS))
 YACC_DEFS := $(shell find . $(DONT_FIND) -type f -name *.y -print)
 YACC_GOS := $(patsubst %.y,%.y.go,$(YACC_DEFS))
 
-# Promtail UI files
-PROMTAIL_GENERATED_FILE := pkg/promtail/server/ui/assets_vfsdata.go
-PROMTAIL_UI_FILES := $(shell find ./pkg/promtail/server/ui -type f -name assets_vfsdata.go -prune -o -print)
+# Valitail UI files
+VALITAIL_GENERATED_FILE := pkg/valitail/server/ui/assets_vfsdata.go
+VALITAIL_UI_FILES := $(shell find ./pkg/valitail/server/ui -type f -name assets_vfsdata.go -prune -o -print)
 
 ##########
 # Docker #
@@ -124,11 +124,11 @@ binfmt:
 ################
 # Main Targets #
 ################
-all: promtail logcli vali vali-canary check-generated-files
+all: valitail logcli vali vali-canary check-generated-files
 
 # This is really a check for the CI to make sure generated files are built and checked in manually
-check-generated-files: touch-protobuf-sources yacc protos pkg/promtail/server/ui/assets_vfsdata.go
-	@if ! (git diff --exit-code $(YACC_GOS) $(PROTO_GOS) $(PROMTAIL_GENERATED_FILE)); then \
+check-generated-files: touch-protobuf-sources yacc protos pkg/valitail/server/ui/assets_vfsdata.go
+	@if ! (git diff --exit-code $(YACC_GOS) $(PROTO_GOS) $(VALITAIL_GENERATED_FILE)); then \
 		echo "\nChanges found in generated files"; \
 		echo "Run 'make check-generated-files' and commit the changes to fix this error."; \
 		echo "If you are actively developing these files you can ignore this error"; \
@@ -191,39 +191,39 @@ vali-querytee: $(APP_GO_FILES) cmd/querytee/main.go
 	$(NETGO_CHECK)
 
 ############
-# Promtail #
+# Valitail #
 ############
 
-PROMTAIL_CGO := 0
-PROMTAIL_GO_FLAGS := $(GO_FLAGS)
-PROMTAIL_DEBUG_GO_FLAGS := $(DEBUG_GO_FLAGS)
+VALITAIL_CGO := 0
+VALITAIL_GO_FLAGS := $(GO_FLAGS)
+VALITAIL_DEBUG_GO_FLAGS := $(DEBUG_GO_FLAGS)
 
 # Validate GOHOSTOS=linux && GOOS=linux to use CGO.
 ifeq ($(shell go env GOHOSTOS),linux)
 ifeq ($(shell go env GOOS),linux)
-PROMTAIL_CGO = 1
-PROMTAIL_GO_FLAGS = $(DYN_GO_FLAGS)
-PROMTAIL_DEBUG_GO_FLAGS = $(DYN_DEBUG_GO_FLAGS)
+VALITAIL_CGO = 1
+VALITAIL_GO_FLAGS = $(DYN_GO_FLAGS)
+VALITAIL_DEBUG_GO_FLAGS = $(DYN_DEBUG_GO_FLAGS)
 endif
 endif
 
-promtail: yacc cmd/promtail/promtail
-promtail-debug: yacc cmd/promtail/promtail-debug
+valitail: yacc cmd/valitail/valitail
+valitail-debug: yacc cmd/valitail/valitail-debug
 
-promtail-clean-assets:
-	rm -rf pkg/promtail/server/ui/assets_vfsdata.go
+valitail-clean-assets:
+	rm -rf pkg/valitail/server/ui/assets_vfsdata.go
 
-# Rule to generate promtail static assets file
-$(PROMTAIL_GENERATED_FILE): $(PROMTAIL_UI_FILES)
+# Rule to generate valitail static assets file
+$(VALITAIL_GENERATED_FILE): $(VALITAIL_UI_FILES)
 	@echo ">> writing assets"
-	GOFLAGS="$(MOD_FLAG)" GOOS=$(shell go env GOHOSTOS) go generate -x -v ./pkg/promtail/server/ui
+	GOFLAGS="$(MOD_FLAG)" GOOS=$(shell go env GOHOSTOS) go generate -x -v ./pkg/valitail/server/ui
 
-cmd/promtail/promtail: $(APP_GO_FILES) $(PROMTAIL_GENERATED_FILE) cmd/promtail/main.go
-	CGO_ENABLED=$(PROMTAIL_CGO) go build $(PROMTAIL_GO_FLAGS) -o $@ ./$(@D)
+cmd/valitail/valitail: $(APP_GO_FILES) $(VALITAIL_GENERATED_FILE) cmd/valitail/main.go
+	CGO_ENABLED=$(VALITAIL_CGO) go build $(VALITAIL_GO_FLAGS) -o $@ ./$(@D)
 	$(NETGO_CHECK)
 
-cmd/promtail/promtail-debug: $(APP_GO_FILES) pkg/promtail/server/ui/assets_vfsdata.go cmd/promtail/main.go
-	CGO_ENABLED=$(PROMTAIL_CGO) go build $(PROMTAIL_DEBUG_GO_FLAGS) -o $@ ./$(@D)
+cmd/valitail/valitail-debug: $(APP_GO_FILES) pkg/valitail/server/ui/assets_vfsdata.go cmd/valitail/main.go
+	CGO_ENABLED=$(VALITAIL_CGO) go build $(VALITAIL_DEBUG_GO_FLAGS) -o $@ ./$(@D)
 	$(NETGO_CHECK)
 
 ###############
@@ -246,8 +246,8 @@ dist: clean
 	CGO_ENABLED=0 $(GOX) -osarch="linux/amd64 linux/arm64 linux/arm darwin/amd64 windows/amd64 freebsd/amd64" ./cmd/vali
 	CGO_ENABLED=0 $(GOX) -osarch="linux/amd64 linux/arm64 linux/arm darwin/amd64 windows/amd64 freebsd/amd64" ./cmd/logcli
 	CGO_ENABLED=0 $(GOX) -osarch="linux/amd64 linux/arm64 linux/arm darwin/amd64 windows/amd64 freebsd/amd64" ./cmd/vali-canary
-	CGO_ENABLED=0 $(GOX) -osarch="linux/arm64 linux/arm darwin/amd64 windows/amd64 windows/386 freebsd/amd64" ./cmd/promtail
-	CGO_ENABLED=1 $(CGO_GOX) -osarch="linux/amd64" ./cmd/promtail
+	CGO_ENABLED=0 $(GOX) -osarch="linux/arm64 linux/arm darwin/amd64 windows/amd64 windows/386 freebsd/amd64" ./cmd/valitail
+	CGO_ENABLED=1 $(CGO_GOX) -osarch="linux/amd64" ./cmd/valitail
 	for i in dist/*; do zip -j -m $$i.zip $$i; done
 	pushd dist && sha256sum * > SHA256SUMS && popd
 
@@ -274,7 +274,7 @@ test: all
 #########
 
 clean:
-	rm -rf cmd/promtail/promtail
+	rm -rf cmd/valitail/valitail
 	rm -rf cmd/vali/vali
 	rm -rf cmd/logcli/logcli
 	rm -rf cmd/vali-canary/vali-canary
@@ -449,13 +449,13 @@ push-bigtable-backup: bigtable-backup
 # Images #
 ##########
 
-images: promtail-image vali-image vali-canary-image docker-driver fluent-bit-image fluentd-image
+images: valitail-image vali-image vali-canary-image docker-driver fluent-bit-image fluentd-image
 
 print-images:
 	$(info $(patsubst %,%:$(IMAGE_TAG),$(IMAGE_NAMES)))
 	@echo > /dev/null
 
-IMAGE_NAMES := grafana/vali grafana/promtail grafana/vali-canary
+IMAGE_NAMES := grafana/vali ghcr.io/credativ/valitail grafana/vali-canary
 
 # push(app, optional tag)
 # pushes the app, optionally tagging it differently before
@@ -472,18 +472,18 @@ define push-image
 	$(call push,$(1),latest)
 endef
 
-# promtail
-promtail-image:
-	$(SUDO) docker build -t $(IMAGE_PREFIX)/promtail:$(IMAGE_TAG) -f cmd/promtail/Dockerfile .
-promtail-image-cross:
-	$(SUDO) $(BUILD_OCI) -t $(IMAGE_PREFIX)/promtail:$(IMAGE_TAG) -f cmd/promtail/Dockerfile.cross .
+# valitail
+valitail-image:
+	$(SUDO) docker build -t $(IMAGE_PREFIX)/valitail:$(IMAGE_TAG) -f cmd/valitail/Dockerfile .
+valitail-image-cross:
+	$(SUDO) $(BUILD_OCI) -t $(IMAGE_PREFIX)/valitail:$(IMAGE_TAG) -f cmd/valitail/Dockerfile.cross .
 
-promtail-debug-image: OCI_PLATFORMS=
-promtail-debug-image:
-	$(SUDO) $(BUILD_OCI) -t $(IMAGE_PREFIX)/promtail:$(IMAGE_TAG)-debug -f cmd/promtail/Dockerfile.debug .
+valitail-debug-image: OCI_PLATFORMS=
+valitail-debug-image:
+	$(SUDO) $(BUILD_OCI) -t $(IMAGE_PREFIX)/valitail:$(IMAGE_TAG)-debug -f cmd/valitail/Dockerfile.debug .
 
-promtail-push: promtail-image-cross
-	$(call push-image,promtail)
+valitail-push: valitail-image-cross
+	$(call push-image,valitail)
 
 # vali
 vali-image:

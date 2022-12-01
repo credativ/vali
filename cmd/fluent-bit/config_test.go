@@ -14,8 +14,8 @@ import (
 	"github.com/cortexproject/cortex/pkg/util/flagext"
 	"github.com/weaveworks/common/logging"
 
-	"github.com/credativ/vali/pkg/promtail/client"
 	valiflag "github.com/credativ/vali/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/valitail/client"
 )
 
 type fakeConfig map[string]string

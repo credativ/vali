@@ -16,7 +16,7 @@ services:
     networks:
       - vali
 
-  promtail:
+  valitail:
     # this is required according to https://github.com/Microsoft/vscode-go/wiki/Debugging-Go-code-using-VS-Code#linuxdocker
     security_opt:
       - seccomp:unconfined
@@ -25,7 +25,7 @@ services:
       - "40100:40000"
     volumes:
       - /var/log:/var/log
-    command: -config.file=/etc/promtail/docker-config.yaml
+    command: -config.file=/etc/valitail/docker-config.yaml
     networks:
       - vali
 

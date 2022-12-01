@@ -1,0 +1,13 @@
+{{- if .Values.rbac.pspEnabled }}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ template "valitail.fullname" . }}
+  labels:
+    app: {{ template "valitail.name" . }}
+    chart: {{ template "valitail.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  {{- toYaml .Values.podSecurityPolicy | nindent 2 }}
+{{- end }}

@@ -12,7 +12,7 @@ import (
 	ww "github.com/weaveworks/common/server"
 
 	"github.com/credativ/vali/pkg/logproto"
-	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/valitail/api"
 )
 
 func Test_multilineStage_Process(t *testing.T) {

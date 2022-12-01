@@ -14,7 +14,7 @@ prometheus:
       type: LoadBalancer
       servicePort: 9090
 
-promtail:
+valitail:
   enabled: true
   image:
     pullPolicy: Never

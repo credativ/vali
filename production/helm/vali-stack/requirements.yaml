@@ -3,9 +3,9 @@ dependencies:
   condition: vali.enabled
   repository: "file://../vali"
   version: "^2.0.0"
-- name: "promtail"
-  condition: promtail.enabled
-  repository: "file://../promtail"
+- name: "valitail"
+  condition: valitail.enabled
+  repository: "file://../valitail"
   version: "^2.0.0"
 - name: "fluent-bit"
   condition: fluent-bit.enabled

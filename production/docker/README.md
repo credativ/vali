@@ -12,7 +12,7 @@ Some features of the deployment:
 - Replication_factor=2: the receiving distributor sends log data to 2 ingesters based on consistent hashing
 - Chunk storage is a shared directory mounted from the same host directory (to simulate S3 or gcs)
 - Query are performed through the two query frontend servers
-- An nginx gateway to route the write and read workloads from clients (Grafana, promtail)
+- An nginx gateway to route the write and read workloads from clients (Grafana, valitail)
 
 1. Ensure you have the most up-to-date Docker container images:
 

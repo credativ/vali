@@ -13,8 +13,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/credativ/vali/pkg/promtail/client"
 	valiutil "github.com/credativ/vali/pkg/util"
+	"github.com/credativ/vali/pkg/valitail/client"
 )
 
 var testTenantYaml = `

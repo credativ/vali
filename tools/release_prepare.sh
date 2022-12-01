@@ -28,8 +28,8 @@ fi
 
 VALI_CURRENT=$(sed -n -e 's/^version: //p' production/helm/vali/Chart.yaml)
 VALI_SUGGESTED=$(tools/increment_version.sh -m ${VALI_CURRENT})
-PROMTAIL_CURRENT=$(sed -n -e 's/^version: //p' production/helm/promtail/Chart.yaml)
-PROMTAIL_SUGGESTED=$(tools/increment_version.sh -m ${PROMTAIL_CURRENT})
+VALITAIL_CURRENT=$(sed -n -e 's/^version: //p' production/helm/valitail/Chart.yaml)
+VALITAIL_SUGGESTED=$(tools/increment_version.sh -m ${VALITAIL_CURRENT})
 VALI_STACK_CURRENT=$(sed -n -e 's/^version: //p' production/helm/vali-stack/Chart.yaml)
 VALI_STACK_SUGGESTED=$(tools/increment_version.sh -m ${VALI_STACK_CURRENT})
 echo
@@ -37,9 +37,9 @@ echo "Current Vali helm chart version: ${VALI_CURRENT}"
 read -p "Enter new Vali helm chart version [${VALI_SUGGESTED}]: " VALI_VERSION
 VALI_VERSION=${VALI_VERSION:-${VALI_SUGGESTED}}
 echo
-echo "Current Promtail helm chart version: ${PROMTAIL_CURRENT}"
-read -p "Enter new Promtail helm chart version [${PROMTAIL_SUGGESTED}]: " PROMTAIL_VERSION
-PROMTAIL_VERSION=${PROMTAIL_VERSION:-${PROMTAIL_SUGGESTED}}
+echo "Current Valitail helm chart version: ${VALITAIL_CURRENT}"
+read -p "Enter new Valitail helm chart version [${VALITAIL_SUGGESTED}]: " VALITAIL_VERSION
+VALITAIL_VERSION=${VALITAIL_VERSION:-${VALITAIL_SUGGESTED}}
 echo
 echo "Current Vali-Stack helm chart version: ${VALI_STACK_CURRENT}"
 read -p "Enter new Vali-Stack helm chart version [${VALI_STACK_SUGGESTED}]: " VALI_STACK_VERSION
@@ -49,7 +49,7 @@ echo
 echo "Creating Release"
 echo "Release Version:       ${VERSION}"
 echo "Vali Helm Chart:       ${VALI_VERSION}"
-echo "Promtail Helm Chart:   ${PROMTAIL_VERSION}"
+echo "Valitail Helm Chart:   ${VALITAIL_VERSION}"
 echo "Vali-Stack Helm Chart: ${VALI_STACK_VERSION}"
 echo
 read -p "Is this correct? [y]: " CONTINUE
@@ -61,19 +61,19 @@ if [[ "${CONTINUE}" != "y" ]]; then
 fi
 
 echo "Updating helm and ksonnet image versions"
-sed-wrap "s/.*promtail:.*/    promtail: 'grafana\/promtail:${VERSION}',/" production/ksonnet/promtail/config.libsonnet
-sed-wrap "s/.*vali_canary:.*/    vali_canary: 'grafana\/vali-canary:${VERSION}',/" production/ksonnet/vali-canary/config.libsonnet
-sed-wrap "s/.*vali:.*/    vali: 'grafana\/vali:${VERSION}',/" production/ksonnet/vali/images.libsonnet
+sed-wrap "s/.*valitail:.*/    valitail: 'ghcr.io\/credativ\/valitail:${VERSION}',/" production/ksonnet/valitail/config.libsonnet
+sed-wrap "s/.*vali_canary:.*/    vali_canary: 'ghcr.io\/credativ\/vali-canary:${VERSION}',/" production/ksonnet/vali-canary/config.libsonnet
+sed-wrap "s/.*vali:.*/    vali: 'ghcr.io\/credativ\/vali:${VERSION}',/" production/ksonnet/vali/images.libsonnet
 sed-wrap "s/.*tag:.*/  tag: ${VERSION}/" production/helm/vali/values.yaml
-sed-wrap "s/.*tag:.*/  tag: ${VERSION}/" production/helm/promtail/values.yaml
+sed-wrap "s/.*tag:.*/  tag: ${VERSION}/" production/helm/valitail/values.yaml
 
 echo "Updating helm charts"
 sed-wrap "s/^version:.*/version: ${VALI_VERSION}/" production/helm/vali/Chart.yaml
-sed-wrap "s/^version:.*/version: ${PROMTAIL_VERSION}/" production/helm/promtail/Chart.yaml
+sed-wrap "s/^version:.*/version: ${VALITAIL_VERSION}/" production/helm/valitail/Chart.yaml
 sed-wrap "s/^version:.*/version: ${VALI_STACK_VERSION}/" production/helm/vali-stack/Chart.yaml
 
 sed-wrap "s/^appVersion:.*/appVersion: ${VERSION}/" production/helm/vali/Chart.yaml
-sed-wrap "s/^appVersion:.*/appVersion: ${VERSION}/" production/helm/promtail/Chart.yaml
+sed-wrap "s/^appVersion:.*/appVersion: ${VERSION}/" production/helm/valitail/Chart.yaml
 sed-wrap "s/^appVersion:.*/appVersion: ${VERSION}/" production/helm/vali-stack/Chart.yaml
 
 echo

@@ -1,8 +1,8 @@
 package marshal
 
 import (
-	"github.com/grafana/loki/pkg/loghttp"
-	legacy "github.com/grafana/loki/pkg/loghttp/legacy"
+	"github.com/credativ/vali/pkg/loghttp"
+	legacy "github.com/credativ/vali/pkg/loghttp/legacy"
 )
 
 // NewTailResponse constructs a TailResponse from a legacy.TailResponse

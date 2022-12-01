@@ -17,11 +17,11 @@ import (
 
 	cortex_middleware "github.com/cortexproject/cortex/pkg/util/middleware"
 
-	"github.com/grafana/loki/pkg/logproto"
+	"github.com/credativ/vali/pkg/logproto"
 )
 
 var ingesterClientRequestDuration = promauto.NewHistogramVec(prometheus.HistogramOpts{
-	Name:    "loki_ingester_client_request_duration_seconds",
+	Name:    "vali_ingester_client_request_duration_seconds",
 	Help:    "Time spent doing Ingester requests.",
 	Buckets: prometheus.ExponentialBuckets(0.001, 4, 6),
 }, []string{"operation", "status_code"})

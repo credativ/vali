@@ -30,7 +30,7 @@ pipeline_stages:
     expression: ".*app1.*"
 - drop:
     source: app
-    value: loki
+    value: vali
 - drop:
     longer_than: 10000
 `

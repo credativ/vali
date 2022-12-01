@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	lokiutil "github.com/grafana/loki/pkg/util"
+	valiutil "github.com/credativ/vali/pkg/util"
 )
 
 var testTimestampYaml = `
@@ -31,7 +31,7 @@ pipeline_stages:
 var testTimestampLogLine = `
 {
 	"time":"2012-11-01T22:08:41-04:00",
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level" : "WARN"
 }
@@ -39,7 +39,7 @@ var testTimestampLogLine = `
 
 var testTimestampLogLineWithMissingKey = `
 {
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level" : "WARN"
 }
@@ -158,7 +158,7 @@ func TestTimestampValidation(t *testing.T) {
 			config: &TimestampConfig{
 				Source:          "source1",
 				Format:          time.RFC3339,
-				ActionOnFailure: lokiutil.StringRef("foo"),
+				ActionOnFailure: valiutil.StringRef("foo"),
 			},
 			err: fmt.Errorf(ErrInvalidActionOnFailure, TimestampActionOnFailureOptions),
 		},
@@ -326,7 +326,7 @@ func TestTimestampStage_ProcessActionOnFailure(t *testing.T) {
 			config: TimestampConfig{
 				Source:          "time",
 				Format:          time.RFC3339Nano,
-				ActionOnFailure: lokiutil.StringRef(TimestampActionOnFailureFudge),
+				ActionOnFailure: valiutil.StringRef(TimestampActionOnFailureFudge),
 			},
 			inputEntries: []inputEntry{
 				{timestamp: time.Unix(1, 0), extracted: map[string]interface{}{"time": "2019-10-01T01:02:03.400000000Z"}},
@@ -341,7 +341,7 @@ func TestTimestampStage_ProcessActionOnFailure(t *testing.T) {
 			config: TimestampConfig{
 				Source:          "time",
 				Format:          time.RFC3339Nano,
-				ActionOnFailure: lokiutil.StringRef(TimestampActionOnFailureFudge),
+				ActionOnFailure: valiutil.StringRef(TimestampActionOnFailureFudge),
 			},
 			inputEntries: []inputEntry{
 				{timestamp: time.Unix(1, 0), extracted: map[string]interface{}{"time": "2019-10-01T01:02:03.400000000Z"}},
@@ -358,7 +358,7 @@ func TestTimestampStage_ProcessActionOnFailure(t *testing.T) {
 			config: TimestampConfig{
 				Source:          "time",
 				Format:          time.RFC3339Nano,
-				ActionOnFailure: lokiutil.StringRef(TimestampActionOnFailureFudge),
+				ActionOnFailure: valiutil.StringRef(TimestampActionOnFailureFudge),
 			},
 			inputEntries: []inputEntry{
 				{timestamp: time.Unix(1, 0), labels: model.LabelSet{"filename": "/1.log"}, extracted: map[string]interface{}{"time": "2019-10-01T01:02:03.400000000Z"}},
@@ -379,7 +379,7 @@ func TestTimestampStage_ProcessActionOnFailure(t *testing.T) {
 			config: TimestampConfig{
 				Source:          "time",
 				Format:          time.RFC3339Nano,
-				ActionOnFailure: lokiutil.StringRef(TimestampActionOnFailureFudge),
+				ActionOnFailure: valiutil.StringRef(TimestampActionOnFailureFudge),
 			},
 			inputEntries: []inputEntry{
 				{timestamp: time.Unix(1, 0), labels: model.LabelSet{"filename": "/1.log"}, extracted: map[string]interface{}{"time": "2019-10-01T01:02:03.400000000Z"}},
@@ -394,7 +394,7 @@ func TestTimestampStage_ProcessActionOnFailure(t *testing.T) {
 			config: TimestampConfig{
 				Source:          "time",
 				Format:          time.RFC3339Nano,
-				ActionOnFailure: lokiutil.StringRef(TimestampActionOnFailureSkip),
+				ActionOnFailure: valiutil.StringRef(TimestampActionOnFailureSkip),
 			},
 			inputEntries: []inputEntry{
 				{timestamp: time.Unix(1, 0), extracted: map[string]interface{}{"time": "2019-10-01T01:02:03.400000000Z"}},
@@ -409,7 +409,7 @@ func TestTimestampStage_ProcessActionOnFailure(t *testing.T) {
 			config: TimestampConfig{
 				Source:          "time",
 				Format:          time.RFC3339Nano,
-				ActionOnFailure: lokiutil.StringRef(TimestampActionOnFailureFudge),
+				ActionOnFailure: valiutil.StringRef(TimestampActionOnFailureFudge),
 			},
 			inputEntries: []inputEntry{
 				{timestamp: time.Unix(1, 0), labels: model.LabelSet{"app": "m", "uniq0": "1", "uniq1": "1"}, extracted: map[string]interface{}{"time": "2019-10-01T01:02:03.400000000Z"}},

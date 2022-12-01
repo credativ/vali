@@ -5,18 +5,18 @@ This chart was moved to <https://github.com/grafana/helm-charts>.
 ## Deploy Promtail only
 
 ```bash
-$ helm upgrade --install promtail loki/promtail --set "loki.serviceName=loki"
+$ helm upgrade --install promtail vali/promtail --set "vali.serviceName=vali"
 ```
 
-## Run Loki behind https ingress
+## Run Vali behind https ingress
 
-If Loki and Promtail are deployed on different clusters you can add an Ingress in front of Loki.
+If Vali and Promtail are deployed on different clusters you can add an Ingress in front of Vali.
 By adding a certificate you create an https endpoint. For extra security enable basic authentication on the Ingress.
 
 In Promtail set the following values to communicate with https and basic auth
 
 ```
-loki:
+vali:
   serviceScheme: https
   user: user
   password: pass

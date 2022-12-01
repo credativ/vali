@@ -16,11 +16,11 @@ import (
 var clientConfig = Config{}
 
 var clientDefaultConfig = (`
-url: http://localhost:3100/loki/api/v1/push
+url: http://localhost:3100/vali/api/v1/push
 `)
 
 var clientCustomConfig = `
-url: http://localhost:3100/loki/api/v1/push
+url: http://localhost:3100/vali/api/v1/push
 backoff_config:
   max_retries: 20
   min_period: 5s
@@ -31,7 +31,7 @@ timeout: 5s
 `
 
 func Test_Config(t *testing.T) {
-	u, err := url.Parse("http://localhost:3100/loki/api/v1/push")
+	u, err := url.Parse("http://localhost:3100/vali/api/v1/push")
 	require.NoError(t, err)
 	tests := []struct {
 		configValues   string

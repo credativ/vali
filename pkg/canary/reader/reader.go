@@ -22,27 +22,27 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
-	"github.com/grafana/loki/pkg/build"
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/unmarshal"
+	"github.com/credativ/vali/pkg/build"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/unmarshal"
 )
 
 var (
 	reconnects = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "ws_reconnects_total",
 		Help:      "counts every time the websocket connection has to reconnect",
 	})
 	websocketPings = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki_canary",
+		Namespace: "vali_canary",
 		Name:      "ws_pings_total",
 		Help:      "counts every time the websocket receives a ping message",
 	})
-	userAgent = fmt.Sprintf("loki-canary/%s", build.Version)
+	userAgent = fmt.Sprintf("vali-canary/%s", build.Version)
 )
 
-type LokiReader interface {
+type ValiReader interface {
 	Query(start time.Time, end time.Time) ([]time.Time, error)
 	QueryCountOverTime(queryRange string) (float64, error)
 }
@@ -138,7 +138,7 @@ func (r *Reader) Stop() {
 	}
 }
 
-// QueryCountOverTime will ask Loki for a count of logs over the provided range e.g. 5m
+// QueryCountOverTime will ask Vali for a count of logs over the provided range e.g. 5m
 // QueryCountOverTime blocks if a previous query has failed until the appropriate backoff time has been reached.
 func (r *Reader) QueryCountOverTime(queryRange string) (float64, error) {
 	r.backoffMtx.RLock()
@@ -159,12 +159,12 @@ func (r *Reader) QueryCountOverTime(queryRange string) (float64, error) {
 	u := url.URL{
 		Scheme: scheme,
 		Host:   r.addr,
-		Path:   "/loki/api/v1/query",
+		Path:   "/vali/api/v1/query",
 		RawQuery: "query=" + url.QueryEscape(fmt.Sprintf("count_over_time({%v=\"%v\",%v=\"%v\"}[%s])", r.sName, r.sValue, r.lName, r.lVal, queryRange)) +
 			fmt.Sprintf("&time=%d", time.Now().UnixNano()) +
 			"&limit=1000",
 	}
-	fmt.Fprintf(r.w, "Querying loki for metric count with query: %v\n", u.String())
+	fmt.Fprintf(r.w, "Querying vali for metric count with query: %v\n", u.String())
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.queryTimeout)
 	defer cancel()
@@ -224,7 +224,7 @@ func (r *Reader) QueryCountOverTime(queryRange string) (float64, error) {
 	return ret, nil
 }
 
-// Query will ask Loki for all canary timestamps in the requested timerange.
+// Query will ask Vali for all canary timestamps in the requested timerange.
 // Query blocks if a previous query has failed until the appropriate backoff time has been reached.
 func (r *Reader) Query(start time.Time, end time.Time) ([]time.Time, error) {
 	r.backoffMtx.RLock()
@@ -245,12 +245,12 @@ func (r *Reader) Query(start time.Time, end time.Time) ([]time.Time, error) {
 	u := url.URL{
 		Scheme: scheme,
 		Host:   r.addr,
-		Path:   "/loki/api/v1/query_range",
+		Path:   "/vali/api/v1/query_range",
 		RawQuery: fmt.Sprintf("start=%d&end=%d", start.UnixNano(), end.UnixNano()) +
 			"&query=" + url.QueryEscape(fmt.Sprintf("{%v=\"%v\",%v=\"%v\"}", r.sName, r.sValue, r.lName, r.lVal)) +
 			"&limit=1000",
 	}
-	fmt.Fprintf(r.w, "Querying loki for logs with query: %v\n", u.String())
+	fmt.Fprintf(r.w, "Querying vali for logs with query: %v\n", u.String())
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.queryTimeout)
 	defer cancel()
@@ -334,7 +334,7 @@ func (r *Reader) run() {
 		err := unmarshal.ReadTailResponseJSON(tailResponse, r.conn)
 		if err != nil {
 			fmt.Fprintf(r.w, "error reading websocket, will retry in 10 seconds: %s\n", err)
-			// Even though we sleep between connection retries, we found it's possible to DOS Loki if the connection
+			// Even though we sleep between connection retries, we found it's possible to DOS Vali if the connection
 			// succeeds but some other error is returned, so also sleep here before retrying.
 			<-time.After(10 * time.Second)
 			r.closeAndReconnect()
@@ -357,7 +357,7 @@ func (r *Reader) run() {
 		// Ping messages can reset the read deadline so also make sure we are receiving regular messages.
 		// We use the same 10x interval to make sure we are getting recent messages
 		if time.Since(lastMessage).Milliseconds() > 10*r.interval.Milliseconds() {
-			fmt.Fprintf(r.w, "Have not received a canary message from loki on the websocket in %vms, "+
+			fmt.Fprintf(r.w, "Have not received a canary message from vali on the websocket in %vms, "+
 				"sleeping 10s and reconnecting\n", 10*r.interval.Milliseconds())
 			<-time.After(10 * time.Second)
 			r.closeAndReconnect()
@@ -385,11 +385,11 @@ func (r *Reader) closeAndReconnect() {
 		u := url.URL{
 			Scheme:   scheme,
 			Host:     r.addr,
-			Path:     "/loki/api/v1/tail",
+			Path:     "/vali/api/v1/tail",
 			RawQuery: "query=" + url.QueryEscape(fmt.Sprintf("{%v=\"%v\",%v=\"%v\"}", r.sName, r.sValue, r.lName, r.lVal)),
 		}
 
-		fmt.Fprintf(r.w, "Connecting to loki at %v, querying for label '%v' with value '%v'\n", u.String(), r.lName, r.lVal)
+		fmt.Fprintf(r.w, "Connecting to vali at %v, querying for label '%v' with value '%v'\n", u.String(), r.lName, r.lVal)
 
 		c, _, err := websocket.DefaultDialer.Dial(u.String(), r.header)
 		if err != nil {
@@ -433,6 +433,6 @@ func nextBackoff(w io.Writer, statusCode int, backoff *util.Backoff) time.Time {
 	} else {
 		next = time.Now().Add(backoff.NextDelay())
 	}
-	fmt.Fprintf(w, "Loki returned an error code: %v, waiting %v before next query.", statusCode, time.Until(next))
+	fmt.Fprintf(w, "Vali returned an error code: %v, waiting %v before next query.", statusCode, time.Until(next))
 	return next
 }

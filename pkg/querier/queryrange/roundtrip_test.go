@@ -25,9 +25,9 @@ import (
 	"github.com/weaveworks/common/middleware"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/marshal"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/marshal"
 )
 
 var (
@@ -98,7 +98,7 @@ func TestMetricsTripperware(t *testing.T) {
 	}
 	require.NoError(t, err)
 
-	lreq := &LokiRequest{
+	lreq := &ValiRequest{
 		Query:     `rate({app="foo"} |= "foo"[1m])`,
 		Limit:     1000,
 		Step:      30000, //30sec
@@ -109,7 +109,7 @@ func TestMetricsTripperware(t *testing.T) {
 	}
 
 	ctx := user.InjectOrgID(context.Background(), "1")
-	req, err := lokiCodec.EncodeRequest(ctx, lreq)
+	req, err := valiCodec.EncodeRequest(ctx, lreq)
 	require.NoError(t, err)
 
 	req = req.WithContext(ctx)
@@ -138,7 +138,7 @@ func TestMetricsTripperware(t *testing.T) {
 	// 2 queries
 	require.Equal(t, 2, *count)
 	require.NoError(t, err)
-	lokiResponse, err := lokiCodec.DecodeResponse(ctx, resp, lreq)
+	valiResponse, err := valiCodec.DecodeResponse(ctx, resp, lreq)
 	require.NoError(t, err)
 
 	// testing cache
@@ -148,10 +148,10 @@ func TestMetricsTripperware(t *testing.T) {
 	// 0 queries result are cached.
 	require.Equal(t, 0, *count)
 	require.NoError(t, err)
-	lokiCacheResponse, err := lokiCodec.DecodeResponse(ctx, cacheResp, lreq)
+	valiCacheResponse, err := valiCodec.DecodeResponse(ctx, cacheResp, lreq)
 	require.NoError(t, err)
 
-	require.Equal(t, lokiResponse.(*LokiPromResponse).Response, lokiCacheResponse.(*LokiPromResponse).Response)
+	require.Equal(t, valiResponse.(*ValiPromResponse).Response, valiCacheResponse.(*ValiPromResponse).Response)
 }
 
 func TestLogFilterTripperware(t *testing.T) {
@@ -165,17 +165,17 @@ func TestLogFilterTripperware(t *testing.T) {
 	require.NoError(t, err)
 	defer rt.Close()
 
-	lreq := &LokiRequest{
+	lreq := &ValiRequest{
 		Query:     `{app="foo"} |= "foo"`,
 		Limit:     1000,
 		StartTs:   testTime.Add(-10 * time.Hour), // bigger than the limit
 		EndTs:     testTime,
 		Direction: logproto.FORWARD,
-		Path:      "/loki/api/v1/query_range",
+		Path:      "/vali/api/v1/query_range",
 	}
 
 	ctx := user.InjectOrgID(context.Background(), "1")
-	req, err := lokiCodec.EncodeRequest(ctx, lreq)
+	req, err := valiCodec.EncodeRequest(ctx, lreq)
 	require.NoError(t, err)
 
 	req = req.WithContext(ctx)
@@ -191,7 +191,7 @@ func TestLogFilterTripperware(t *testing.T) {
 
 	// set the query length back to normal
 	lreq.StartTs = testTime.Add(-6 * time.Hour)
-	req, err = lokiCodec.EncodeRequest(ctx, lreq)
+	req, err = valiCodec.EncodeRequest(ctx, lreq)
 	require.NoError(t, err)
 
 	// testing retry
@@ -213,15 +213,15 @@ func TestSeriesTripperware(t *testing.T) {
 	require.NoError(t, err)
 	defer rt.Close()
 
-	lreq := &LokiSeriesRequest{
+	lreq := &ValiSeriesRequest{
 		Match:   []string{`{job="varlogs"}`},
 		StartTs: testTime.Add(-5 * time.Hour), // bigger than the limit
 		EndTs:   testTime,
-		Path:    "/loki/api/v1/series",
+		Path:    "/vali/api/v1/series",
 	}
 
 	ctx := user.InjectOrgID(context.Background(), "1")
-	req, err := lokiCodec.EncodeRequest(ctx, lreq)
+	req, err := valiCodec.EncodeRequest(ctx, lreq)
 	require.NoError(t, err)
 
 	req = req.WithContext(ctx)
@@ -234,8 +234,8 @@ func TestSeriesTripperware(t *testing.T) {
 	// 2 queries
 	require.Equal(t, 2, *count)
 	require.NoError(t, err)
-	lokiSeriesResponse, err := lokiCodec.DecodeResponse(ctx, resp, lreq)
-	res, ok := lokiSeriesResponse.(*LokiSeriesResponse)
+	valiSeriesResponse, err := valiCodec.DecodeResponse(ctx, resp, lreq)
+	res, ok := valiSeriesResponse.(*ValiSeriesResponse)
 	require.Equal(t, true, ok)
 
 	// make sure we return unique series since responses from
@@ -255,14 +255,14 @@ func TestLabelsTripperware(t *testing.T) {
 	require.NoError(t, err)
 	defer rt.Close()
 
-	lreq := &LokiLabelNamesRequest{
+	lreq := &ValiLabelNamesRequest{
 		StartTs: testTime.Add(-25 * time.Hour), // bigger than the limit
 		EndTs:   testTime,
-		Path:    "/loki/api/v1/labels",
+		Path:    "/vali/api/v1/labels",
 	}
 
 	ctx := user.InjectOrgID(context.Background(), "1")
-	req, err := lokiCodec.EncodeRequest(ctx, lreq)
+	req, err := valiCodec.EncodeRequest(ctx, lreq)
 	require.NoError(t, err)
 
 	req = req.WithContext(ctx)
@@ -283,8 +283,8 @@ func TestLabelsTripperware(t *testing.T) {
 	// verify 2 calls have been made to downstream.
 	require.Equal(t, 2, handler.count)
 	require.NoError(t, err)
-	lokiLabelsResponse, err := lokiCodec.DecodeResponse(ctx, resp, lreq)
-	res, ok := lokiLabelsResponse.(*LokiLabelNamesResponse)
+	valiLabelsResponse, err := valiCodec.DecodeResponse(ctx, resp, lreq)
+	res, ok := valiLabelsResponse.(*ValiLabelNamesResponse)
 	require.Equal(t, true, ok)
 	require.Equal(t, []string{"foo", "bar", "blop", "blip"}, res.Data)
 	require.Equal(t, "success", res.Status)
@@ -301,17 +301,17 @@ func TestLogNoRegex(t *testing.T) {
 	require.NoError(t, err)
 	defer rt.Close()
 
-	lreq := &LokiRequest{
+	lreq := &ValiRequest{
 		Query:     `{app="foo"}`, // no regex so it should go to the querier
 		Limit:     1000,
 		StartTs:   testTime.Add(-6 * time.Hour),
 		EndTs:     testTime,
 		Direction: logproto.FORWARD,
-		Path:      "/loki/api/v1/query_range",
+		Path:      "/vali/api/v1/query_range",
 	}
 
 	ctx := user.InjectOrgID(context.Background(), "1")
-	req, err := lokiCodec.EncodeRequest(ctx, lreq)
+	req, err := valiCodec.EncodeRequest(ctx, lreq)
 	require.NoError(t, err)
 
 	req = req.WithContext(ctx)
@@ -336,7 +336,7 @@ func TestUnhandledPath(t *testing.T) {
 	defer rt.Close()
 
 	ctx := user.InjectOrgID(context.Background(), "1")
-	req, err := http.NewRequest(http.MethodGet, "/loki/api/v1/labels/foo/values", nil)
+	req, err := http.NewRequest(http.MethodGet, "/vali/api/v1/labels/foo/values", nil)
 	require.NoError(t, err)
 	req = req.WithContext(ctx)
 	err = user.InjectOrgIDIntoHTTPRequest(ctx, req)
@@ -359,17 +359,17 @@ func TestRegexpParamsSupport(t *testing.T) {
 	require.NoError(t, err)
 	defer rt.Close()
 
-	lreq := &LokiRequest{
+	lreq := &ValiRequest{
 		Query:     `{app="foo"}`, // no regex so it should go to the querier
 		Limit:     1000,
 		StartTs:   testTime.Add(-6 * time.Hour),
 		EndTs:     testTime,
 		Direction: logproto.FORWARD,
-		Path:      "/loki/api/v1/query_range",
+		Path:      "/vali/api/v1/query_range",
 	}
 
 	ctx := user.InjectOrgID(context.Background(), "1")
-	req, err := lokiCodec.EncodeRequest(ctx, lreq)
+	req, err := valiCodec.EncodeRequest(ctx, lreq)
 	require.NoError(t, err)
 
 	// fudge a regexp params
@@ -393,7 +393,7 @@ func TestRegexpParamsSupport(t *testing.T) {
 }
 
 func TestPostQueries(t *testing.T) {
-	req, err := http.NewRequest(http.MethodPost, "/loki/api/v1/query_range", nil)
+	req, err := http.NewRequest(http.MethodPost, "/vali/api/v1/query_range", nil)
 	data := url.Values{
 		"query": {`{app="foo"} |~ "foo"`},
 	}
@@ -438,17 +438,17 @@ func TestEntriesLimitsTripperware(t *testing.T) {
 	require.NoError(t, err)
 	defer rt.Close()
 
-	lreq := &LokiRequest{
+	lreq := &ValiRequest{
 		Query:     `{app="foo"}`, // no regex so it should go to the querier
 		Limit:     10000,
 		StartTs:   testTime.Add(-6 * time.Hour),
 		EndTs:     testTime,
 		Direction: logproto.FORWARD,
-		Path:      "/loki/api/v1/query_range",
+		Path:      "/vali/api/v1/query_range",
 	}
 
 	ctx := user.InjectOrgID(context.Background(), "1")
-	req, err := lokiCodec.EncodeRequest(ctx, lreq)
+	req, err := valiCodec.EncodeRequest(ctx, lreq)
 	require.NoError(t, err)
 
 	req = req.WithContext(ctx)
@@ -469,17 +469,17 @@ func TestEntriesLimitWithZeroTripperware(t *testing.T) {
 	require.NoError(t, err)
 	defer rt.Close()
 
-	lreq := &LokiRequest{
+	lreq := &ValiRequest{
 		Query:     `{app="foo"}`, // no regex so it should go to the querier
 		Limit:     10000,
 		StartTs:   testTime.Add(-6 * time.Hour),
 		EndTs:     testTime,
 		Direction: logproto.FORWARD,
-		Path:      "/loki/api/v1/query_range",
+		Path:      "/vali/api/v1/query_range",
 	}
 
 	ctx := user.InjectOrgID(context.Background(), "1")
-	req, err := lokiCodec.EncodeRequest(ctx, lreq)
+	req, err := valiCodec.EncodeRequest(ctx, lreq)
 	require.NoError(t, err)
 
 	req = req.WithContext(ctx)

@@ -18,7 +18,7 @@ pipeline_stages:
 - labels:
     app:
 - match:
-    selector: "{app=\"loki\"}"
+    selector: "{app=\"vali\"}"
     stages:
     - json:
         expressions:
@@ -37,7 +37,7 @@ pipeline_stages:
 var testMatchLogLineApp1 = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level" : "WARN",
 	"message" : "app1 log line"

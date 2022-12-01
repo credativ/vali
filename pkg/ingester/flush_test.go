@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/log"
-	"github.com/grafana/loki/pkg/util/runtime"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/log"
+	"github.com/credativ/vali/pkg/util/runtime"
 
 	"github.com/cortexproject/cortex/pkg/chunk"
 	"github.com/cortexproject/cortex/pkg/ring"
@@ -20,11 +20,11 @@ import (
 	"github.com/cortexproject/cortex/pkg/util/flagext"
 	"github.com/cortexproject/cortex/pkg/util/services"
 
-	"github.com/grafana/loki/pkg/chunkenc"
-	"github.com/grafana/loki/pkg/ingester/client"
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/chunkenc"
+	"github.com/credativ/vali/pkg/ingester/client"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/util/validation"
 
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/pkg/labels"
@@ -130,7 +130,7 @@ func buildChunkDecs(t testing.TB) []*chunkDesc {
 func TestWALFullFlush(t *testing.T) {
 	// technically replaced with a fake wal, but the ingester New() function creates a regular wal first,
 	// so we enable creation/cleanup even though it remains unused.
-	walDir, err := ioutil.TempDir(os.TempDir(), "loki-wal")
+	walDir, err := ioutil.TempDir(os.TempDir(), "vali-wal")
 	require.Nil(t, err)
 	defer os.RemoveAll(walDir)
 
@@ -396,8 +396,8 @@ func (s *testStore) checkData(t *testing.T, testData map[string][]logproto.Strea
 func (s *testStore) getStreamsForUser(t *testing.T, userID string) []logproto.Stream {
 	var streams []logproto.Stream
 	for _, c := range s.getChunksForUser(userID) {
-		lokiChunk := c.Data.(*chunkenc.Facade).LokiChunk()
-		streams = append(streams, buildStreamsFromChunk(t, c.Metric.String(), lokiChunk))
+		valiChunk := c.Data.(*chunkenc.Facade).ValiChunk()
+		streams = append(streams, buildStreamsFromChunk(t, c.Metric.String(), valiChunk))
 	}
 	sort.Slice(streams, func(i, j int) bool {
 		return streams[i].Labels < streams[j].Labels

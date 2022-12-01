@@ -5,9 +5,9 @@ name: fluent-bit
 version: 2.0.2
 appVersion: v2.0.0
 kubeVersion: "^1.10.0-0"
-description: "DEPRECATED Uses fluent-bit Loki go plugin for gathering logs and sending them to Loki"
-home: https://grafana.com/loki
-icon: https://raw.githubusercontent.com/grafana/loki/master/docs/sources/logo.png
+description: "DEPRECATED Uses fluent-bit Vali go plugin for gathering logs and sending them to Vali"
+home: https://github.com/credativ/vali
+icon: https://raw.githubusercontent.com/credativ/vali/main/docs/sources/logo.png
 sources:
-- https://github.com/grafana/loki
+- https://github.com/credativ/vali
 engine: gotpl

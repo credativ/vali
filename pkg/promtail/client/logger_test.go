@@ -10,9 +10,9 @@ import (
 	"github.com/prometheus/common/model"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/util/flagext"
 )
 
 func TestNewLogger(t *testing.T) {

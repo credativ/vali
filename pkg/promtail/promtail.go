@@ -7,10 +7,10 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/grafana/loki/pkg/promtail/client"
-	"github.com/grafana/loki/pkg/promtail/config"
-	"github.com/grafana/loki/pkg/promtail/server"
-	"github.com/grafana/loki/pkg/promtail/targets"
+	"github.com/credativ/vali/pkg/promtail/client"
+	"github.com/credativ/vali/pkg/promtail/config"
+	"github.com/credativ/vali/pkg/promtail/server"
+	"github.com/credativ/vali/pkg/promtail/targets"
 )
 
 // Option is a function that can be passed to the New method of Promtail and
@@ -60,7 +60,7 @@ func New(cfg config.Config, dryRun bool, opts ...Option) (*Promtail, error) {
 		cfg.ClientConfigs = append(cfg.ClientConfigs, cfg.ClientConfig)
 	}
 
-	// This is a bit crude but if the Loki Push API target is specified,
+	// This is a bit crude but if the Vali Push API target is specified,
 	// force the log level to match the promtail log level
 	for i := range cfg.ScrapeConfig {
 		if cfg.ScrapeConfig[i].PushConfig != nil {
@@ -108,7 +108,7 @@ func (p *Promtail) Run() error {
 	return p.server.Run()
 }
 
-// Client returns the underlying client Promtail uses to write to Loki.
+// Client returns the underlying client Promtail uses to write to Vali.
 func (p *Promtail) Client() client.Client {
 	return p.client
 }

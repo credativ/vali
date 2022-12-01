@@ -1,6 +1,6 @@
 {
-    "description": "Loki Logging Driver",
-    "documentation": "https://github.com/grafana/loki",
+    "description": "Vali Logging Driver",
+    "documentation": "https://github.com/credativ/vali",
     "entrypoint": [
         "/bin/docker-driver"
     ],
@@ -11,7 +11,7 @@
         "types": [
             "docker.logdriver/1.0"
         ],
-        "socket": "loki.sock"
+        "socket": "vali.sock"
     },
     "env": [
         {

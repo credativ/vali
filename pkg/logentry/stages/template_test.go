@@ -38,7 +38,7 @@ pipeline_stages:
 var testTemplateLogLine = `
 {
 	"time":"2012-11-01T22:08:41+00:00",
-	"app":"loki",
+	"app":"vali",
 	"component": ["parser","type"],
 	"level" : "WARN",
 	"nested" : {"child":"value"},
@@ -62,7 +62,7 @@ func TestPipeline_Template(t *testing.T) {
 		t.Fatal(err)
 	}
 	expectedLbls := model.LabelSet{
-		"app":   "LOKI doki",
+		"app":   "VALI doki",
 		"level": "OK",
 		"type":  "TEST",
 	}
@@ -158,15 +158,15 @@ func TestTemplateStage_Process(t *testing.T) {
 			},
 			map[string]interface{}{
 				"level":   "warn",
-				"app":     "loki",
-				"message": "warn for app loki",
+				"app":     "vali",
+				"message": "warn for app vali",
 				"module":  "test",
 			},
 			map[string]interface{}{
 				"level":   "warn",
-				"app":     "loki",
+				"app":     "vali",
 				"module":  "test",
-				"message": "warn for app loki in module test",
+				"message": "warn for app vali in module test",
 			},
 		},
 		"template with multiple keys with missing source": {
@@ -176,12 +176,12 @@ func TestTemplateStage_Process(t *testing.T) {
 			},
 			map[string]interface{}{
 				"level": "warn",
-				"app":   "loki",
+				"app":   "vali",
 			},
 			map[string]interface{}{
 				"level":   "warn",
-				"app":     "loki",
-				"missing": "warn for app LOKI",
+				"app":     "vali",
+				"missing": "warn for app VALI",
 			},
 		},
 		"template with multiple keys with missing key": {
@@ -191,13 +191,13 @@ func TestTemplateStage_Process(t *testing.T) {
 			},
 			map[string]interface{}{
 				"level":   "warn",
-				"app":     "loki",
-				"message": "warn for app loki",
+				"app":     "vali",
+				"message": "warn for app vali",
 			},
 			map[string]interface{}{
 				"level":   "warn",
-				"app":     "loki",
-				"message": "warn for app loki in module <no value>",
+				"app":     "vali",
+				"message": "warn for app vali in module <no value>",
 			},
 		},
 		"template with multiple keys with nil value in extracted key": {

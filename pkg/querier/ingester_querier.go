@@ -16,11 +16,11 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/weaveworks/common/httpgrpc"
 
-	"github.com/grafana/loki/pkg/ingester/client"
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/ingester/client"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 type responseFromIngesters struct {

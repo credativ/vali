@@ -36,7 +36,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
         },
       ],
     } +
-    g.dashboard('Loki / Promtail')
+    g.dashboard('Vali / Promtail')
     .addRow(
       g.row('Targets & Files')
       .addPanel(

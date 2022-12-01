@@ -187,7 +187,7 @@ func TestEntryNeverReceived(t *testing.T) {
 	expected := fmt.Sprintf(ErrOutOfOrderEntry+ErrOutOfOrderEntry+ // 1 Out of order because we missed entries
 		ErrEntryNotReceivedWs+ErrEntryNotReceivedWs+ // 2 Log that entries weren't received over websocket
 		DebugWebsocketMissingEntry+DebugWebsocketMissingEntry+ // 3 List entries we are missing
-		DebugQueryResult+DebugQueryResult+DebugQueryResult+DebugQueryResult+ // 4 List entries we got back from Loki
+		DebugQueryResult+DebugQueryResult+DebugQueryResult+DebugQueryResult+ // 4 List entries we got back from Vali
 		DebugEntryFound+ // 5 We log when t4 was found on followup query
 		DebugWebsocketMissingEntry+ // 6 Log missing entries on second run of pruneEntries
 		DebugQueryResult+DebugQueryResult+DebugQueryResult+DebugQueryResult+ // 7 Because we call pruneEntries twice we get the confirmation query results back twice
@@ -304,7 +304,7 @@ func TestSpotCheck(t *testing.T) {
 	// First entry should have been pruned, second and third entries have not expired yet
 	assert.Equal(t, 2, len(c.spotCheck))
 
-	expected := fmt.Sprintf(ErrSpotCheckEntryNotReceived, // List entry not received from Loki
+	expected := fmt.Sprintf(ErrSpotCheckEntryNotReceived, // List entry not received from Vali
 		entries[20].UnixNano(), "5ms")
 
 	// We didn't send the last entry and our initial counter did not start at 0 so we should get back entries 1-19

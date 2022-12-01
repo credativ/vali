@@ -12,8 +12,8 @@ import (
 	"github.com/cortexproject/cortex/pkg/querier/queryrange"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 func TestStatsCollectorMiddleware(t *testing.T) {
@@ -25,7 +25,7 @@ func TestStatsCollectorMiddleware(t *testing.T) {
 	ctx := context.WithValue(context.Background(), ctxKey, data)
 	_, _ = StatsCollectorMiddleware().Wrap(queryrange.HandlerFunc(func(ctx context.Context, r queryrange.Request) (queryrange.Response, error) {
 		return nil, nil
-	})).Do(ctx, &LokiRequest{
+	})).Do(ctx, &ValiRequest{
 		Query:   "foo",
 		StartTs: now,
 	})
@@ -38,7 +38,7 @@ func TestStatsCollectorMiddleware(t *testing.T) {
 	data = &queryData{}
 	_, _ = StatsCollectorMiddleware().Wrap(queryrange.HandlerFunc(func(ctx context.Context, r queryrange.Request) (queryrange.Response, error) {
 		return nil, nil
-	})).Do(context.Background(), &LokiRequest{
+	})).Do(context.Background(), &ValiRequest{
 		Query:   "foo",
 		StartTs: now,
 	})
@@ -48,14 +48,14 @@ func TestStatsCollectorMiddleware(t *testing.T) {
 	data = &queryData{}
 	ctx = context.WithValue(context.Background(), ctxKey, data)
 	_, _ = StatsCollectorMiddleware().Wrap(queryrange.HandlerFunc(func(ctx context.Context, r queryrange.Request) (queryrange.Response, error) {
-		return &LokiPromResponse{
+		return &ValiPromResponse{
 			Statistics: stats.Result{
 				Ingester: stats.Ingester{
 					TotalReached: 10,
 				},
 			},
 		}, nil
-	})).Do(ctx, &LokiRequest{
+	})).Do(ctx, &ValiRequest{
 		Query:   "foo",
 		StartTs: now,
 	})
@@ -86,7 +86,7 @@ func Test_StatsHTTP(t *testing.T) {
 			http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				data := r.Context().Value(ctxKey).(*queryData)
 				data.recorded = true
-				data.params = paramsFromRequest(&LokiRequest{
+				data.params = paramsFromRequest(&ValiRequest{
 					Query:     "foo",
 					Direction: logproto.BACKWARD,
 					Limit:     100,
@@ -106,7 +106,7 @@ func Test_StatsHTTP(t *testing.T) {
 			http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				data := r.Context().Value(ctxKey).(*queryData)
 				data.recorded = true
-				data.params = paramsFromRequest(&LokiRequest{
+				data.params = paramsFromRequest(&ValiRequest{
 					Query:     "foo",
 					Direction: logproto.BACKWARD,
 					Limit:     100,
@@ -127,7 +127,7 @@ func Test_StatsHTTP(t *testing.T) {
 			http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				data := r.Context().Value(ctxKey).(*queryData)
 				data.recorded = true
-				data.params = paramsFromRequest(&LokiRequest{
+				data.params = paramsFromRequest(&ValiRequest{
 					Query:     "foo",
 					Direction: logproto.BACKWARD,
 					Limit:     100,
@@ -157,11 +157,11 @@ func Test_StatsHTTP(t *testing.T) {
 func Test_StatsUpdateResult(t *testing.T) {
 	resp, err := StatsCollectorMiddleware().Wrap(queryrange.HandlerFunc(func(c context.Context, r queryrange.Request) (queryrange.Response, error) {
 		time.Sleep(20 * time.Millisecond)
-		return &LokiResponse{}, nil
-	})).Do(context.Background(), &LokiRequest{
+		return &ValiResponse{}, nil
+	})).Do(context.Background(), &ValiRequest{
 		Query: "foo",
 		EndTs: time.Now(),
 	})
 	require.NoError(t, err)
-	require.GreaterOrEqual(t, resp.(*LokiResponse).Statistics.Summary.ExecTime, (20 * time.Millisecond).Seconds())
+	require.GreaterOrEqual(t, resp.(*ValiResponse).Statistics.Summary.ExecTime, (20 * time.Millisecond).Seconds())
 }

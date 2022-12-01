@@ -12,9 +12,9 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/prometheus/prometheus/promql/parser"
 
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/marshal"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/marshal"
 )
 
 // NewQueryShardMiddleware creates a middleware which downstreams queries after AST mapping and query encoding.
@@ -92,9 +92,9 @@ func (ast *astMapperware) Do(ctx context.Context, r queryrange.Request) (queryra
 	shardedLog, ctx := spanlogger.New(ctx, "shardedEngine")
 	defer shardedLog.Finish()
 
-	req, ok := r.(*LokiRequest)
+	req, ok := r.(*ValiRequest)
 	if !ok {
-		return nil, fmt.Errorf("expected *LokiRequest, got (%T)", r)
+		return nil, fmt.Errorf("expected *ValiRequest, got (%T)", r)
 	}
 
 	mapper, err := logql.NewShardMapper(int(conf.RowShards), ast.metrics)
@@ -129,7 +129,7 @@ func (ast *astMapperware) Do(ctx context.Context, r queryrange.Request) (queryra
 
 	switch res.Data.Type() {
 	case parser.ValueTypeMatrix:
-		return &LokiPromResponse{
+		return &ValiPromResponse{
 			Response: &queryrange.PrometheusResponse{
 				Status: loghttp.QueryStatusSuccess,
 				Data: queryrange.PrometheusData{
@@ -140,13 +140,13 @@ func (ast *astMapperware) Do(ctx context.Context, r queryrange.Request) (queryra
 			Statistics: res.Statistics,
 		}, nil
 	case logql.ValueTypeStreams:
-		return &LokiResponse{
+		return &ValiResponse{
 			Status:     loghttp.QueryStatusSuccess,
 			Direction:  req.Direction,
 			Limit:      req.Limit,
 			Version:    uint32(loghttp.GetVersion(req.Path)),
 			Statistics: res.Statistics,
-			Data: LokiData{
+			Data: ValiData{
 				ResultType: loghttp.ResultTypeStream,
 				Result:     value.(loghttp.Streams).ToProto(),
 			},

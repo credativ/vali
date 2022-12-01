@@ -24,7 +24,7 @@ const (
 	// DroppedTargetType is a target that's been dropped.
 	DroppedTargetType = TargetType("dropped")
 
-	// PushTargetType is a Loki push target
+	// PushTargetType is a Vali push target
 	PushTargetType = TargetType("Push")
 
 	// WindowsTargetType is a Windows event target

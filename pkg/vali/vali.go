@@ -1,0 +1,399 @@
+package vali
+
+import (
+	"bytes"
+	"context"
+	"flag"
+	"fmt"
+	"net/http"
+
+	frontend "github.com/cortexproject/cortex/pkg/frontend/v1"
+	"github.com/cortexproject/cortex/pkg/querier/worker"
+	"github.com/felixge/fgprof"
+
+	"github.com/credativ/vali/pkg/storage/stores/shipper/compactor"
+	"github.com/credativ/vali/pkg/util/runtime"
+
+	"github.com/cortexproject/cortex/pkg/util/flagext"
+	"github.com/cortexproject/cortex/pkg/util/modules"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/weaveworks/common/signals"
+
+	"github.com/cortexproject/cortex/pkg/chunk"
+	"github.com/cortexproject/cortex/pkg/ring"
+	"github.com/cortexproject/cortex/pkg/ring/kv/memberlist"
+	cortex_ruler "github.com/cortexproject/cortex/pkg/ruler"
+	"github.com/cortexproject/cortex/pkg/ruler/rules"
+	"github.com/cortexproject/cortex/pkg/util"
+	util_log "github.com/cortexproject/cortex/pkg/util/log"
+	"github.com/cortexproject/cortex/pkg/util/runtimeconfig"
+	"github.com/cortexproject/cortex/pkg/util/services"
+
+	"github.com/go-kit/kit/log"
+	"github.com/go-kit/kit/log/level"
+	"github.com/pkg/errors"
+	"github.com/weaveworks/common/middleware"
+	"github.com/weaveworks/common/server"
+	"google.golang.org/grpc"
+
+	"github.com/credativ/vali/pkg/distributor"
+	"github.com/credativ/vali/pkg/ingester"
+	"github.com/credativ/vali/pkg/ingester/client"
+	"github.com/credativ/vali/pkg/querier"
+	"github.com/credativ/vali/pkg/querier/queryrange"
+	"github.com/credativ/vali/pkg/ruler"
+	"github.com/credativ/vali/pkg/storage"
+	"github.com/credativ/vali/pkg/tracing"
+	serverutil "github.com/credativ/vali/pkg/util/server"
+	"github.com/credativ/vali/pkg/util/validation"
+	"github.com/credativ/vali/pkg/valifrontend"
+)
+
+// Config is the root config for Vali.
+type Config struct {
+	Target      string `yaml:"target,omitempty"`
+	AuthEnabled bool   `yaml:"auth_enabled,omitempty"`
+	HTTPPrefix  string `yaml:"http_prefix"`
+
+	Server           server.Config               `yaml:"server,omitempty"`
+	Distributor      distributor.Config          `yaml:"distributor,omitempty"`
+	Querier          querier.Config              `yaml:"querier,omitempty"`
+	IngesterClient   client.Config               `yaml:"ingester_client,omitempty"`
+	Ingester         ingester.Config             `yaml:"ingester,omitempty"`
+	StorageConfig    storage.Config              `yaml:"storage_config,omitempty"`
+	ChunkStoreConfig chunk.StoreConfig           `yaml:"chunk_store_config,omitempty"`
+	SchemaConfig     storage.SchemaConfig        `yaml:"schema_config,omitempty"`
+	LimitsConfig     validation.Limits           `yaml:"limits_config,omitempty"`
+	TableManager     chunk.TableManagerConfig    `yaml:"table_manager,omitempty"`
+	Worker           worker.Config               `yaml:"frontend_worker,omitempty"`
+	Frontend         valifrontend.Config         `yaml:"frontend,omitempty"`
+	Ruler            ruler.Config                `yaml:"ruler,omitempty"`
+	QueryRange       queryrange.Config           `yaml:"query_range,omitempty"`
+	RuntimeConfig    runtimeconfig.ManagerConfig `yaml:"runtime_config,omitempty"`
+	MemberlistKV     memberlist.KVConfig         `yaml:"memberlist"`
+	Tracing          tracing.Config              `yaml:"tracing"`
+	CompactorConfig  compactor.Config            `yaml:"compactor,omitempty"`
+}
+
+// RegisterFlags registers flag.
+func (c *Config) RegisterFlags(f *flag.FlagSet) {
+	c.Server.MetricsNamespace = "vali"
+	c.Server.ExcludeRequestInLog = true
+
+	f.StringVar(&c.Target, "target", All, "target module (default All)")
+	f.BoolVar(&c.AuthEnabled, "auth.enabled", true, "Set to false to disable auth.")
+
+	c.Server.RegisterFlags(f)
+	c.Distributor.RegisterFlags(f)
+	c.Querier.RegisterFlags(f)
+	c.IngesterClient.RegisterFlags(f)
+	c.Ingester.RegisterFlags(f)
+	c.StorageConfig.RegisterFlags(f)
+	c.ChunkStoreConfig.RegisterFlags(f)
+	c.SchemaConfig.RegisterFlags(f)
+	c.LimitsConfig.RegisterFlags(f)
+	c.TableManager.RegisterFlags(f)
+	c.Frontend.RegisterFlags(f)
+	c.Ruler.RegisterFlags(f)
+	c.Worker.RegisterFlags(f)
+	c.QueryRange.RegisterFlags(f)
+	c.RuntimeConfig.RegisterFlags(f)
+	c.MemberlistKV.RegisterFlags(f, "")
+	c.Tracing.RegisterFlags(f)
+	c.CompactorConfig.RegisterFlags(f)
+}
+
+// Clone takes advantage of pass-by-value semantics to return a distinct *Config.
+// This is primarily used to parse a different flag set without mutating the original *Config.
+func (c *Config) Clone() flagext.Registerer {
+	return func(c Config) *Config {
+		return &c
+	}(*c)
+}
+
+// Validate the config and returns an error if the validation
+// doesn't pass
+func (c *Config) Validate(log log.Logger) error {
+	if err := c.SchemaConfig.Validate(); err != nil {
+		return errors.Wrap(err, "invalid schema config")
+	}
+	if err := c.StorageConfig.Validate(); err != nil {
+		return errors.Wrap(err, "invalid storage config")
+	}
+	if err := c.QueryRange.Validate(log); err != nil {
+		return errors.Wrap(err, "invalid queryrange config")
+	}
+	if err := c.TableManager.Validate(); err != nil {
+		return errors.Wrap(err, "invalid tablemanager config")
+	}
+	if err := c.Ruler.Validate(); err != nil {
+		return errors.Wrap(err, "invalid ruler config")
+	}
+	if err := c.Ingester.Validate(); err != nil {
+		return errors.Wrap(err, "invalid ingester config")
+	}
+	return nil
+}
+
+// Vali is the root datastructure for Vali.
+type Vali struct {
+	cfg Config
+
+	// set during initialization
+	ModuleManager *modules.Manager
+	serviceMap    map[string]services.Service
+
+	Server          *server.Server
+	ring            *ring.Ring
+	overrides       *validation.Overrides
+	tenantConfigs   *runtime.TenantConfigs
+	distributor     *distributor.Distributor
+	ingester        *ingester.Ingester
+	querier         *querier.Querier
+	ingesterQuerier *querier.IngesterQuerier
+	store           storage.Store
+	tableManager    *chunk.TableManager
+	frontend        *frontend.Frontend
+	ruler           *cortex_ruler.Ruler
+	RulerStorage    rules.RuleStore
+	rulerAPI        *cortex_ruler.API
+	stopper         queryrange.Stopper
+	runtimeConfig   *runtimeconfig.Manager
+	memberlistKV    *memberlist.KVInitService
+	compactor       *compactor.Compactor
+
+	HTTPAuthMiddleware middleware.Interface
+}
+
+// New makes a new Vali.
+func New(cfg Config) (*Vali, error) {
+	vali := &Vali{
+		cfg: cfg,
+	}
+
+	vali.setupAuthMiddleware()
+	if err := vali.setupModuleManager(); err != nil {
+		return nil, err
+	}
+	storage.RegisterCustomIndexClients(&vali.cfg.StorageConfig, prometheus.DefaultRegisterer)
+
+	return vali, nil
+}
+
+func (t *Vali) setupAuthMiddleware() {
+	t.cfg.Server.GRPCMiddleware = []grpc.UnaryServerInterceptor{serverutil.RecoveryGRPCUnaryInterceptor}
+	t.cfg.Server.GRPCStreamMiddleware = []grpc.StreamServerInterceptor{serverutil.RecoveryGRPCStreamInterceptor}
+	if t.cfg.AuthEnabled {
+		t.cfg.Server.GRPCMiddleware = append(t.cfg.Server.GRPCMiddleware, middleware.ServerUserHeaderInterceptor)
+		t.cfg.Server.GRPCStreamMiddleware = append(t.cfg.Server.GRPCStreamMiddleware, GRPCStreamAuthInterceptor)
+		t.HTTPAuthMiddleware = middleware.AuthenticateUser
+	} else {
+		t.cfg.Server.GRPCMiddleware = append(t.cfg.Server.GRPCMiddleware, fakeGRPCAuthUnaryMiddleware)
+		t.cfg.Server.GRPCStreamMiddleware = append(t.cfg.Server.GRPCStreamMiddleware, fakeGRPCAuthStreamMiddleware)
+		t.HTTPAuthMiddleware = fakeHTTPAuthMiddleware
+	}
+}
+
+var GRPCStreamAuthInterceptor = func(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+	switch info.FullMethod {
+	// Don't check auth header on TransferChunks, as we weren't originally
+	// sending it and this could cause transfers to fail on update.
+	//
+	// Also don't check auth /frontend.Frontend/Process, as this handles
+	// queries for multiple users.
+	case "/logproto.Ingester/TransferChunks", "/frontend.Frontend/Process":
+		return handler(srv, ss)
+	default:
+		return middleware.StreamServerUserHeaderInterceptor(srv, ss, info, handler)
+	}
+}
+
+func newDefaultConfig() *Config {
+	defaultConfig := &Config{}
+	defaultFS := flag.NewFlagSet("", flag.PanicOnError)
+	defaultConfig.RegisterFlags(defaultFS)
+	return defaultConfig
+}
+
+// Run starts Vali running, and blocks until a Vali stops.
+func (t *Vali) Run() error {
+	serviceMap, err := t.ModuleManager.InitModuleServices(t.cfg.Target)
+	if err != nil {
+		return err
+	}
+
+	t.serviceMap = serviceMap
+	t.Server.HTTP.Handle("/services", http.HandlerFunc(t.servicesHandler))
+
+	// get all services, create service manager and tell it to start
+	var servs []services.Service
+	for _, s := range serviceMap {
+		servs = append(servs, s)
+	}
+
+	sm, err := services.NewManager(servs...)
+	if err != nil {
+		return err
+	}
+
+	// before starting servers, register /ready handler. It should reflect entire Vali.
+	t.Server.HTTP.Path("/ready").Handler(t.readyHandler(sm))
+
+	// This adds a way to see the config and the changes compared to the defaults
+	t.Server.HTTP.Path("/config").HandlerFunc(configHandler(t.cfg, newDefaultConfig()))
+
+	t.Server.HTTP.Path("/debug/fgprof").Handler(fgprof.Handler())
+
+	// Let's listen for events from this manager, and log them.
+	healthy := func() { level.Info(util_log.Logger).Log("msg", "Vali started") }
+	stopped := func() { level.Info(util_log.Logger).Log("msg", "Vali stopped") }
+	serviceFailed := func(service services.Service) {
+		// if any service fails, stop entire Vali
+		sm.StopAsync()
+
+		// let's find out which module failed
+		for m, s := range serviceMap {
+			if s == service {
+				if service.FailureCase() == util.ErrStopProcess {
+					level.Info(util_log.Logger).Log("msg", "received stop signal via return error", "module", m, "error", service.FailureCase())
+				} else {
+					level.Error(util_log.Logger).Log("msg", "module failed", "module", m, "error", service.FailureCase())
+				}
+				return
+			}
+		}
+
+		level.Error(util_log.Logger).Log("msg", "module failed", "module", "unknown", "error", service.FailureCase())
+	}
+
+	sm.AddListener(services.NewManagerListener(healthy, stopped, serviceFailed))
+
+	// Setup signal handler. If signal arrives, we stop the manager, which stops all the services.
+	handler := signals.NewHandler(t.Server.Log)
+	go func() {
+		handler.Loop()
+		sm.StopAsync()
+	}()
+
+	// Start all services. This can really only fail if some service is already
+	// in other state than New, which should not be the case.
+	err = sm.StartAsync(context.Background())
+	if err == nil {
+		// Wait until service manager stops. It can stop in two ways:
+		// 1) Signal is received and manager is stopped.
+		// 2) Any service fails.
+		err = sm.AwaitStopped(context.Background())
+	}
+
+	// If there is no error yet (= service manager started and then stopped without problems),
+	// but any service failed, report that failure as an error to caller.
+	if err == nil {
+		if failed := sm.ServicesByState()[services.Failed]; len(failed) > 0 {
+			for _, f := range failed {
+				if f.FailureCase() != util.ErrStopProcess {
+					// Details were reported via failure listener before
+					err = errors.New("failed services")
+					break
+				}
+			}
+		}
+	}
+	return err
+}
+
+func (t *Vali) readyHandler(sm *services.Manager) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if !sm.IsHealthy() {
+			msg := bytes.Buffer{}
+			msg.WriteString("Some services are not Running:\n")
+
+			byState := sm.ServicesByState()
+			for st, ls := range byState {
+				msg.WriteString(fmt.Sprintf("%v: %d\n", st, len(ls)))
+			}
+
+			http.Error(w, msg.String(), http.StatusServiceUnavailable)
+			return
+		}
+
+		// Ingester has a special check that makes sure that it was able to register into the ring,
+		// and that all other ring entries are OK too.
+		if t.ingester != nil {
+			if err := t.ingester.CheckReady(r.Context()); err != nil {
+				http.Error(w, "Ingester not ready: "+err.Error(), http.StatusServiceUnavailable)
+				return
+			}
+		}
+
+		// Query Frontend has a special check that makes sure that a querier is attached before it signals
+		// itself as ready
+		if t.frontend != nil {
+			if err := t.frontend.CheckReady(r.Context()); err != nil {
+				http.Error(w, "Query Frontend not ready: "+err.Error(), http.StatusServiceUnavailable)
+				return
+			}
+		}
+
+		http.Error(w, "ready", http.StatusOK)
+	}
+}
+
+func (t *Vali) setupModuleManager() error {
+	mm := modules.NewManager()
+
+	mm.RegisterModule(Server, t.initServer)
+	mm.RegisterModule(RuntimeConfig, t.initRuntimeConfig)
+	mm.RegisterModule(MemberlistKV, t.initMemberlistKV)
+	mm.RegisterModule(Ring, t.initRing)
+	mm.RegisterModule(Overrides, t.initOverrides)
+	mm.RegisterModule(TenantConfigs, t.initTenantConfigs)
+	mm.RegisterModule(Distributor, t.initDistributor)
+	mm.RegisterModule(Store, t.initStore)
+	mm.RegisterModule(Ingester, t.initIngester)
+	mm.RegisterModule(Querier, t.initQuerier)
+	mm.RegisterModule(IngesterQuerier, t.initIngesterQuerier)
+	mm.RegisterModule(QueryFrontend, t.initQueryFrontend)
+	mm.RegisterModule(RulerStorage, t.initRulerStorage, modules.UserInvisibleModule)
+	mm.RegisterModule(Ruler, t.initRuler)
+	mm.RegisterModule(TableManager, t.initTableManager)
+	mm.RegisterModule(Compactor, t.initCompactor)
+	mm.RegisterModule(All, nil)
+
+	// Add dependencies
+	deps := map[string][]string{
+		Ring:            {RuntimeConfig, Server, MemberlistKV},
+		Overrides:       {RuntimeConfig},
+		TenantConfigs:   {RuntimeConfig},
+		Distributor:     {Ring, Server, Overrides, TenantConfigs},
+		Store:           {Overrides},
+		Ingester:        {Store, Server, MemberlistKV, TenantConfigs},
+		Querier:         {Store, Ring, Server, IngesterQuerier, TenantConfigs},
+		QueryFrontend:   {Server, Overrides, TenantConfigs},
+		Ruler:           {Ring, Server, Store, RulerStorage, IngesterQuerier, Overrides, TenantConfigs},
+		TableManager:    {Server},
+		Compactor:       {Server},
+		IngesterQuerier: {Ring},
+		All:             {Querier, Ingester, Distributor, TableManager, Ruler},
+	}
+
+	// Add IngesterQuerier as a dependency for store when target is either ingester or querier.
+	if t.cfg.Target == Querier || t.cfg.Target == Ruler {
+		deps[Store] = append(deps[Store], IngesterQuerier)
+	}
+
+	// If we are running Vali with boltdb-shipper as a single binary, without clustered mode(which should always be the case when using inmemory ring),
+	// we should start compactor as well for better user experience.
+	if storage.UsingBoltdbShipper(t.cfg.SchemaConfig.Configs) && t.cfg.Ingester.LifecyclerConfig.RingConfig.KVStore.Store == "inmemory" {
+		deps[All] = append(deps[All], Compactor)
+	}
+
+	for mod, targets := range deps {
+		if err := mm.AddDependency(mod, targets...); err != nil {
+			return err
+		}
+	}
+
+	t.ModuleManager = mm
+
+	return nil
+}

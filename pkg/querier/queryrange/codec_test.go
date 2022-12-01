@@ -14,9 +14,9 @@ import (
 	"github.com/cortexproject/cortex/pkg/querier/queryrange"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 func init() {
@@ -39,7 +39,7 @@ func Test_codec_DecodeRequest(t *testing.T) {
 		{"ok", func() (*http.Request, error) {
 			return http.NewRequest(http.MethodGet,
 				fmt.Sprintf(`/query_range?start=%d&end=%d&query={foo="bar"}&step=1&limit=200&direction=FORWARD`, start.UnixNano(), end.UnixNano()), nil)
-		}, &LokiRequest{
+		}, &ValiRequest{
 			Query:     `{foo="bar"}`,
 			Limit:     200,
 			Step:      1000, // step is expected in ms.
@@ -51,7 +51,7 @@ func Test_codec_DecodeRequest(t *testing.T) {
 		{"ok", func() (*http.Request, error) {
 			return http.NewRequest(http.MethodGet,
 				fmt.Sprintf(`/query_range?start=%d&end=%d&query={foo="bar"}&step=86400&limit=200&direction=FORWARD`, start.UnixNano(), end.UnixNano()), nil)
-		}, &LokiRequest{
+		}, &ValiRequest{
 			Query:     `{foo="bar"}`,
 			Limit:     200,
 			Step:      86400000, // step is expected in ms.
@@ -63,7 +63,7 @@ func Test_codec_DecodeRequest(t *testing.T) {
 		{"series", func() (*http.Request, error) {
 			return http.NewRequest(http.MethodGet,
 				fmt.Sprintf(`/series?start=%d&end=%d&match={foo="bar"}`, start.UnixNano(), end.UnixNano()), nil)
-		}, &LokiSeriesRequest{
+		}, &ValiSeriesRequest{
 			Match:   []string{`{foo="bar"}`},
 			Path:    "/series",
 			StartTs: start,
@@ -72,7 +72,7 @@ func Test_codec_DecodeRequest(t *testing.T) {
 		{"labels", func() (*http.Request, error) {
 			return http.NewRequest(http.MethodGet,
 				fmt.Sprintf(`/label?start=%d&end=%d`, start.UnixNano(), end.UnixNano()), nil)
-		}, &LokiLabelNamesRequest{
+		}, &ValiLabelNamesRequest{
 			Path:    "/label",
 			StartTs: start,
 			EndTs:   end,
@@ -84,7 +84,7 @@ func Test_codec_DecodeRequest(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			got, err := lokiCodec.DecodeRequest(context.TODO(), req)
+			got, err := valiCodec.DecodeRequest(context.TODO(), req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("codec.DecodeRequest() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -109,7 +109,7 @@ func Test_codec_DecodeResponse(t *testing.T) {
 		{"unknown", &http.Response{StatusCode: 200, Body: ioutil.NopCloser(strings.NewReader(`{"status":"success"}`))}, nil, nil, true},
 		{
 			"matrix", &http.Response{StatusCode: 200, Body: ioutil.NopCloser(strings.NewReader(matrixString))}, nil,
-			&LokiPromResponse{
+			&ValiPromResponse{
 				Response: &queryrange.PrometheusResponse{
 					Status: loghttp.QueryStatusSuccess,
 					Data: queryrange.PrometheusData{
@@ -122,13 +122,13 @@ func Test_codec_DecodeResponse(t *testing.T) {
 		},
 		{
 			"streams v1", &http.Response{StatusCode: 200, Body: ioutil.NopCloser(strings.NewReader(streamsString))},
-			&LokiRequest{Direction: logproto.FORWARD, Limit: 100, Path: "/loki/api/v1/query_range"},
-			&LokiResponse{
+			&ValiRequest{Direction: logproto.FORWARD, Limit: 100, Path: "/vali/api/v1/query_range"},
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.FORWARD,
 				Limit:     100,
 				Version:   uint32(loghttp.VersionV1),
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result:     logStreams,
 				},
@@ -137,13 +137,13 @@ func Test_codec_DecodeResponse(t *testing.T) {
 		},
 		{
 			"streams legacy", &http.Response{StatusCode: 200, Body: ioutil.NopCloser(strings.NewReader(streamsString))},
-			&LokiRequest{Direction: logproto.FORWARD, Limit: 100, Path: "/api/prom/query_range"},
-			&LokiResponse{
+			&ValiRequest{Direction: logproto.FORWARD, Limit: 100, Path: "/api/prom/query_range"},
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.FORWARD,
 				Limit:     100,
 				Version:   uint32(loghttp.VersionLegacy),
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result:     logStreams,
 				},
@@ -152,8 +152,8 @@ func Test_codec_DecodeResponse(t *testing.T) {
 		},
 		{
 			"series", &http.Response{StatusCode: 200, Body: ioutil.NopCloser(strings.NewReader(seriesString))},
-			&LokiSeriesRequest{Path: "/loki/api/v1/series"},
-			&LokiSeriesResponse{
+			&ValiSeriesRequest{Path: "/vali/api/v1/series"},
+			&ValiSeriesResponse{
 				Status:  "success",
 				Version: uint32(loghttp.VersionV1),
 				Data:    seriesData,
@@ -161,8 +161,8 @@ func Test_codec_DecodeResponse(t *testing.T) {
 		},
 		{
 			"labels legacy", &http.Response{StatusCode: 200, Body: ioutil.NopCloser(strings.NewReader(labelsString))},
-			&LokiLabelNamesRequest{Path: "/api/prom/label"},
-			&LokiLabelNamesResponse{
+			&ValiLabelNamesRequest{Path: "/api/prom/label"},
+			&ValiLabelNamesResponse{
 				Status:  "success",
 				Version: uint32(loghttp.VersionLegacy),
 				Data:    labelsData,
@@ -171,7 +171,7 @@ func Test_codec_DecodeResponse(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := lokiCodec.DecodeResponse(context.TODO(), tt.res, tt.req)
+			got, err := valiCodec.DecodeResponse(context.TODO(), tt.res, tt.req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("codec.DecodeResponse() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -182,13 +182,13 @@ func Test_codec_DecodeResponse(t *testing.T) {
 }
 
 func Test_codec_EncodeRequest(t *testing.T) {
-	// we only accept LokiRequest.
-	got, err := lokiCodec.EncodeRequest(context.TODO(), &queryrange.PrometheusRequest{})
+	// we only accept ValiRequest.
+	got, err := valiCodec.EncodeRequest(context.TODO(), &queryrange.PrometheusRequest{})
 	require.Error(t, err)
 	require.Nil(t, got)
 
 	ctx := context.Background()
-	toEncode := &LokiRequest{
+	toEncode := &ValiRequest{
 		Query:     `{foo="bar"}`,
 		Limit:     200,
 		Step:      86400000,
@@ -197,10 +197,10 @@ func Test_codec_EncodeRequest(t *testing.T) {
 		StartTs:   start,
 		EndTs:     end,
 	}
-	got, err = lokiCodec.EncodeRequest(ctx, toEncode)
+	got, err = valiCodec.EncodeRequest(ctx, toEncode)
 	require.NoError(t, err)
 	require.Equal(t, ctx, got.Context())
-	require.Equal(t, "/loki/api/v1/query_range", got.URL.Path)
+	require.Equal(t, "/vali/api/v1/query_range", got.URL.Path)
 	require.Equal(t, fmt.Sprintf("%d", start.UnixNano()), got.URL.Query().Get("start"))
 	require.Equal(t, fmt.Sprintf("%d", end.UnixNano()), got.URL.Query().Get("end"))
 	require.Equal(t, `{foo="bar"}`, got.URL.Query().Get("query"))
@@ -209,66 +209,66 @@ func Test_codec_EncodeRequest(t *testing.T) {
 	require.Equal(t, "86400.000000", got.URL.Query().Get("step"))
 
 	// testing a full roundtrip
-	req, err := lokiCodec.DecodeRequest(context.TODO(), got)
+	req, err := valiCodec.DecodeRequest(context.TODO(), got)
 	require.NoError(t, err)
-	require.Equal(t, toEncode.Query, req.(*LokiRequest).Query)
-	require.Equal(t, toEncode.Step, req.(*LokiRequest).Step)
-	require.Equal(t, toEncode.StartTs, req.(*LokiRequest).StartTs)
-	require.Equal(t, toEncode.EndTs, req.(*LokiRequest).EndTs)
-	require.Equal(t, toEncode.Direction, req.(*LokiRequest).Direction)
-	require.Equal(t, toEncode.Limit, req.(*LokiRequest).Limit)
-	require.Equal(t, "/loki/api/v1/query_range", req.(*LokiRequest).Path)
+	require.Equal(t, toEncode.Query, req.(*ValiRequest).Query)
+	require.Equal(t, toEncode.Step, req.(*ValiRequest).Step)
+	require.Equal(t, toEncode.StartTs, req.(*ValiRequest).StartTs)
+	require.Equal(t, toEncode.EndTs, req.(*ValiRequest).EndTs)
+	require.Equal(t, toEncode.Direction, req.(*ValiRequest).Direction)
+	require.Equal(t, toEncode.Limit, req.(*ValiRequest).Limit)
+	require.Equal(t, "/vali/api/v1/query_range", req.(*ValiRequest).Path)
 }
 
 func Test_codec_series_EncodeRequest(t *testing.T) {
-	got, err := lokiCodec.EncodeRequest(context.TODO(), &queryrange.PrometheusRequest{})
+	got, err := valiCodec.EncodeRequest(context.TODO(), &queryrange.PrometheusRequest{})
 	require.Error(t, err)
 	require.Nil(t, got)
 
 	ctx := context.Background()
-	toEncode := &LokiSeriesRequest{
+	toEncode := &ValiSeriesRequest{
 		Match:   []string{`{foo="bar"}`},
 		Path:    "/series",
 		StartTs: start,
 		EndTs:   end,
 	}
-	got, err = lokiCodec.EncodeRequest(ctx, toEncode)
+	got, err = valiCodec.EncodeRequest(ctx, toEncode)
 	require.NoError(t, err)
 	require.Equal(t, ctx, got.Context())
-	require.Equal(t, "/loki/api/v1/series", got.URL.Path)
+	require.Equal(t, "/vali/api/v1/series", got.URL.Path)
 	require.Equal(t, fmt.Sprintf("%d", start.UnixNano()), got.URL.Query().Get("start"))
 	require.Equal(t, fmt.Sprintf("%d", end.UnixNano()), got.URL.Query().Get("end"))
 	require.Equal(t, `{foo="bar"}`, got.URL.Query().Get("match[]"))
 
 	// testing a full roundtrip
-	req, err := lokiCodec.DecodeRequest(context.TODO(), got)
+	req, err := valiCodec.DecodeRequest(context.TODO(), got)
 	require.NoError(t, err)
-	require.Equal(t, toEncode.Match, req.(*LokiSeriesRequest).Match)
-	require.Equal(t, toEncode.StartTs, req.(*LokiSeriesRequest).StartTs)
-	require.Equal(t, toEncode.EndTs, req.(*LokiSeriesRequest).EndTs)
-	require.Equal(t, "/loki/api/v1/series", req.(*LokiSeriesRequest).Path)
+	require.Equal(t, toEncode.Match, req.(*ValiSeriesRequest).Match)
+	require.Equal(t, toEncode.StartTs, req.(*ValiSeriesRequest).StartTs)
+	require.Equal(t, toEncode.EndTs, req.(*ValiSeriesRequest).EndTs)
+	require.Equal(t, "/vali/api/v1/series", req.(*ValiSeriesRequest).Path)
 }
 
 func Test_codec_labels_EncodeRequest(t *testing.T) {
 	ctx := context.Background()
-	toEncode := &LokiLabelNamesRequest{
-		Path:    "/loki/api/v1/labels",
+	toEncode := &ValiLabelNamesRequest{
+		Path:    "/vali/api/v1/labels",
 		StartTs: start,
 		EndTs:   end,
 	}
-	got, err := lokiCodec.EncodeRequest(ctx, toEncode)
+	got, err := valiCodec.EncodeRequest(ctx, toEncode)
 	require.NoError(t, err)
 	require.Equal(t, ctx, got.Context())
-	require.Equal(t, "/loki/api/v1/labels", got.URL.Path)
+	require.Equal(t, "/vali/api/v1/labels", got.URL.Path)
 	require.Equal(t, fmt.Sprintf("%d", start.UnixNano()), got.URL.Query().Get("start"))
 	require.Equal(t, fmt.Sprintf("%d", end.UnixNano()), got.URL.Query().Get("end"))
 
 	// testing a full roundtrip
-	req, err := lokiCodec.DecodeRequest(context.TODO(), got)
+	req, err := valiCodec.DecodeRequest(context.TODO(), got)
 	require.NoError(t, err)
-	require.Equal(t, toEncode.StartTs, req.(*LokiLabelNamesRequest).StartTs)
-	require.Equal(t, toEncode.EndTs, req.(*LokiLabelNamesRequest).EndTs)
-	require.Equal(t, "/loki/api/v1/labels", req.(*LokiLabelNamesRequest).Path)
+	require.Equal(t, toEncode.StartTs, req.(*ValiLabelNamesRequest).StartTs)
+	require.Equal(t, toEncode.EndTs, req.(*ValiLabelNamesRequest).EndTs)
+	require.Equal(t, "/vali/api/v1/labels", req.(*ValiLabelNamesRequest).Path)
 }
 
 func Test_codec_EncodeResponse(t *testing.T) {
@@ -279,7 +279,7 @@ func Test_codec_EncodeResponse(t *testing.T) {
 		wantErr bool
 	}{
 		{"error", &badResponse{}, "", true},
-		{"prom", &LokiPromResponse{
+		{"prom", &ValiPromResponse{
 			Response: &queryrange.PrometheusResponse{
 				Status: loghttp.QueryStatusSuccess,
 				Data: queryrange.PrometheusData{
@@ -290,13 +290,13 @@ func Test_codec_EncodeResponse(t *testing.T) {
 			Statistics: statsResult,
 		}, matrixString, false},
 		{
-			"loki v1",
-			&LokiResponse{
+			"vali v1",
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.FORWARD,
 				Limit:     100,
 				Version:   uint32(loghttp.VersionV1),
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result:     logStreams,
 				},
@@ -304,13 +304,13 @@ func Test_codec_EncodeResponse(t *testing.T) {
 			}, streamsString, false,
 		},
 		{
-			"loki legacy",
-			&LokiResponse{
+			"vali legacy",
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.FORWARD,
 				Limit:     100,
 				Version:   uint32(loghttp.VersionLegacy),
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result:     logStreams,
 				},
@@ -318,24 +318,24 @@ func Test_codec_EncodeResponse(t *testing.T) {
 			}, streamsStringLegacy, false,
 		},
 		{
-			"loki series",
-			&LokiSeriesResponse{
+			"vali series",
+			&ValiSeriesResponse{
 				Status:  "success",
 				Version: uint32(loghttp.VersionV1),
 				Data:    seriesData,
 			}, seriesString, false,
 		},
 		{
-			"loki labels",
-			&LokiLabelNamesResponse{
+			"vali labels",
+			&ValiLabelNamesResponse{
 				Status:  "success",
 				Version: uint32(loghttp.VersionV1),
 				Data:    labelsData,
 			}, labelsString, false,
 		},
 		{
-			"loki labels legacy",
-			&LokiLabelNamesResponse{
+			"vali labels legacy",
+			&ValiLabelNamesResponse{
 				Status:  "success",
 				Version: uint32(loghttp.VersionLegacy),
 				Data:    labelsData,
@@ -344,7 +344,7 @@ func Test_codec_EncodeResponse(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := lokiCodec.EncodeResponse(context.TODO(), tt.res)
+			got, err := valiCodec.EncodeResponse(context.TODO(), tt.res)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("codec.EncodeResponse() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -372,7 +372,7 @@ func Test_codec_MergeResponse(t *testing.T) {
 		{
 			"prom",
 			[]queryrange.Response{
-				&LokiPromResponse{
+				&ValiPromResponse{
 					Response: &queryrange.PrometheusResponse{
 						Status: loghttp.QueryStatusSuccess,
 						Data: queryrange.PrometheusData{
@@ -382,7 +382,7 @@ func Test_codec_MergeResponse(t *testing.T) {
 					},
 				},
 			},
-			&LokiPromResponse{
+			&ValiPromResponse{
 				Response: &queryrange.PrometheusResponse{
 					Status: loghttp.QueryStatusSuccess,
 					Data: queryrange.PrometheusData{
@@ -394,14 +394,14 @@ func Test_codec_MergeResponse(t *testing.T) {
 			false,
 		},
 		{
-			"loki backward",
+			"vali backward",
 			[]queryrange.Response{
-				&LokiResponse{
+				&ValiResponse{
 					Status:    loghttp.QueryStatusSuccess,
 					Direction: logproto.BACKWARD,
 					Limit:     100,
 					Version:   1,
-					Data: LokiData{
+					Data: ValiData{
 						ResultType: loghttp.ResultTypeStream,
 						Result: []logproto.Stream{
 							{
@@ -421,12 +421,12 @@ func Test_codec_MergeResponse(t *testing.T) {
 						},
 					},
 				},
-				&LokiResponse{
+				&ValiResponse{
 					Status:    loghttp.QueryStatusSuccess,
 					Direction: logproto.BACKWARD,
 					Limit:     100,
 					Version:   1,
-					Data: LokiData{
+					Data: ValiData{
 						ResultType: loghttp.ResultTypeStream,
 						Result: []logproto.Stream{
 							{
@@ -448,12 +448,12 @@ func Test_codec_MergeResponse(t *testing.T) {
 					},
 				},
 			},
-			&LokiResponse{
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.BACKWARD,
 				Limit:     100,
 				Version:   1,
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result: []logproto.Stream{
 						{
@@ -481,14 +481,14 @@ func Test_codec_MergeResponse(t *testing.T) {
 			false,
 		},
 		{
-			"loki backward limited",
+			"vali backward limited",
 			[]queryrange.Response{
-				&LokiResponse{
+				&ValiResponse{
 					Status:    loghttp.QueryStatusSuccess,
 					Direction: logproto.BACKWARD,
 					Limit:     6,
 					Version:   1,
-					Data: LokiData{
+					Data: ValiData{
 						ResultType: loghttp.ResultTypeStream,
 						Result: []logproto.Stream{
 							{
@@ -509,12 +509,12 @@ func Test_codec_MergeResponse(t *testing.T) {
 						},
 					},
 				},
-				&LokiResponse{
+				&ValiResponse{
 					Status:    loghttp.QueryStatusSuccess,
 					Direction: logproto.BACKWARD,
 					Limit:     6,
 					Version:   1,
-					Data: LokiData{
+					Data: ValiData{
 						ResultType: loghttp.ResultTypeStream,
 						Result: []logproto.Stream{
 							{
@@ -535,12 +535,12 @@ func Test_codec_MergeResponse(t *testing.T) {
 					},
 				},
 			},
-			&LokiResponse{
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.BACKWARD,
 				Limit:     6,
 				Version:   1,
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result: []logproto.Stream{
 						{
@@ -565,14 +565,14 @@ func Test_codec_MergeResponse(t *testing.T) {
 			false,
 		},
 		{
-			"loki forward",
+			"vali forward",
 			[]queryrange.Response{
-				&LokiResponse{
+				&ValiResponse{
 					Status:    loghttp.QueryStatusSuccess,
 					Direction: logproto.FORWARD,
 					Limit:     100,
 					Version:   1,
-					Data: LokiData{
+					Data: ValiData{
 						ResultType: loghttp.ResultTypeStream,
 						Result: []logproto.Stream{
 							{
@@ -592,12 +592,12 @@ func Test_codec_MergeResponse(t *testing.T) {
 						},
 					},
 				},
-				&LokiResponse{
+				&ValiResponse{
 					Status:    loghttp.QueryStatusSuccess,
 					Direction: logproto.FORWARD,
 					Limit:     100,
 					Version:   1,
-					Data: LokiData{
+					Data: ValiData{
 						ResultType: loghttp.ResultTypeStream,
 						Result: []logproto.Stream{
 							{
@@ -619,12 +619,12 @@ func Test_codec_MergeResponse(t *testing.T) {
 					},
 				},
 			},
-			&LokiResponse{
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.FORWARD,
 				Limit:     100,
 				Version:   1,
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result: []logproto.Stream{
 						{
@@ -653,14 +653,14 @@ func Test_codec_MergeResponse(t *testing.T) {
 			false,
 		},
 		{
-			"loki forward limited",
+			"vali forward limited",
 			[]queryrange.Response{
-				&LokiResponse{
+				&ValiResponse{
 					Status:    loghttp.QueryStatusSuccess,
 					Direction: logproto.FORWARD,
 					Limit:     5,
 					Version:   1,
-					Data: LokiData{
+					Data: ValiData{
 						ResultType: loghttp.ResultTypeStream,
 						Result: []logproto.Stream{
 							{
@@ -680,12 +680,12 @@ func Test_codec_MergeResponse(t *testing.T) {
 						},
 					},
 				},
-				&LokiResponse{
+				&ValiResponse{
 					Status:    loghttp.QueryStatusSuccess,
 					Direction: logproto.FORWARD,
 					Limit:     5,
 					Version:   1,
-					Data: LokiData{
+					Data: ValiData{
 						ResultType: loghttp.ResultTypeStream,
 						Result: []logproto.Stream{
 							{
@@ -707,12 +707,12 @@ func Test_codec_MergeResponse(t *testing.T) {
 					},
 				},
 			},
-			&LokiResponse{
+			&ValiResponse{
 				Status:    loghttp.QueryStatusSuccess,
 				Direction: logproto.FORWARD,
 				Limit:     5,
 				Version:   1,
-				Data: LokiData{
+				Data: ValiData{
 					ResultType: loghttp.ResultTypeStream,
 					Result: []logproto.Stream{
 						{
@@ -737,9 +737,9 @@ func Test_codec_MergeResponse(t *testing.T) {
 			false,
 		},
 		{
-			"loki series",
+			"vali series",
 			[]queryrange.Response{
-				&LokiSeriesResponse{
+				&ValiSeriesResponse{
 					Status:  "success",
 					Version: 1,
 					Data: []logproto.SeriesIdentifier{
@@ -751,7 +751,7 @@ func Test_codec_MergeResponse(t *testing.T) {
 						},
 					},
 				},
-				&LokiSeriesResponse{
+				&ValiSeriesResponse{
 					Status:  "success",
 					Version: 1,
 					Data: []logproto.SeriesIdentifier{
@@ -764,7 +764,7 @@ func Test_codec_MergeResponse(t *testing.T) {
 					},
 				},
 			},
-			&LokiSeriesResponse{
+			&ValiSeriesResponse{
 				Status:  "success",
 				Version: 1,
 				Data: []logproto.SeriesIdentifier{
@@ -782,25 +782,25 @@ func Test_codec_MergeResponse(t *testing.T) {
 			false,
 		},
 		{
-			"loki labels",
+			"vali labels",
 			[]queryrange.Response{
-				&LokiLabelNamesResponse{
+				&ValiLabelNamesResponse{
 					Status:  "success",
 					Version: 1,
 					Data:    []string{"foo", "bar", "buzz"},
 				},
-				&LokiLabelNamesResponse{
+				&ValiLabelNamesResponse{
 					Status:  "success",
 					Version: 1,
 					Data:    []string{"foo", "bar", "buzz"},
 				},
-				&LokiLabelNamesResponse{
+				&ValiLabelNamesResponse{
 					Status:  "success",
 					Version: 1,
 					Data:    []string{"foo", "blip", "blop"},
 				},
 			},
-			&LokiLabelNamesResponse{
+			&ValiLabelNamesResponse{
 				Status:  "success",
 				Version: 1,
 				Data:    []string{"foo", "bar", "buzz", "blip", "blop"},
@@ -810,7 +810,7 @@ func Test_codec_MergeResponse(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := lokiCodec.MergeResponse(tt.responses...)
+			got, err := valiCodec.MergeResponse(tt.responses...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("codec.MergeResponse() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -1033,7 +1033,7 @@ func BenchmarkResponseMerge(b *testing.B) {
 	for _, tc := range []struct {
 		desc  string
 		limit uint32
-		fn    func([]*LokiResponse, uint32, logproto.Direction) []logproto.Stream
+		fn    func([]*ValiResponse, uint32, logproto.Direction) []logproto.Stream
 	}{
 		{
 			"mergeStreams unlimited",
@@ -1065,9 +1065,9 @@ func BenchmarkResponseMerge(b *testing.B) {
 	}
 }
 
-func mkResps(nResps, nStreams, nLogs int, direction logproto.Direction) (resps []*LokiResponse) {
+func mkResps(nResps, nStreams, nLogs int, direction logproto.Direction) (resps []*ValiResponse) {
 	for i := 0; i < nResps; i++ {
-		r := &LokiResponse{}
+		r := &ValiResponse{}
 		for j := 0; j < nStreams; j++ {
 			stream := logproto.Stream{
 				Labels: fmt.Sprintf(`{foo="%d"}`, j),

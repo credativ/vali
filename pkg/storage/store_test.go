@@ -28,12 +28,12 @@ import (
 	"github.com/cortexproject/cortex/pkg/querier/astmapper"
 	"github.com/cortexproject/cortex/pkg/util/flagext"
 
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/marshal"
-	"github.com/grafana/loki/pkg/storage/stores/shipper"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/marshal"
+	"github.com/credativ/vali/pkg/storage/stores/shipper"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 var (

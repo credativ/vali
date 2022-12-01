@@ -2,10 +2,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "fluent-bit-loki.fullname" . }}
+  name: {{ template "fluent-bit-vali.fullname" . }}
   labels:
-    app: {{ template "fluent-bit-loki.name" . }}
-    chart: {{ template "fluent-bit-loki.chart" . }}
+    app: {{ template "fluent-bit-vali.name" . }}
+    chart: {{ template "fluent-bit-vali.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     {{- if .Values.serviceMonitor.additionalLabels }}
@@ -18,7 +18,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ template "fluent-bit-loki.name" . }}
+      app: {{ template "fluent-bit-vali.name" . }}
       release: {{ .Release.Name | quote }}
   namespaceSelector:
     matchNames:

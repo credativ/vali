@@ -7,9 +7,9 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/promtail/scrapeconfig"
-	"github.com/grafana/loki/pkg/promtail/targets/target"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/promtail/targets/target"
 )
 
 // TargetManager manages a series of windows event targets.

@@ -17,7 +17,7 @@ import (
 	"github.com/klauspost/compress/gzip"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/storage/stores/shipper/testutil"
+	"github.com/credativ/vali/pkg/storage/stores/shipper/testutil"
 )
 
 const (

@@ -13,9 +13,9 @@ import (
 	"github.com/prometheus/common/model"
 	"github.com/weaveworks/common/logging"
 
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/promtail/client"
-	lokiflag "github.com/grafana/loki/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/promtail/client"
+	valiflag "github.com/credativ/vali/pkg/util/flagext"
 )
 
 var defaultClientCfg = client.Config{}
@@ -62,7 +62,7 @@ func parseConfig(cfg ConfigGetter) (*config, error) {
 	url := cfg.Get("URL")
 	var clientURL flagext.URLValue
 	if url == "" {
-		url = "http://localhost:3100/loki/api/v1/push"
+		url = "http://localhost:3100/vali/api/v1/push"
 	}
 	err := clientURL.Set(url)
 	if err != nil {
@@ -145,7 +145,7 @@ func parseConfig(cfg ConfigGetter) (*config, error) {
 	for _, m := range matchers {
 		labelSet[model.LabelName(m.Name)] = model.LabelValue(m.Value)
 	}
-	res.clientConfig.ExternalLabels = lokiflag.LabelSet{LabelSet: labelSet}
+	res.clientConfig.ExternalLabels = valiflag.LabelSet{LabelSet: labelSet}
 
 	logLevel := cfg.Get("LogLevel")
 	if logLevel == "" {
@@ -209,7 +209,7 @@ func parseConfig(cfg ConfigGetter) (*config, error) {
 		res.labelKeys = nil
 	}
 
-	// enable loki plugin buffering
+	// enable vali plugin buffering
 	buffer := cfg.Get("Buffer")
 	switch buffer {
 	case falseStr, "":

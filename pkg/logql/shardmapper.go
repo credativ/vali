@@ -31,15 +31,15 @@ func NewShardingMetrics(registerer prometheus.Registerer) *ShardingMetrics {
 
 	return &ShardingMetrics{
 		shards: promauto.With(registerer).NewCounterVec(prometheus.CounterOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Name:      "query_frontend_shards_total",
 		}, []string{"type"}),
 		parsed: promauto.With(registerer).NewCounterVec(prometheus.CounterOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Name:      "query_frontend_sharding_parsed_queries_total",
 		}, []string{"type"}),
 		shardFactor: promauto.With(registerer).NewHistogram(prometheus.HistogramOpts{
-			Namespace: "loki",
+			Namespace: "vali",
 			Name:      "query_frontend_shard_factor",
 			Help:      "Number of shards per request",
 			Buckets:   prometheus.LinearBuckets(0, 16, 4), // 16 is the default shard factor for later schemas

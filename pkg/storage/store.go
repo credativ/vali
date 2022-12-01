@@ -16,12 +16,12 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/stats"
-	"github.com/grafana/loki/pkg/storage/stores/shipper"
-	"github.com/grafana/loki/pkg/util"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/storage/stores/shipper"
+	"github.com/credativ/vali/pkg/util"
 )
 
 var (
@@ -30,7 +30,7 @@ var (
 	errZeroLengthConfig                = errors.New("must specify at least one schema configuration")
 )
 
-// Config is the loki storage configuration
+// Config is the vali storage configuration
 type Config struct {
 	storage.Config      `yaml:",inline"`
 	MaxChunkBatchSize   int            `yaml:"max_chunk_batch_size"`
@@ -69,7 +69,7 @@ func (cfg *SchemaConfig) Validate() error {
 	return cfg.SchemaConfig.Validate()
 }
 
-// Store is the Loki chunk store to retrieve and save chunks.
+// Store is the Vali chunk store to retrieve and save chunks.
 type Store interface {
 	chunk.Store
 	SelectSamples(ctx context.Context, req logql.SelectSampleParams) (iter.SampleIterator, error)
@@ -85,7 +85,7 @@ type store struct {
 	schemaCfg    SchemaConfig
 }
 
-// NewStore creates a new Loki Store using configuration supplied.
+// NewStore creates a new Vali Store using configuration supplied.
 func NewStore(cfg Config, schemaCfg SchemaConfig, chunkStore chunk.Store, registerer prometheus.Registerer) (Store, error) {
 	return &store{
 		Store:        chunkStore,
@@ -188,7 +188,7 @@ func (s *store) GetSeries(ctx context.Context, req logql.SelectLogParams) ([]log
 	var from, through model.Time
 	var matchers []*labels.Matcher
 
-	// The Loki parser doesn't allow for an empty label matcher but for the Series API
+	// The Vali parser doesn't allow for an empty label matcher but for the Series API
 	// we allow this to select all series in the time range.
 	if req.Selector == "" {
 		from, through = util.RoundToMilliseconds(req.Start, req.End)

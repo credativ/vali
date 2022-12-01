@@ -63,19 +63,19 @@ func newMetrics(r prometheus.Registerer) *metrics {
 		tablesDownloadDurationSeconds: &downloadTableDurationMetric{
 			periods: map[string]float64{},
 			gauge: promauto.With(r).NewGauge(prometheus.GaugeOpts{
-				Namespace: "loki_boltdb_shipper",
+				Namespace: "vali_boltdb_shipper",
 				Name:      "initial_tables_download_duration_seconds",
 				Help:      "Time (in seconds) spent in downloading of files per table, initially i.e for the first time",
 			})},
 		tablesDownloadSizeBytes: &downloadTableBytesMetric{
 			periods: map[string]int64{},
 			gauge: promauto.With(r).NewGauge(prometheus.GaugeOpts{
-				Namespace: "loki_boltdb_shipper",
+				Namespace: "vali_boltdb_shipper",
 				Name:      "initial_tables_download_size_bytes",
 				Help:      "Size of files (in bytes) downloaded per table, initially i.e for the first time",
 			})},
 		tablesSyncOperationTotal: promauto.With(r).NewCounterVec(prometheus.CounterOpts{
-			Namespace: "loki_boltdb_shipper",
+			Namespace: "vali_boltdb_shipper",
 			Name:      "tables_sync_operation_total",
 			Help:      "Total number of tables sync operations done by status",
 		}, []string{"status"}),

@@ -11,10 +11,10 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/util"
+	"github.com/credativ/vali/pkg/util"
 )
 
-// storeMock is a mockable version of Loki's storage, used in querier unit tests
+// storeMock is a mockable version of Vali's storage, used in querier unit tests
 // to control the behaviour of the store without really hitting any storage backend
 type storeMock struct {
 	chunk.Store

@@ -3,7 +3,7 @@ package queryrange
 import (
 	"sort"
 
-	"github.com/grafana/loki/pkg/logproto"
+	"github.com/credativ/vali/pkg/logproto"
 )
 
 type entry struct {
@@ -40,7 +40,7 @@ func (a byDirection) Less(i, j int) bool {
 	}
 }
 
-func mergeStreams(resps []*LokiResponse, limit uint32, direction logproto.Direction) []logproto.Stream {
+func mergeStreams(resps []*ValiResponse, limit uint32, direction logproto.Direction) []logproto.Stream {
 	output := byDirection{
 		direction: direction,
 		entries:   []entry{},

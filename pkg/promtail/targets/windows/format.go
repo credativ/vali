@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"syscall"
 
-	"github.com/grafana/loki/pkg/promtail/scrapeconfig"
-	"github.com/grafana/loki/pkg/promtail/targets/windows/win_eventlog"
+	"github.com/credativ/vali/pkg/promtail/scrapeconfig"
+	"github.com/credativ/vali/pkg/promtail/targets/windows/win_eventlog"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -54,7 +54,7 @@ type Correlation struct {
 	RelatedActivityID string `json:"relatedActivityID,omitempty"`
 }
 
-// formatLine format a Loki log line from a windows event.
+// formatLine format a Vali log line from a windows event.
 func formatLine(cfg *scrapeconfig.WindowsEventsTargetConfig, event win_eventlog.Event) (string, error) {
 	structuredEvent := Event{
 		Source:        event.Source.Name,

@@ -11,9 +11,9 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/prometheus/prometheus/pkg/relabel"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/promtail/api"
-	"github.com/grafana/loki/pkg/util"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/util"
 )
 
 // LogEntry that will be written to the pubsub topic.
@@ -35,7 +35,7 @@ type GCPLogEntry struct {
 	TextPayload string `json:"textPayload"`
 
 	// NOTE(kavi): There are other fields on GCPLogEntry. but we need only need above fields for now
-	// anyway we will be sending the entire entry to Loki.
+	// anyway we will be sending the entire entry to Vali.
 }
 
 func format(
@@ -68,7 +68,7 @@ func format(
 		processed = lbs.Labels()
 	}
 
-	// final labelset that will be sent to loki
+	// final labelset that will be sent to vali
 	labels := make(model.LabelSet)
 	for _, lbl := range processed {
 		// ignore internal labels

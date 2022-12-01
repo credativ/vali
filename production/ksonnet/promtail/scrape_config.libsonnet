@@ -43,7 +43,7 @@ config {
       // But also include the namespace, pod, container as separate
       // labels. They uniquely identify a container. They are also
       // identical to the target labels configured in Prometheus
-      // (but note that Loki does not use an instance label).
+      // (but note that Vali does not use an instance label).
       {
         source_labels: ['__meta_kubernetes_namespace'],
         action: 'replace',

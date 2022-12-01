@@ -120,7 +120,7 @@ func (sl *seriesLimiter) Do(ctx context.Context, req queryrange.Request) (queryr
 	if err != nil {
 		return res, err
 	}
-	promResponse, ok := res.(*LokiPromResponse)
+	promResponse, ok := res.(*ValiPromResponse)
 	if !ok {
 		return res, nil
 	}

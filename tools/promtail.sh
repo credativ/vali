@@ -282,7 +282,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        image: grafana/promtail:<version>
+        image: ghcr.io/credativ/valitail:<version>
         imagePullPolicy: Always
         name: promtail
         readinessProbe:

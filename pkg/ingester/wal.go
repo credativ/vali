@@ -11,8 +11,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/prometheus/tsdb/wal"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/util/flagext"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/util/flagext"
 )
 
 var (

@@ -14,8 +14,8 @@ import (
 
 	"github.com/prometheus/prometheus/promql/parser"
 
-	"github.com/grafana/loki/pkg/logentry/metric"
-	"github.com/grafana/loki/pkg/promtail/api"
+	"github.com/credativ/vali/pkg/logentry/metric"
+	"github.com/credativ/vali/pkg/promtail/api"
 
 	"github.com/cortexproject/cortex/pkg/util"
 	"github.com/go-kit/kit/log"
@@ -26,7 +26,7 @@ import (
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/common/version"
 
-	"github.com/grafana/loki/pkg/helpers"
+	"github.com/credativ/vali/pkg/helpers"
 )
 
 const (
@@ -132,7 +132,7 @@ func mustRegisterOrGet(reg prometheus.Registerer, c prometheus.Collector) promet
 	return c
 }
 
-// Client pushes entries to Loki and can be stopped
+// Client pushes entries to Vali and can be stopped
 type Client interface {
 	api.EntryHandler
 	// Stop goroutine sending batch of entries without retries.
@@ -349,7 +349,7 @@ func (c *client) send(ctx context.Context, tenantID string, buf []byte) (int, er
 	req.Header.Set("User-Agent", UserAgent)
 
 	// If the tenant ID is not empty promtail is running in multi-tenant mode, so
-	// we should send it to Loki
+	// we should send it to Vali
 	if tenantID != "" {
 		req.Header.Set("X-Scope-OrgID", tenantID)
 	}

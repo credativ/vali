@@ -1,15 +1,15 @@
 version: '3'
 services:
-  # Receive forwarded logs and send to /fluentd/logs/data.log and loki
+  # Receive forwarded logs and send to /fluentd/logs/data.log and vali
   fluentd:
     build:
       context: ../../..
       dockerfile: cmd/fluentd/Dockerfile
-    image: fluentd:loki
+    image: fluentd:vali
     volumes:
     - ./fluentd.conf:/fluentd/etc/fluent.conf
     environment:
-      - LOKI_URL
+      - VALI_URL
   # Read /var/log/syslog and send it to fluentd
   fluentbit:
     image: fluent/fluent-bit:1.0

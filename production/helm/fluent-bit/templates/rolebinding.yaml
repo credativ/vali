@@ -2,18 +2,18 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ template "fluent-bit-loki.fullname" . }}
+  name: {{ template "fluent-bit-vali.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "fluent-bit-loki.name" . }}
-    chart: {{ template "fluent-bit-loki.chart" . }}
+    app: {{ template "fluent-bit-vali.name" . }}
+    chart: {{ template "fluent-bit-vali.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ template "fluent-bit-loki.fullname" . }}
+  name: {{ template "fluent-bit-vali.fullname" . }}
 subjects:
 - kind: ServiceAccount
-  name: {{ template "fluent-bit-loki.serviceAccountName" . }}
+  name: {{ template "fluent-bit-vali.serviceAccountName" . }}
 {{- end }}

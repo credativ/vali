@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ template "fluent-bit-loki.fullname" . }}
+  name: {{ template "fluent-bit-vali.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "fluent-bit-loki.name" . }}
-    chart: {{ template "fluent-bit-loki.chart" . }}
+    app: {{ template "fluent-bit-vali.name" . }}
+    chart: {{ template "fluent-bit-vali.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
@@ -13,7 +13,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ template "fluent-bit-loki.name" . }}
+      app: {{ template "fluent-bit-vali.name" . }}
       release: {{ .Release.Name }}
   updateStrategy:
     type: {{ .Values.deploymentStrategy }}
@@ -23,7 +23,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "fluent-bit-loki.name" . }}
+        app: {{ template "fluent-bit-vali.name" . }}
         release: {{ .Release.Name }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
@@ -34,7 +34,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "fluent-bit-loki.serviceAccountName" . }}
+      serviceAccountName: {{ template "fluent-bit-vali.serviceAccountName" . }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
@@ -45,7 +45,7 @@ spec:
       {{- end }}
       {{- end }}
       containers:
-        - name: fluent-bit-loki
+        - name: fluent-bit-vali
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
@@ -71,7 +71,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {{ template "fluent-bit-loki.fullname" . }}
+            name: {{ template "fluent-bit-vali.fullname" . }}
         - name: run
           hostPath:
             path: /run/fluent-bit

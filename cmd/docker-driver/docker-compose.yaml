@@ -3,10 +3,10 @@ services:
   nginx:
     image: grafana/grafana
     logging:
-      driver: loki
+      driver: vali
       options:
-        loki-url: http://host.docker.internal:3100/loki/api/v1/push
-        loki-pipeline-stages: |
+        vali-url: http://host.docker.internal:3100/vali/api/v1/push
+        vali-pipeline-stages: |
           - regex:
               expression: '(level|lvl|severity)=(?P<level>\w+)'
           - labels:

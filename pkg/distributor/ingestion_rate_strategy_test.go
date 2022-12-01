@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 const (

@@ -18,7 +18,7 @@ ks init promtail
 cd promtail
 ks env add promtail
 jb init
-jb install github.com/grafana/loki/production/ksonnet/promtail
+jb install github.com/credativ/vali/production/ksonnet/promtail
 vi environments/promtail/main.jsonnet
 ```
 
@@ -48,10 +48,10 @@ promtail + {
 }
 ```
 
-change the `some_cluster_name` to anything meaningful to help find your logs in Loki
+change the `some_cluster_name` to anything meaningful to help find your logs in Vali
 
-also update the `hostname`, `username`, and `password` for your Loki instance.
+also update the `hostname`, `username`, and `password` for your Vali instance.
 
-## Loki in kubernetes
+## Vali in kubernetes
 
 Haven't tried this yet, it works from docker-compose so it should run in kubernetes just fine also.

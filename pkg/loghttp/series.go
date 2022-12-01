@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/grafana/loki/pkg/logproto"
+	"github.com/credativ/vali/pkg/logproto"
 )
 
 type SeriesResponse struct {

@@ -22,7 +22,7 @@ promtail:
 fluent-bit:
   enable: false
 
-loki:
+vali:
   image:
     pullPolicy: Never
   service:

@@ -14,7 +14,7 @@ type metrics struct {
 func newMetrics(r prometheus.Registerer) *metrics {
 	return &metrics{
 		requestDurationSeconds: promauto.With(r).NewHistogramVec(prometheus.HistogramOpts{
-			Namespace: "loki_boltdb_shipper",
+			Namespace: "vali_boltdb_shipper",
 			Name:      "request_duration_seconds",
 			Help:      "Time (in seconds) spent serving requests when using boltdb shipper",
 			Buckets:   instrument.DefBuckets,

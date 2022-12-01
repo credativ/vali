@@ -43,15 +43,15 @@ Create the name of the service account
 {{- end -}}
 
 {{/*
-The service name to connect to Loki. Defaults to the same logic as "loki.fullname"
+The service name to connect to Vali. Defaults to the same logic as "vali.fullname"
 */}}
-{{- define "loki.serviceName" -}}
-{{- if .Values.loki.serviceName -}}
-{{- .Values.loki.serviceName -}}
-{{- else if .Values.loki.fullnameOverride -}}
-{{- .Values.loki.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- define "vali.serviceName" -}}
+{{- if .Values.vali.serviceName -}}
+{{- .Values.vali.serviceName -}}
+{{- else if .Values.vali.fullnameOverride -}}
+{{- .Values.vali.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default "loki" .Values.loki.nameOverride -}}
+{{- $name := default "vali" .Values.vali.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}

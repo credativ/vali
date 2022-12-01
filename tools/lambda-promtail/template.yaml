@@ -3,16 +3,16 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   lambda-promtail:
   
-  propagate Cloudwatch Logs to Loki via Promtail.
+  propagate Cloudwatch Logs to Vali via Promtail.
 
 Parameters:
   LogGroup:
     Description: 'Required. The Log Group to forward to Promtail.'
     Type: String
   PromtailAddress:
-    Description: 'address for promtail in the form of: http<s>://<location><:port>/loki/api/v1/push'
+    Description: 'address for promtail in the form of: http<s>://<location><:port>/vali/api/v1/push'
     Type: String
-    Default: 'http://localhost:8080/loki/api/v1/push'
+    Default: 'http://localhost:8080/vali/api/v1/push'
   ReservedConcurrency:
     Description: The maximum of concurrent executions you want to reserve for the function.
     Type: Number

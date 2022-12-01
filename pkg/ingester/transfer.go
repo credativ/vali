@@ -17,18 +17,18 @@ import (
 	"github.com/weaveworks/common/user"
 	"golang.org/x/net/context"
 
-	"github.com/grafana/loki/pkg/helpers"
-	"github.com/grafana/loki/pkg/logproto"
+	"github.com/credativ/vali/pkg/helpers"
+	"github.com/credativ/vali/pkg/logproto"
 )
 
 var (
 	sentChunks = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "ingester_sent_chunks",
 		Help:      "The total number of chunks sent by this ingester whilst leaving.",
 	})
 	receivedChunks = promauto.NewCounter(prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "ingester_received_chunks",
 		Help:      "The total number of chunks received by this ingester whilst joining.",
 	})
@@ -62,12 +62,12 @@ func (i *Ingester) TransferChunks(stream logproto.Ingester_TransferChunksServer)
 		if i.lifecycler.GetState() == ring.JOINING {
 			// Create a new context here to attempt to update the state back to pending to allow
 			// a failed transfer to try again.  If we fail to set the state back to PENDING then
-			// exit Loki as we will effectively be hung anyway stuck in a JOINING state and will
+			// exit Vali as we will effectively be hung anyway stuck in a JOINING state and will
 			// never join.
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
 			if err := i.lifecycler.ChangeState(ctx, ring.PENDING); err != nil {
 				level.Error(logger).Log("msg", "failed to update the ring state back to PENDING after "+
-					"a chunk transfer failure, there is nothing more Loki can do from this state "+
+					"a chunk transfer failure, there is nothing more Vali can do from this state "+
 					"so the process will exit...", "err", err)
 				os.Exit(1)
 			}

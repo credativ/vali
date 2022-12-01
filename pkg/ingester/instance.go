@@ -22,14 +22,14 @@ import (
 	cutil "github.com/cortexproject/cortex/pkg/util"
 	util_log "github.com/cortexproject/cortex/pkg/util/log"
 
-	"github.com/grafana/loki/pkg/helpers"
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/stats"
-	"github.com/grafana/loki/pkg/util/runtime"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/helpers"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/util/runtime"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 const (
@@ -44,17 +44,17 @@ var (
 
 var (
 	memoryStreams = promauto.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "ingester_memory_streams",
 		Help:      "The total number of streams in memory per tenant.",
 	}, []string{"tenant"})
 	streamsCreatedTotal = promauto.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "ingester_streams_created_total",
 		Help:      "The total number of streams created per tenant.",
 	}, []string{"tenant"})
 	streamsRemovedTotal = promauto.NewCounterVec(prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "ingester_streams_removed_total",
 		Help:      "The total number of streams removed per tenant.",
 	}, []string{"tenant"})

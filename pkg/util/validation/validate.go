@@ -12,14 +12,14 @@ const (
 	// RateLimited is one of the values for the reason to discard samples.
 	// Declared here to avoid duplication in ingester and distributor.
 	RateLimited         = "rate_limited"
-	RateLimitedErrorMsg = "Ingestion rate limit exceeded (limit: %d bytes/sec) while attempting to ingest '%d' lines totaling '%d' bytes, reduce log volume or contact your Loki administrator to see if the limit can be increased"
+	RateLimitedErrorMsg = "Ingestion rate limit exceeded (limit: %d bytes/sec) while attempting to ingest '%d' lines totaling '%d' bytes, reduce log volume or contact your Vali administrator to see if the limit can be increased"
 	// LineTooLong is a reason for discarding too long log lines.
 	LineTooLong         = "line_too_long"
 	LineTooLongErrorMsg = "Max entry size '%d' bytes exceeded for stream '%s' while adding an entry with length '%d' bytes"
 	// StreamLimit is a reason for discarding lines when we can't create a new stream
 	// because the limit of active streams has been reached.
 	StreamLimit         = "stream_limit"
-	StreamLimitErrorMsg = "Maximum active stream limit exceeded, reduce the number of active streams (reduce labels or reduce label values), or contact your Loki administrator to see if the limit can be increased"
+	StreamLimitErrorMsg = "Maximum active stream limit exceeded, reduce the number of active streams (reduce labels or reduce label values), or contact your Vali administrator to see if the limit can be increased"
 	// GreaterThanMaxSampleAge is a reason for discarding log lines which are older than the current time - `reject_old_samples_max_age`
 	GreaterThanMaxSampleAge         = "greater_than_max_sample_age"
 	GreaterThanMaxSampleAgeErrorMsg = "entry for stream '%s' has timestamp too old: %v"
@@ -43,7 +43,7 @@ const (
 // DiscardedBytes is a metric of the total discarded bytes, by reason.
 var DiscardedBytes = prometheus.NewCounterVec(
 	prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "discarded_bytes_total",
 		Help:      "The total number of bytes that were discarded.",
 	},
@@ -53,7 +53,7 @@ var DiscardedBytes = prometheus.NewCounterVec(
 // DiscardedSamples is a metric of the number of discarded samples, by reason.
 var DiscardedSamples = prometheus.NewCounterVec(
 	prometheus.CounterOpts{
-		Namespace: "loki",
+		Namespace: "vali",
 		Name:      "discarded_samples_total",
 		Help:      "The total number of samples that were discarded.",
 	},

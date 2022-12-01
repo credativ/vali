@@ -10,11 +10,11 @@ import (
 
 	ring_client "github.com/cortexproject/cortex/pkg/ring/client"
 
-	"github.com/grafana/loki/pkg/ingester/client"
+	"github.com/credativ/vali/pkg/ingester/client"
 
-	"github.com/grafana/loki/pkg/storage"
+	"github.com/credativ/vali/pkg/storage"
 
-	"github.com/grafana/loki/pkg/logql"
+	"github.com/credativ/vali/pkg/logql"
 
 	"github.com/prometheus/common/model"
 	"github.com/stretchr/testify/assert"
@@ -26,8 +26,8 @@ import (
 	"github.com/cortexproject/cortex/pkg/ring"
 	"github.com/cortexproject/cortex/pkg/util/flagext"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/util/validation"
 )
 
 const (

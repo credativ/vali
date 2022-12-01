@@ -7,10 +7,10 @@ import (
 
 	"github.com/cortexproject/cortex/pkg/chunk"
 
-	"github.com/grafana/loki/pkg/chunkenc"
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/log"
+	"github.com/credativ/vali/pkg/chunkenc"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/log"
 )
 
 // LazyChunk loads the chunk when it is accessed.
@@ -41,8 +41,8 @@ func (c *LazyChunk) Iterator(
 		return nil, errors.New("chunk is not loaded")
 	}
 
-	lokiChunk := c.Chunk.Data.(*chunkenc.Facade).LokiChunk()
-	blocks := lokiChunk.Blocks(from, through)
+	valiChunk := c.Chunk.Data.(*chunkenc.Facade).ValiChunk()
+	blocks := valiChunk.Blocks(from, through)
 	if len(blocks) == 0 {
 		return iter.NoopIterator, nil
 	}
@@ -114,8 +114,8 @@ func (c *LazyChunk) SampleIterator(
 		return nil, errors.New("chunk is not loaded")
 	}
 
-	lokiChunk := c.Chunk.Data.(*chunkenc.Facade).LokiChunk()
-	blocks := lokiChunk.Blocks(from, through)
+	valiChunk := c.Chunk.Data.(*chunkenc.Facade).ValiChunk()
+	blocks := valiChunk.Blocks(from, through)
 	if len(blocks) == 0 {
 		return iter.NoopIterator, nil
 	}

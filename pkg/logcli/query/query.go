@@ -19,17 +19,17 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/weaveworks/common/user"
 
-	"github.com/grafana/loki/pkg/cfg"
-	"github.com/grafana/loki/pkg/logcli/client"
-	"github.com/grafana/loki/pkg/logcli/output"
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/marshal"
-	"github.com/grafana/loki/pkg/logql/stats"
-	"github.com/grafana/loki/pkg/loki"
-	"github.com/grafana/loki/pkg/storage"
-	"github.com/grafana/loki/pkg/util/validation"
+	"github.com/credativ/vali/pkg/cfg"
+	"github.com/credativ/vali/pkg/logcli/client"
+	"github.com/credativ/vali/pkg/logcli/output"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/marshal"
+	"github.com/credativ/vali/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/storage"
+	"github.com/credativ/vali/pkg/util/validation"
+	"github.com/credativ/vali/pkg/vali"
 )
 
 type streamEntryPair struct {
@@ -122,14 +122,14 @@ func (q *Query) DoQuery(c client.Client, out output.LogOutput, statistics bool) 
 			}
 			if len(lastEntry) >= q.BatchSize {
 				log.Fatalf("Invalid batch size %v, the next query will have %v overlapping entries "+
-					"(there will always be 1 overlapping entry but Loki allows multiple entries to have "+
+					"(there will always be 1 overlapping entry but Vali allows multiple entries to have "+
 					"the same timestamp, so when a batch ends in this scenario the next query will include "+
 					"all the overlapping entries again).  Please increase your batch size to at least %v to account "+
 					"for overlapping entryes\n", q.BatchSize, len(lastEntry), len(lastEntry)+1)
 			}
 
 			// Batching works by taking the timestamp of the last query and using it in the next query,
-			// because Loki supports multiple entries with the same timestamp it's possible for a batch to have
+			// because Vali supports multiple entries with the same timestamp it's possible for a batch to have
 			// fallen in the middle of a list of entries for the same time, so to make sure we get all entries
 			// we start the query on the same time as the last entry from the last batch, and then we keep this last
 			// entry and remove the duplicate when printing the results.
@@ -168,9 +168,9 @@ func (q *Query) printResult(value loghttp.ResultValue, out output.LogOutput, las
 	return length, entry
 }
 
-// DoLocalQuery executes the query against the local store using a Loki configuration file.
+// DoLocalQuery executes the query against the local store using a Vali configuration file.
 func (q *Query) DoLocalQuery(out output.LogOutput, statistics bool, orgID string) error {
-	var conf loki.Config
+	var conf vali.Config
 	conf.RegisterFlags(flag.CommandLine)
 	if q.LocalConfig == "" {
 		return errors.New("no supplied config file")
@@ -344,7 +344,7 @@ func (q *Query) printStream(streams loghttp.Streams, out output.LogOutput, lastE
 		printed++
 	}
 
-	// Loki allows multiple entries at the same timestamp, this is a bit of a mess if a batch ends
+	// Vali allows multiple entries at the same timestamp, this is a bit of a mess if a batch ends
 	// with an entry that shared multiple timestamps, so we need to keep a list of all these entries
 	// because the next query is going to contain them too and we want to not duplicate anything already
 	// printed.

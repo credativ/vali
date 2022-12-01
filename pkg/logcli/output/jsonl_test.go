@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/grafana/loki/pkg/loghttp"
+	"github.com/credativ/vali/pkg/loghttp"
 )
 
 func TestJSONLOutput_Format(t *testing.T) {

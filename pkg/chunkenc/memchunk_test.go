@@ -17,12 +17,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/chunkenc/testdata"
-	"github.com/grafana/loki/pkg/iter"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/log"
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/chunkenc/testdata"
+	"github.com/credativ/vali/pkg/iter"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/log"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 var testEncoding = []Encoding{
@@ -935,18 +935,18 @@ func BenchmarkBufferedIteratorLabels(b *testing.B) {
 		{
 			{Name: "cluster", Value: "us-central1"},
 			{Name: "stream", Value: "stdout"},
-			{Name: "filename", Value: "/var/log/pods/loki-prod_query-frontend-6894f97b98-89q2n_eac98024-f60f-44af-a46f-d099bc99d1e7/query-frontend/0.log"},
-			{Name: "namespace", Value: "loki-dev"},
-			{Name: "job", Value: "loki-prod/query-frontend"},
+			{Name: "filename", Value: "/var/log/pods/vali-prod_query-frontend-6894f97b98-89q2n_eac98024-f60f-44af-a46f-d099bc99d1e7/query-frontend/0.log"},
+			{Name: "namespace", Value: "vali-dev"},
+			{Name: "job", Value: "vali-prod/query-frontend"},
 			{Name: "container", Value: "query-frontend"},
 			{Name: "pod", Value: "query-frontend-6894f97b98-89q2n"},
 		},
 		{
 			{Name: "cluster", Value: "us-central2"},
 			{Name: "stream", Value: "stderr"},
-			{Name: "filename", Value: "/var/log/pods/loki-prod_querier-6894f97b98-89q2n_eac98024-f60f-44af-a46f-d099bc99d1e7/query-frontend/0.log"},
-			{Name: "namespace", Value: "loki-dev"},
-			{Name: "job", Value: "loki-prod/querier"},
+			{Name: "filename", Value: "/var/log/pods/vali-prod_querier-6894f97b98-89q2n_eac98024-f60f-44af-a46f-d099bc99d1e7/query-frontend/0.log"},
+			{Name: "namespace", Value: "vali-dev"},
+			{Name: "job", Value: "vali-prod/querier"},
 			{Name: "container", Value: "querier"},
 			{Name: "pod", Value: "querier-6894f97b98-89q2n"},
 		},

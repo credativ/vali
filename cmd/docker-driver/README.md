@@ -1,13 +1,11 @@
-# Loki Docker Logging Driver
+# Vali Docker Logging Driver
 
 ## Overview
 
-Docker logging driver plugins extends Docker's logging capabilities. You can use Loki Docker logging driver plugin to send
-Docker container logs directly to your Loki instance or [Grafana Cloud](https://grafana.com/loki).
+Docker logging driver plugins extends Docker's logging capabilities. You can use Vali Docker logging driver plugin to send
+Docker container logs directly to your Vali instance.
 
 > Docker plugins are not yet supported on Windows; see Docker's logging driver plugin [documentation](https://docs.docker.com/engine/extend/)
-
-If you have any questions or issues using the Docker plugin feel free to open an issue in this [repository](https://github.com/grafana/loki/issues).
 
 The documentation source code of the plugin is available in the [documentation folder](../../docs/sources/clients/docker-driver/).
 

@@ -11,10 +11,10 @@ const testFile = `
 clients:
   - external_labels:
         cluster: dev1
-    url: https://1:shh@example.com/loki/api/v1/push
+    url: https://1:shh@example.com/vali/api/v1/push
   - external_labels:
         cluster: prod1
-    url: https://1:shh@example.com/loki/api/v1/push
+    url: https://1:shh@example.com/vali/api/v1/push
 scrape_configs:
   - job_name: kubernetes-pods-name
     kubernetes_sd_configs:

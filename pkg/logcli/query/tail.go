@@ -11,13 +11,13 @@ import (
 	"github.com/fatih/color"
 	"github.com/gorilla/websocket"
 
-	"github.com/grafana/loki/pkg/logcli/client"
-	"github.com/grafana/loki/pkg/logcli/output"
-	"github.com/grafana/loki/pkg/loghttp"
-	"github.com/grafana/loki/pkg/logql/unmarshal"
+	"github.com/credativ/vali/pkg/logcli/client"
+	"github.com/credativ/vali/pkg/logcli/output"
+	"github.com/credativ/vali/pkg/loghttp"
+	"github.com/credativ/vali/pkg/logql/unmarshal"
 )
 
-// TailQuery connects to the Loki websocket endpoint and tails logs
+// TailQuery connects to the Vali websocket endpoint and tails logs
 func (q *Query) TailQuery(delayFor time.Duration, c client.Client, out output.LogOutput) {
 	conn, err := c.LiveTailQueryConn(q.QueryString, delayFor, q.Limit, q.Start, q.Quiet)
 	if err != nil {

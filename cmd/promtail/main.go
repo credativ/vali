@@ -18,12 +18,12 @@ import (
 	// embed time zone data
 	_ "time/tzdata"
 
-	_ "github.com/grafana/loki/pkg/build"
-	"github.com/grafana/loki/pkg/cfg"
-	"github.com/grafana/loki/pkg/logentry/stages"
-	"github.com/grafana/loki/pkg/promtail"
-	"github.com/grafana/loki/pkg/promtail/config"
-	logutil "github.com/grafana/loki/pkg/util"
+	_ "github.com/credativ/vali/pkg/build"
+	"github.com/credativ/vali/pkg/cfg"
+	"github.com/credativ/vali/pkg/logentry/stages"
+	"github.com/credativ/vali/pkg/promtail"
+	"github.com/credativ/vali/pkg/promtail/config"
+	logutil "github.com/credativ/vali/pkg/util"
 )
 
 func init() {
@@ -42,10 +42,10 @@ type Config struct {
 
 func (c *Config) RegisterFlags(f *flag.FlagSet) {
 	f.BoolVar(&c.printVersion, "version", false, "Print this builds version information")
-	f.BoolVar(&c.printConfig, "print-config-stderr", false, "Dump the entire Loki config object to stderr")
-	f.BoolVar(&c.logConfig, "log-config-reverse-order", false, "Dump the entire Loki config object at Info log "+
+	f.BoolVar(&c.printConfig, "print-config-stderr", false, "Dump the entire Vali config object to stderr")
+	f.BoolVar(&c.logConfig, "log-config-reverse-order", false, "Dump the entire Vali config object at Info log "+
 		"level with the order reversed, reversing the order makes viewing the entries easier in Grafana.")
-	f.BoolVar(&c.dryRun, "dry-run", false, "Start Promtail but print entries instead of sending them to Loki.")
+	f.BoolVar(&c.dryRun, "dry-run", false, "Start Promtail but print entries instead of sending them to Vali.")
 	f.StringVar(&c.configFile, "config.file", "", "yaml file to load")
 	f.BoolVar(&c.configExpandEnv, "config.expand-env", false, "Expands ${var} in config according to the values of the environment variables.")
 	c.Config.RegisterFlags(f)

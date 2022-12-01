@@ -1,29 +1,29 @@
-This is release `${CIRCLE_TAG}` of Loki.
+This is release `${CIRCLE_TAG}` of Vali.
 
 ### Notable changes:
 :warning: **ADD RELEASE NOTES HERE** :warning:
 
 
 ### Installation:
-The components of Loki are currently distributed in plain binary form and as Docker container images. Choose what fits your use-case best.
+The components of Vali are currently distributed in plain binary form and as Docker container images. Choose what fits your use-case best.
 
 #### Docker container:
-* https://hub.docker.com/r/grafana/loki
-* https://hub.docker.com/r/grafana/promtail
+* https://github.com/credativ/vali/pkgs/container/vali
+* https://github.com/credativ/vali/pkgs/container/valitail
 ```bash
-$ docker pull "grafana/loki:${CIRCLE_TAG}"
-$ docker pull "grafana/promtail:${CIRCLE_TAG}"
+$ docker pull "ghcr.io/credativ/vali:${CIRCLE_TAG}"
+$ docker pull "ghcr.io/credativ/valitail:${CIRCLE_TAG}"
 ```
 
 #### Binary
 We provide pre-compiled binary executables for the most common operating systems and architectures.
 Choose from the assets below for the application and architecture matching your system.
-Example for `Loki` on the `linux` operating system and `amd64` architecture:
+Example for `Vali` on the `linux` operating system and `amd64` architecture:
 
 ```bash
-$ curl -O -L "https://github.com/grafana/loki/releases/download/${CIRCLE_TAG}/loki-linux-amd64.zip"
+$ curl -O -L "https://github.com/credativ/vali/releases/download/${CIRCLE_TAG}/vali-linux-amd64.zip"
 # extract the binary
-$ unzip "loki-linux-amd64.zip"
+$ unzip "vali-linux-amd64.zip"
 # make sure it is executable
-$ chmod a+x "loki-linux-amd64"
+$ chmod a+x "vali-linux-amd64"
 ```

@@ -2,10 +2,10 @@
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: {{ template "fluent-bit-loki.fullname" . }}
+  name: {{ template "fluent-bit-vali.fullname" . }}
   labels:
-    app: {{ template "fluent-bit-loki.name" . }}
-    chart: {{ template "fluent-bit-loki.chart" . }}
+    app: {{ template "fluent-bit-vali.name" . }}
+    chart: {{ template "fluent-bit-vali.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:

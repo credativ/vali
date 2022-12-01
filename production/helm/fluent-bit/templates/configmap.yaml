@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "fluent-bit-loki.fullname" . }}
+  name: {{ template "fluent-bit-vali.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "fluent-bit-loki.name" . }}
-    chart: {{ template "fluent-bit-loki.chart" . }}
+    app: {{ template "fluent-bit-vali.name" . }}
+    chart: {{ template "fluent-bit-vali.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
@@ -33,12 +33,12 @@ data:
         K8S-Logging.Exclude {{ .Values.config.k8sLoggingExclude }}
         K8S-Logging.Parser {{ .Values.config.k8sLoggingParser }}
     [Output]
-        Name grafana-loki
+        Name grafana-vali
         Match *
-        {{- if and .Values.loki.user .Values.loki.password }}
-        Url {{ .Values.loki.serviceScheme }}://{{ .Values.loki.user }}:{{ .Values.loki.password }}@{{ include "loki.serviceName" . }}:{{ .Values.loki.servicePort }}{{ .Values.loki.servicePath }}
+        {{- if and .Values.vali.user .Values.vali.password }}
+        Url {{ .Values.vali.serviceScheme }}://{{ .Values.vali.user }}:{{ .Values.vali.password }}@{{ include "vali.serviceName" . }}:{{ .Values.vali.servicePort }}{{ .Values.vali.servicePath }}
           {{- else }}
-        Url {{ .Values.loki.serviceScheme }}://{{ include "loki.serviceName" . }}:{{ .Values.loki.servicePort }}{{ .Values.loki.servicePath }}
+        Url {{ .Values.vali.serviceScheme }}://{{ include "vali.serviceName" . }}:{{ .Values.vali.servicePort }}{{ .Values.vali.servicePath }}
         {{- end }}
         TenantID {{ .Values.config.tenantID }}
         BatchWait {{ .Values.config.batchWait }}

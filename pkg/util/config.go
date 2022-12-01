@@ -34,6 +34,6 @@ func PrintConfig(w io.Writer, config interface{}) error {
 	if err != nil {
 		return err
 	}
-	fmt.Fprintf(w, "---\n# Loki Config\n# %s\n%s\n\n", version.Info(), string(lc))
+	fmt.Fprintf(w, "---\n# Vali Config\n# %s\n%s\n\n", version.Info(), string(lc))
 	return nil
 }

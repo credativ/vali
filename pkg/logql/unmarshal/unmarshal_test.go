@@ -9,13 +9,13 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/loghttp"
-	legacy_loghttp "github.com/grafana/loki/pkg/loghttp/legacy"
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql/marshal"
+	"github.com/credativ/vali/pkg/loghttp"
+	legacy_loghttp "github.com/credativ/vali/pkg/loghttp/legacy"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql/marshal"
 )
 
-// covers requests to /loki/api/v1/push
+// covers requests to /vali/api/v1/push
 var pushTests = []struct {
 	expected []logproto.Stream
 	actual   string

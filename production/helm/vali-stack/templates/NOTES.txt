@@ -1,0 +1,1 @@
+The Vali stack has been deployed to your cluster. Vali can now be added as a datasource in Grafana.

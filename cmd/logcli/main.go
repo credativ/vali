@@ -11,16 +11,16 @@ import (
 	"github.com/prometheus/common/version"
 	"gopkg.in/alecthomas/kingpin.v2"
 
-	_ "github.com/grafana/loki/pkg/build"
-	"github.com/grafana/loki/pkg/logcli/client"
-	"github.com/grafana/loki/pkg/logcli/labelquery"
-	"github.com/grafana/loki/pkg/logcli/output"
-	"github.com/grafana/loki/pkg/logcli/query"
-	"github.com/grafana/loki/pkg/logcli/seriesquery"
+	_ "github.com/credativ/vali/pkg/build"
+	"github.com/credativ/vali/pkg/logcli/client"
+	"github.com/credativ/vali/pkg/logcli/labelquery"
+	"github.com/credativ/vali/pkg/logcli/output"
+	"github.com/credativ/vali/pkg/logcli/query"
+	"github.com/credativ/vali/pkg/logcli/seriesquery"
 )
 
 var (
-	app        = kingpin.New("logcli", "A command-line for loki.").Version(version.Print("logcli"))
+	app        = kingpin.New("logcli", "A command-line for vali.").Version(version.Print("logcli"))
 	quiet      = app.Flag("quiet", "Suppress query metadata").Default("false").Short('q').Bool()
 	statistics = app.Flag("stats", "Show query statistics").Default("false").Bool()
 	outputMode = app.Flag("output", "Specify output mode [default, raw, jsonl]. raw suppresses log labels and timestamp.").Default("default").Short('o').Enum("default", "raw", "jsonl")
@@ -37,7 +37,7 @@ returned in a few output modes:
 
 	raw: log line
 	default: log timestamp + log labels + log line
-	jsonl: JSON response from Loki API of log line
+	jsonl: JSON response from Vali API of log line
 
 The output of the log can be specified with the "-o" flag, for
 example, "-o raw" for the raw output format.
@@ -86,9 +86,7 @@ This command does not produce useful output when querying for log lines;
 you should always use the "query" command when you are running log queries.
 
 For more information about log queries and metric queries, refer to the
-LogQL documentation:
-
-https://grafana.com/docs/loki/latest/logql/`)
+LogQL documentation.`)
 	instantQuery = newQuery(true, instantQueryCmd)
 
 	labelsCmd   = app.Command("labels", "Find values for a given label.")
@@ -201,14 +199,14 @@ func newQueryClient(app *kingpin.Application) client.Client {
 		return nil
 	}
 
-	app.Flag("addr", "Server address. Can also be set using LOKI_ADDR env var.").Default("http://localhost:3100").Envar("LOKI_ADDR").Action(addressAction).StringVar(&client.Address)
-	app.Flag("username", "Username for HTTP basic auth. Can also be set using LOKI_USERNAME env var.").Default("").Envar("LOKI_USERNAME").StringVar(&client.Username)
-	app.Flag("password", "Password for HTTP basic auth. Can also be set using LOKI_PASSWORD env var.").Default("").Envar("LOKI_PASSWORD").StringVar(&client.Password)
-	app.Flag("ca-cert", "Path to the server Certificate Authority. Can also be set using LOKI_CA_CERT_PATH env var.").Default("").Envar("LOKI_CA_CERT_PATH").StringVar(&client.TLSConfig.CAFile)
-	app.Flag("tls-skip-verify", "Server certificate TLS skip verify.").Default("false").Envar("LOKI_TLS_SKIP_VERIFY").BoolVar(&client.TLSConfig.InsecureSkipVerify)
-	app.Flag("cert", "Path to the client certificate. Can also be set using LOKI_CLIENT_CERT_PATH env var.").Default("").Envar("LOKI_CLIENT_CERT_PATH").StringVar(&client.TLSConfig.CertFile)
-	app.Flag("key", "Path to the client certificate key. Can also be set using LOKI_CLIENT_KEY_PATH env var.").Default("").Envar("LOKI_CLIENT_KEY_PATH").StringVar(&client.TLSConfig.KeyFile)
-	app.Flag("org-id", "adds X-Scope-OrgID to API requests for representing tenant ID. Useful for requesting tenant data when bypassing an auth gateway.").Default("").Envar("LOKI_ORG_ID").StringVar(&client.OrgID)
+	app.Flag("addr", "Server address. Can also be set using VALI_ADDR env var.").Default("http://localhost:3100").Envar("VALI_ADDR").Action(addressAction).StringVar(&client.Address)
+	app.Flag("username", "Username for HTTP basic auth. Can also be set using VALI_USERNAME env var.").Default("").Envar("VALI_USERNAME").StringVar(&client.Username)
+	app.Flag("password", "Password for HTTP basic auth. Can also be set using VALI_PASSWORD env var.").Default("").Envar("VALI_PASSWORD").StringVar(&client.Password)
+	app.Flag("ca-cert", "Path to the server Certificate Authority. Can also be set using VALI_CA_CERT_PATH env var.").Default("").Envar("VALI_CA_CERT_PATH").StringVar(&client.TLSConfig.CAFile)
+	app.Flag("tls-skip-verify", "Server certificate TLS skip verify.").Default("false").Envar("VALI_TLS_SKIP_VERIFY").BoolVar(&client.TLSConfig.InsecureSkipVerify)
+	app.Flag("cert", "Path to the client certificate. Can also be set using VALI_CLIENT_CERT_PATH env var.").Default("").Envar("VALI_CLIENT_CERT_PATH").StringVar(&client.TLSConfig.CertFile)
+	app.Flag("key", "Path to the client certificate key. Can also be set using VALI_CLIENT_KEY_PATH env var.").Default("").Envar("VALI_CLIENT_KEY_PATH").StringVar(&client.TLSConfig.KeyFile)
+	app.Flag("org-id", "adds X-Scope-OrgID to API requests for representing tenant ID. Useful for requesting tenant data when bypassing an auth gateway.").Default("").Envar("VALI_ORG_ID").StringVar(&client.OrgID)
 
 	return client
 }
@@ -310,7 +308,7 @@ func newQuery(instant bool, cmd *kingpin.CmdClause) *query.Query {
 	cmd.Flag("exclude-label", "Exclude labels given the provided key during output.").StringsVar(&q.IgnoreLabelsKey)
 	cmd.Flag("include-label", "Include labels given the provided key during output.").StringsVar(&q.ShowLabelsKey)
 	cmd.Flag("labels-length", "Set a fixed padding to labels").Default("0").IntVar(&q.FixedLabelsLen)
-	cmd.Flag("store-config", "Execute the current query using a configured storage from a given Loki configuration file.").Default("").StringVar(&q.LocalConfig)
+	cmd.Flag("store-config", "Execute the current query using a configured storage from a given Vali configuration file.").Default("").StringVar(&q.LocalConfig)
 	cmd.Flag("colored-output", "Show output with colored labels").Default("false").BoolVar(&q.ColoredOutput)
 
 	return q

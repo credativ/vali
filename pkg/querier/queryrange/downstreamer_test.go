@@ -13,9 +13,9 @@ import (
 	"github.com/prometheus/prometheus/promql"
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/loki/pkg/logproto"
-	"github.com/grafana/loki/pkg/logql"
-	"github.com/grafana/loki/pkg/logql/stats"
+	"github.com/credativ/vali/pkg/logproto"
+	"github.com/credativ/vali/pkg/logql"
+	"github.com/credativ/vali/pkg/logql/stats"
 )
 
 func testSampleStreams() []queryrange.SampleStream {
@@ -110,9 +110,9 @@ func TestResponseToResult(t *testing.T) {
 		expected logql.Result
 	}{
 		{
-			desc: "LokiResponse",
-			input: &LokiResponse{
-				Data: LokiData{
+			desc: "ValiResponse",
+			input: &ValiResponse{
+				Data: ValiData{
 					Result: []logproto.Stream{{
 						Labels: `{foo="bar"}`,
 					}},
@@ -131,16 +131,16 @@ func TestResponseToResult(t *testing.T) {
 			},
 		},
 		{
-			desc: "LokiResponseError",
-			input: &LokiResponse{
+			desc: "ValiResponseError",
+			input: &ValiResponse{
 				Error:     "foo",
 				ErrorType: "bar",
 			},
 			err: true,
 		},
 		{
-			desc: "LokiPromResponse",
-			input: &LokiPromResponse{
+			desc: "ValiPromResponse",
+			input: &ValiPromResponse{
 				Statistics: stats.Result{
 					Summary: stats.Summary{ExecTime: 1},
 				},
@@ -158,8 +158,8 @@ func TestResponseToResult(t *testing.T) {
 			},
 		},
 		{
-			desc: "LokiPromResponseError",
-			input: &LokiPromResponse{
+			desc: "ValiPromResponseError",
+			input: &ValiPromResponse{
 				Response: &queryrange.PrometheusResponse{
 					Error:     "foo",
 					ErrorType: "bar",
@@ -300,9 +300,9 @@ func TestInstanceDownstream(t *testing.T) {
 	expr, err := logql.ParseExpr(`{foo="bar"}`)
 	require.Nil(t, err)
 
-	expectedResp := func() *LokiResponse {
-		return &LokiResponse{
-			Data: LokiData{
+	expectedResp := func() *ValiResponse {
+		return &ValiResponse{
+			Data: ValiData{
 				Result: []logproto.Stream{{
 					Labels: `{foo="bar"}`,
 				}},
@@ -328,7 +328,7 @@ func TestInstanceDownstream(t *testing.T) {
 			// for some reason these seemingly can't be checked in their own goroutines,
 			// so we assign them to scoped variables for later comparison.
 			got = req
-			want = ParamsToLokiRequest(params).WithShards(logql.Shards{{Shard: 0, Of: 2}}).WithQuery(expr.String())
+			want = ParamsToValiRequest(params).WithShards(logql.Shards{{Shard: 0, Of: 2}}).WithQuery(expr.String())
 
 			return expectedResp(), nil
 		},

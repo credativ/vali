@@ -78,8 +78,8 @@ func (f Facade) Size() int {
 	return f.c.Size()
 }
 
-// LokiChunk returns the chunkenc.Chunk.
-func (f Facade) LokiChunk() Chunk {
+// ValiChunk returns the chunkenc.Chunk.
+func (f Facade) ValiChunk() Chunk {
 	return f.c
 }
 

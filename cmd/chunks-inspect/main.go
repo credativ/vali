@@ -60,27 +60,27 @@ func printFile(filename string, blockDetails, printLines, storeBlocks bool) {
 		fmt.Println("\t", l.Name, "=", l.Value)
 	}
 
-	lokiChunk, err := parseLokiChunk(h, f)
+	valiChunk, err := parseValiChunk(h, f)
 	if err != nil {
 		log.Printf("%s: %v", filename, err)
 		return
 	}
 
-	fmt.Println("Encoding:", lokiChunk.encoding)
-	fmt.Print("Blocks Metadata Checksum: ", fmt.Sprintf("%08x", lokiChunk.metadataChecksum))
-	if lokiChunk.metadataChecksum == lokiChunk.computedMetadataChecksum {
+	fmt.Println("Encoding:", valiChunk.encoding)
+	fmt.Print("Blocks Metadata Checksum: ", fmt.Sprintf("%08x", valiChunk.metadataChecksum))
+	if valiChunk.metadataChecksum == valiChunk.computedMetadataChecksum {
 		fmt.Println(" OK")
 	} else {
-		fmt.Println(" BAD, computed checksum:", fmt.Sprintf("%08x", lokiChunk.computedMetadataChecksum))
+		fmt.Println(" BAD, computed checksum:", fmt.Sprintf("%08x", valiChunk.computedMetadataChecksum))
 	}
 	if blockDetails {
-		fmt.Println("Found", len(lokiChunk.blocks), "block(s)")
+		fmt.Println("Found", len(valiChunk.blocks), "block(s)")
 	} else {
-		fmt.Println("Found", len(lokiChunk.blocks), "block(s), use -b to show block details")
+		fmt.Println("Found", len(valiChunk.blocks), "block(s), use -b to show block details")
 	}
-	if len(lokiChunk.blocks) > 0 {
-		fmt.Println("Minimum time (from first block):", time.Unix(0, lokiChunk.blocks[0].minT).In(timezone).Format(format))
-		fmt.Println("Maximum time (from last block):", time.Unix(0, lokiChunk.blocks[len(lokiChunk.blocks)-1].maxT).In(timezone).Format(format))
+	if len(valiChunk.blocks) > 0 {
+		fmt.Println("Minimum time (from first block):", time.Unix(0, valiChunk.blocks[0].minT).In(timezone).Format(format))
+		fmt.Println("Maximum time (from last block):", time.Unix(0, valiChunk.blocks[len(valiChunk.blocks)-1].maxT).In(timezone).Format(format))
 	}
 
 	if blockDetails {
@@ -89,7 +89,7 @@ func printFile(filename string, blockDetails, printLines, storeBlocks bool) {
 
 	totalSize := 0
 
-	for ix, b := range lokiChunk.blocks {
+	for ix, b := range valiChunk.blocks {
 		if blockDetails {
 			cksum := ""
 			if b.storedChecksum == b.computedChecksum {

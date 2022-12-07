@@ -27,7 +27,7 @@ func TestNewMulti(t *testing.T) {
 		t.Fatal("expected err but got nil")
 	}
 	host1, _ := url.Parse("http://localhost:3100")
-	host2, _ := url.Parse("https://grafana.com")
+	host2, _ := url.Parse("https://example.com")
 	cc1 := Config{
 		BatchSize:      20,
 		BatchWait:      1 * time.Second,

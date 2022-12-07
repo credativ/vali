@@ -1,4 +1,4 @@
-FROM       plutono/bigtable-backup:master-18e7589
+FROM       ghcr.io/credativ/bigtable-backup:main
 RUN        apk add --update --no-cache python3 python3-dev git \
             && pip3 install --no-cache-dir --upgrade pip
 COPY       bigtable-backup.py bigtable-backup.py

@@ -38,7 +38,7 @@ filebeat:
 
 logstash:
   enabled: false
-  image: plutono/logstash-output-vali
+  image: ghcr.io/credativ/logstash-output-vali
   imageTag: 1.0.1
   filters:
     main: |-

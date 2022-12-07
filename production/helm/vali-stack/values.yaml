@@ -7,7 +7,7 @@ valitail:
 fluent-bit:
   enabled: false
 
-grafana:
+plutono:
   enabled: false
   sidecar:
     datasources:
@@ -38,7 +38,7 @@ filebeat:
 
 logstash:
   enabled: false
-  image: grafana/logstash-output-vali
+  image: plutono/logstash-output-vali
   imageTag: 1.0.1
   filters:
     main: |-

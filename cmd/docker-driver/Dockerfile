@@ -1,7 +1,7 @@
-ARG BUILD_IMAGE=grafana/vali-build-image:0.12.0
+ARG BUILD_IMAGE=ghcr.io/credativ/vali-build-image:0.12.0
 # Directories in this file are referenced from the root of the project not this folder
 # This file is intended to be called from the root like so:
-# docker build -t grafana/vali -f cmd/vali/Dockerfile .
+# docker build -t ghcr.io/credativ/vali -f cmd/vali/Dockerfile .
 
 # TODO: add cross-platform support
 FROM $BUILD_IMAGE as build

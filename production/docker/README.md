@@ -12,7 +12,7 @@ Some features of the deployment:
 - Replication_factor=2: the receiving distributor sends log data to 2 ingesters based on consistent hashing
 - Chunk storage is a shared directory mounted from the same host directory (to simulate S3 or gcs)
 - Query are performed through the two query frontend servers
-- An nginx gateway to route the write and read workloads from clients (Grafana, valitail)
+- An nginx gateway to route the write and read workloads from clients (Plutono, valitail)
 
 1. Ensure you have the most up-to-date Docker container images:
 
@@ -26,7 +26,7 @@ Some features of the deployment:
    docker-compose -f ./docker-compose-ha-memberlist.yaml up
    ```
 
-1. When adding data source in the grafana dashboard, using `http://vali-gateway:3100` for the URL field.
+1. When adding data source in the plutono dashboard, using `http://vali-gateway:3100` for the URL field.
 
 1. To clean up
 

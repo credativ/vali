@@ -16,7 +16,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
     driver.configure(<<-CONF)
       type vali
-      url https://logs-us-west1.grafana.net
+      url https://logs.example.com
       username userID
       password API_KEY
       tenant 1234
@@ -31,7 +31,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
       </label>
     CONF
 
-    expect(driver.instance.url).to eq 'https://logs-us-west1.grafana.net'
+    expect(driver.instance.url).to eq 'https://logs.example.com'
     expect(driver.instance.username).to eq 'userID'
     expect(driver.instance.password).to eq 'API_KEY'
     expect(driver.instance.tenant).to eq '1234'
@@ -45,7 +45,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'converts syslog output to vali output' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
     CONF
     driver = Fluent::Test::Driver::Output.new(described_class)
     driver.configure(config)
@@ -60,7 +60,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'converts syslog output with extra labels to vali output' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
       extra_labels {"env": "test"}
     CONF
     driver = Fluent::Test::Driver::Output.new(described_class)
@@ -76,7 +76,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'converts multiple syslog output lines to vali output' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
     CONF
     driver = Fluent::Test::Driver::Output.new(described_class)
     driver.configure(config)
@@ -93,7 +93,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'converts multiple syslog output lines with extra labels to vali output' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
       extra_labels {"env": "test"}
     CONF
     driver = Fluent::Test::Driver::Output.new(described_class)
@@ -111,7 +111,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'formats record hash as key_value' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
     CONF
     driver = Fluent::Test::Driver::Output.new(described_class)
     driver.configure(config)
@@ -127,7 +127,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'formats record hash as json' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
       line_format json
     CONF
     driver = Fluent::Test::Driver::Output.new(described_class)
@@ -144,7 +144,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'extracts record key as label' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
       line_format json
       <label>
         stream
@@ -164,7 +164,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'extracts nested record key as label' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
       line_format json
       <label>
         pod $.kubernetes.pod
@@ -184,7 +184,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'extracts nested record key as label and drop key after' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
       line_format json
       remove_keys kubernetes
       <label>
@@ -205,7 +205,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'formats as simple string when only 1 record key' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
       line_format json
       drop_single_key true
       <label>
@@ -226,7 +226,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'order by timestamp then index when received unordered' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
       drop_single_key true
       <label>
         stream
@@ -249,7 +249,7 @@ RSpec.describe Fluent::Plugin::ValiOutput do
 
   it 'raises an LogPostError when http request is not successful' do
     config = <<-CONF
-      url     https://logs-us-west1.grafana.net
+      url     https://logs.example.com
     CONF
     driver = Fluent::Test::Driver::Output.new(described_class)
     driver.configure(config)

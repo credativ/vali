@@ -44,7 +44,7 @@ func (c *Config) RegisterFlags(f *flag.FlagSet) {
 	f.BoolVar(&c.printVersion, "version", false, "Print this builds version information")
 	f.BoolVar(&c.printConfig, "print-config-stderr", false, "Dump the entire Vali config object to stderr")
 	f.BoolVar(&c.logConfig, "log-config-reverse-order", false, "Dump the entire Vali config object at Info log "+
-		"level with the order reversed, reversing the order makes viewing the entries easier in Grafana.")
+		"level with the order reversed, reversing the order makes viewing the entries easier in Plutono.")
 	f.BoolVar(&c.dryRun, "dry-run", false, "Start Valitail but print entries instead of sending them to Vali.")
 	f.StringVar(&c.configFile, "config.file", "", "yaml file to load")
 	f.BoolVar(&c.configExpandEnv, "config.expand-env", false, "Expands ${var} in config according to the values of the environment variables.")

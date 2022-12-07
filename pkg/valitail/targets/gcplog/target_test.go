@@ -159,7 +159,7 @@ const (
 	gcpLogEntry = `
 {
   "insertId": "ajv4d1f1ch8dr",
-  "logName": "projects/grafanalabs-dev/logs/cloudaudit.googleapis.com%2Fdata_access",
+  "logName": "projects/plutonolabs-dev/logs/cloudaudit.googleapis.com%2Fdata_access",
   "protoPayload": {
     "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
     "authenticationInfo": {
@@ -190,7 +190,7 @@ const (
     "methodName": "storage.objects.get",
     "requestMetadata": {
       "callerIp": "34.66.19.193",
-      "callerNetwork": "//compute.googleapis.com/projects/grafanalabs-dev/global/networks/__unknown__",
+      "callerNetwork": "//compute.googleapis.com/projects/plutonolabs-dev/global/networks/__unknown__",
       "callerSuppliedUserAgent": "thanos-store-gateway/1.5.0 (go1.14.9),gzip(gfe)",
       "destinationAttributes": {
       },
@@ -215,7 +215,7 @@ const (
     "labels": {
       "bucket_name": "dev-us-central1-cortex-tsdb-dev",
       "location": "us-central1",
-      "project_id": "grafanalabs-dev"
+      "project_id": "plutonolabs-dev"
     },
     "type": "gcs_bucket"
   },

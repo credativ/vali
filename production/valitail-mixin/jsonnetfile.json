@@ -1,11 +1,11 @@
 {
     "dependencies": [
         {
-            "name": "grafana-builder",
+            "name": "plutono-builder",
             "source": {
                 "git": {
                     "remote": "https://github.com/grafana/jsonnet-libs",
-                    "subdir": "grafana-builder"
+                    "subdir": "plutono-builder"
                 }
             },
             "version": "master"

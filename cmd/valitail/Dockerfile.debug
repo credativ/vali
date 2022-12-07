@@ -2,7 +2,7 @@
 # This file is intended to be called from the root like so:
 # docker build -t ghcr.io/credativ/valitail -f cmd/valitail/Dockerfile.debug .
 
-FROM grafana/vali-build-image as build
+FROM ghcr.io/credativ/vali-build-image as build
 ARG GOARCH="amd64"
 COPY . /src/vali
 WORKDIR /src/vali

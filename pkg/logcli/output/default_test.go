@@ -150,7 +150,7 @@ func TestColorForLabels(t *testing.T) {
 			}),
 			loghttp.LabelSet(map[string]string{
 				"type": "test",
-				"app":  "grafana-vali",
+				"app":  "plutono-vali",
 			}),
 			false,
 		},

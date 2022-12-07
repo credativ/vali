@@ -19,7 +19,7 @@ var (
 	"request": {
 		"time": "30.001",
 		"method": "POST",
-		"host": "foo.grafana.net",
+		"host": "foo.example.com",
 		"uri": "/rpc/v2/stage",
 		"size": "101"
 	},
@@ -56,7 +56,7 @@ func Test_ParserHints(t *testing.T) {
 			jsonLine,
 			true,
 			1.0,
-			`{app="nginx", cluster="us-central-west", cluster_extracted="us-east-west", protocol="HTTP/2.0", remote_user="foo", request_host="foo.grafana.net", request_method="POST", request_size="101", request_time="30.001", request_uri="/rpc/v2/stage", response_latency_seconds="30.001", response_status="204", upstream_addr="10.0.0.1:80"}`,
+			`{app="nginx", cluster="us-central-west", cluster_extracted="us-east-west", protocol="HTTP/2.0", remote_user="foo", request_host="foo.example.com", request_method="POST", request_size="101", request_time="30.001", request_uri="/rpc/v2/stage", response_latency_seconds="30.001", response_status="204", upstream_addr="10.0.0.1:80"}`,
 		},
 		{
 			`sum without (request_host,app,cluster) (rate({app="nginx"} | json | __error__="" | response_status = 204 [1m]))`,
@@ -70,7 +70,7 @@ func Test_ParserHints(t *testing.T) {
 			jsonLine,
 			true,
 			1.0,
-			`{app="nginx", request_host="foo.grafana.net"}`,
+			`{app="nginx", request_host="foo.example.com"}`,
 		},
 		{
 			`sum(rate({app="nginx"} | json | __error__="" | response_status = 204 [1m]))`,
@@ -105,14 +105,14 @@ func Test_ParserHints(t *testing.T) {
 			jsonLine,
 			true,
 			30.001,
-			`{app="nginx", request_host="foo.grafana.net"}`,
+			`{app="nginx", request_host="foo.example.com"}`,
 		},
 		{
 			`rate({app="nginx"} | json | response_status = 204 | unwrap response_latency_seconds [1m])`,
 			jsonLine,
 			true,
 			30.001,
-			`{app="nginx", cluster="us-central-west", cluster_extracted="us-east-west", protocol="HTTP/2.0", remote_user="foo", request_host="foo.grafana.net", request_method="POST", request_size="101", request_time="30.001", request_uri="/rpc/v2/stage", response_status="204", upstream_addr="10.0.0.1:80"}`,
+			`{app="nginx", cluster="us-central-west", cluster_extracted="us-east-west", protocol="HTTP/2.0", remote_user="foo", request_host="foo.example.com", request_method="POST", request_size="101", request_time="30.001", request_uri="/rpc/v2/stage", response_status="204", upstream_addr="10.0.0.1:80"}`,
 		},
 		{
 			`sum without (request_host,app,cluster)(rate({app="nginx"} | json | response_status = 204 | unwrap response_latency_seconds [1m]))`,

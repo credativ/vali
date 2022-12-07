@@ -67,9 +67,9 @@ The output is limited to 30 entries by default; use --limit to increase.
 
 While "query" does support metrics queries, its output contains multiple
 data points between the start and end query time. This output is used to
-build graphs, similar to what is seen in the Grafana Explore graph view.
+build graphs, similar to what is seen in the Plutono Explore graph view.
 If you are querying metrics and just want the most recent data point
-(like what is seen in the Grafana Explore table view), then you should use
+(like what is seen in the Plutono Explore table view), then you should use
 the "instant-query" command instead.`)
 	rangeQuery = newQuery(false, queryCmd)
 	tail       = queryCmd.Flag("tail", "Tail the logs").Short('t').Default("false").Bool()
@@ -78,8 +78,8 @@ the "instant-query" command instead.`)
 	instantQueryCmd = app.Command("instant-query", `Run an instant LogQL query.
 
 The "instant-query" command is useful for evaluating a metric query for
-a single point in time. This is equivalent to the Grafana Explore table
-view; if you want a metrics query that is used to build a Grafana graph,
+a single point in time. This is equivalent to the Plutono Explore table
+view; if you want a metrics query that is used to build a Plutono graph,
 you should use the "query" command instead.
 
 This command does not produce useful output when querying for log lines;

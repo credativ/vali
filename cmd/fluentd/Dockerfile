@@ -10,7 +10,7 @@ WORKDIR /src/vali
 RUN make BUILD_IN_CONTAINER=false fluentd-plugin
 
 FROM fluent/fluentd:v1.9.2-debian-1.0
-ENV VALI_URL "https://logs-prod-us-central1.grafana.net"
+ENV VALI_URL "https://logs-prod.example.com"
 
 COPY --from=build /src/vali/cmd/fluentd/lib/fluent/plugin/out_vali.rb /fluentd/plugins/out_vali.rb
 

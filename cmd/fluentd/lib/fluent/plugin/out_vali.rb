@@ -36,7 +36,7 @@ module Fluent
       DEFAULT_BUFFER_TYPE = 'memory'
 
       desc 'Vali API base URL'
-      config_param :url, :string, default: 'https://logs-prod-us-central1.grafana.net'
+      config_param :url, :string, default: 'https://logs-prod.example.com'
 
       desc 'Authentication: basic auth credentials'
       config_param :username, :string, default: nil

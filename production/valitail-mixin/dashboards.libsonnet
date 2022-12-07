@@ -1,8 +1,8 @@
-local g = import 'grafana-builder/grafana.libsonnet';
+local g = import 'plutono-builder/plutono.libsonnet';
 local utils = import 'mixin-utils/utils.libsonnet';
 
 {
-  grafanaDashboards+: {
+  plutonoDashboards+: {
     local dashboards = self,
 
     'valitail.json':{

@@ -48,7 +48,7 @@ $ helm upgrade --install vali vali/vali
 
 We recommend Valitail to ship your logs to Vali as the configuration is very similar to Prometheus.
 This allows you to ensure that labels for metrics and logs are equivalent by re-using the same `scrape_configs` and `relabeling` configuration.
-When using Grafana having the same labels will allows you to pivot from Metrics to Logs verify easily by simply switching datasource.
+When using Plutono having the same labels will allows you to pivot from Metrics to Logs verify easily by simply switching datasource.
 
 To only install Valitail use the following command:
 
@@ -81,34 +81,34 @@ $ helm upgrade --install vali vali/vali-stack \
     --set vali.fullnameOverride=vali,logstash.fullnameOverride=logstash-vali
 ```
 
-## Deploy Grafana to your cluster
+## Deploy Plutono to your cluster
 
-To install Grafana on your cluster with helm, use the following command:
+To install Plutono on your cluster with helm, use the following command:
 
 ```bash
 # with Helm 2
-$ helm install stable/grafana -n vali-grafana --namespace <YOUR-NAMESPACE>
+$ helm install stable/plutono -n vali-plutono --namespace <YOUR-NAMESPACE>
 
 # with Helm 3
-$ helm install vali-grafana stable/grafana -n <YOUR-NAMESPACE>
+$ helm install vali-plutono stable/plutono -n <YOUR-NAMESPACE>
 ```
 
-> The chart vali-stack contains a pre-configured Grafana, simply use `--set grafana.enabled=true`
+> The chart vali-stack contains a pre-configured Plutono, simply use `--set plutono.enabled=true`
 
-To get the admin password for the Grafana pod, run the following command:
+To get the admin password for the Plutono pod, run the following command:
 
 ```bash
-$ kubectl get secret --namespace <YOUR-NAMESPACE> vali-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+$ kubectl get secret --namespace <YOUR-NAMESPACE> vali-plutono -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
-To access the Grafana UI, run the following command:
+To access the Plutono UI, run the following command:
 
 ```bash
-$ kubectl port-forward --namespace <YOUR-NAMESPACE> service/vali-grafana 3000:80
+$ kubectl port-forward --namespace <YOUR-NAMESPACE> service/vali-plutono 3000:80
 ```
 
 Navigate to http://localhost:3000 and login with `admin` and the password output above.
-Then follow the [instructions for adding the vali datasource](/docs/getting-started/grafana.md), using the URL `http://vali:3100/`.
+Then follow the [instructions for adding the vali datasource](/docs/getting-started/plutono.md), using the URL `http://vali:3100/`.
 
 ## Run Vali behind https ingress
 

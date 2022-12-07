@@ -11,7 +11,7 @@ clients:
 scrape_configs:
   - job_name: pubsub-test
     gcplog:
-      project_id: "grafanalabs-dev"
+      project_id: "plutonolabs-dev"
       subscription: "dev-logs-pull"
       use_incoming_timestamp: false # default rewrite timestamp.
       labels:

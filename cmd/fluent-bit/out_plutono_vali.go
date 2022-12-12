@@ -37,7 +37,7 @@ func (c *pluginConfig) Get(key string) string {
 
 //export FLBPluginRegister
 func FLBPluginRegister(ctx unsafe.Pointer) int {
-	return output.FLBPluginRegister(ctx, "grafana-vali", "Ship fluent-bit logs to Grafana Vali")
+	return output.FLBPluginRegister(ctx, "plutono-vali", "Ship fluent-bit logs to Plutono Vali")
 }
 
 //export FLBPluginInit

@@ -1,5 +1,5 @@
 image:
-  repository: grafana/vali
+  repository: ghcr.io/credativ/vali
   tag: 2.0.0
   pullPolicy: IfNotPresent
 

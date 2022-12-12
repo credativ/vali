@@ -5,7 +5,7 @@ networks:
 
 services:
 
-  grafana:
+  plutono:
     image: ghcr.io/credativ/plutono:7.3.4
     ports:
       - "3000:3000"

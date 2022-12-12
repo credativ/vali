@@ -12,7 +12,7 @@ import (
 )
 
 // LogConfig takes a pointer to a config object, marshalls it to YAML and prints each line in REVERSE order
-// The reverse order makes display in Grafana in easier which typically sorts newest entries at the top.
+// The reverse order makes display in Plutono in easier which typically sorts newest entries at the top.
 func LogConfig(cfg interface{}) error {
 	lc, err := yaml.Marshal(cfg)
 	if err != nil {

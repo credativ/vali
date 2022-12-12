@@ -11,8 +11,8 @@ dependencies:
   condition: fluent-bit.enabled
   repository: "file://../fluent-bit"
   version: "^2.0.0"
-- name: "grafana"
-  condition: grafana.enabled
+- name: "plutono"
+  condition: plutono.enabled
   version: "~5.7.0"
   repository:  "https://credativ.github.io/helm-charts"
 - name: "prometheus"

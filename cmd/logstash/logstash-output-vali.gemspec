@@ -1,11 +1,9 @@
 Gem::Specification.new do |s|
   s.name    = 'logstash-output-vali'
   s.version = '1.0.3'
-  s.authors = ['Aditya C S','Cyril Tovena']
-  s.email   = ['aditya.gnu@gmail.com','cyril.tovena@grafana.com']
 
-  s.summary       = 'Output plugin to ship logs to a Grafana Vali server'
-  s.description   = 'Output plugin to ship logs to a Grafana Vali server'
+  s.summary       = 'Output plugin to ship logs to a Plutono Vali server'
+  s.description   = 'Output plugin to ship logs to a Plutono Vali server'
   s.homepage      = 'https://github.com/credativ/vali/'
   s.license       = 'Apache-2.0'
   s.require_paths = ["lib"]

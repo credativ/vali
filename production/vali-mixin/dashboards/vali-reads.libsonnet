@@ -1,8 +1,8 @@
-local g = import 'grafana-builder/grafana.libsonnet';
+local g = import 'plutono-builder/plutono.libsonnet';
 local utils = import 'mixin-utils/utils.libsonnet';
 
 {
-  grafanaDashboards+: {
+  plutonoDashboards+: {
     local dashboards = self,
 
     local http_routes = 'vali_api_v1_series|api_prom_series|api_prom_query|api_prom_label|api_prom_label_name_values|vali_api_v1_query|vali_api_v1_query_range|vali_api_v1_labels|vali_api_v1_label_name_values',

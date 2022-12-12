@@ -2,7 +2,7 @@ local valiOperational = (import './dashboard-vali-operational.json');
 local utils = import 'mixin-utils/utils.libsonnet';
 
 {
-  grafanaDashboards+: {
+  plutonoDashboards+: {
     local dashboards = self,
 
     'vali-operational.json': {

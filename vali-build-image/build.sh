@@ -10,8 +10,8 @@ SRC_PATH=/src/vali
 # few things up so that sudo works without complaining later on.
 uid=$(stat --format="%u" $SRC_PATH)
 gid=$(stat --format="%g" $SRC_PATH)
-echo "grafana:x:$uid:$gid::$SRC_PATH:/bin/bash" >>/etc/passwd
-echo "grafana:*:::::::" >>/etc/shadow
-echo "grafana	ALL=(ALL)	NOPASSWD: ALL" >>/etc/sudoers
+echo "plutono:x:$uid:$gid::$SRC_PATH:/bin/bash" >>/etc/passwd
+echo "plutono:*:::::::" >>/etc/shadow
+echo "plutono	ALL=(ALL)	NOPASSWD: ALL" >>/etc/sudoers
 
-su grafana -c "PATH=$PATH make -C $SRC_PATH BUILD_IN_CONTAINER=false $*"
+su plutono -c "PATH=$PATH make -C $SRC_PATH BUILD_IN_CONTAINER=false $*"

@@ -145,13 +145,13 @@ func TestValitail(t *testing.T) {
 	logFile5 := testDir + "/testPipeline.log"
 	entries := []string{
 		`{"log":"11.11.11.11 - frank [25/Jan/2000:14:00:01 -0500] \"GET /1986.js HTTP/1.1\" 200 932 \"-\" \"Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7 GTB6\"","stream":"stderr","time":"2019-04-30T02:12:41.8443515Z"}`,
-		`{"log":"11.11.11.12 - - [19/May/2015:04:05:16 -0500] \"POST /blog HTTP/1.1\" 200 10975 \"http://grafana.com/test/\" \"Mozilla/5.0 (Windows NT 6.1; WOW64) Gecko/20091221 Firefox/3.5.7 GTB6\"","stream":"stdout","time":"2019-04-30T02:12:42.8443515Z"}`,
+		`{"log":"11.11.11.12 - - [19/May/2015:04:05:16 -0500] \"POST /blog HTTP/1.1\" 200 10975 \"http://example.com/test/\" \"Mozilla/5.0 (Windows NT 6.1; WOW64) Gecko/20091221 Firefox/3.5.7 GTB6\"","stream":"stdout","time":"2019-04-30T02:12:42.8443515Z"}`,
 	}
 	expectedCounts[logFile5] = pipelineFile(t, logFile5, entries)
 	expectedEntries := make(map[string]int)
 	entriesArray := []string{
 		`11.11.11.11 - frank [25/Jan/2000:14:00:01 -0500] "GET /1986.js HTTP/1.1" 200 932 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7 GTB6"`,
-		`11.11.11.12 - - [19/May/2015:04:05:16 -0500] "POST /blog HTTP/1.1" 200 10975 "http://grafana.com/test/" "Mozilla/5.0 (Windows NT 6.1; WOW64) Gecko/20091221 Firefox/3.5.7 GTB6"`,
+		`11.11.11.12 - - [19/May/2015:04:05:16 -0500] "POST /blog HTTP/1.1" 200 10975 "http://example.com/test/" "Mozilla/5.0 (Windows NT 6.1; WOW64) Gecko/20091221 Firefox/3.5.7 GTB6"`,
 	}
 	for i, entry := range entriesArray {
 		expectedEntries[entry] = i

@@ -3,7 +3,7 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": "-- Plutono --",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -37,7 +37,7 @@
       "title": "Chunks",
       "tooltip": "",
       "type": "link",
-      "url": "/grafana/d/586c2916e59d3f81282a776dbe8333e9/vali-chunks"
+      "url": "/plutono/d/586c2916e59d3f81282a776dbe8333e9/vali-chunks"
     },
     {
       "icon": "dashboard",
@@ -48,7 +48,7 @@
       "title": "Memcached",
       "tooltip": "",
       "type": "link",
-      "url": "/grafana/d/8127d7f60e3a3230d7c633c8b5ddf68c/memcached"
+      "url": "/plutono/d/8127d7f60e3a3230d7c633c8b5ddf68c/memcached"
     },
     {
       "icon": "dashboard",
@@ -58,7 +58,7 @@
       "targetBlank": true,
       "title": "Valitail",
       "type": "link",
-      "url": "/grafana/d/739c15a23c04c6ace0d03f6e14ba26e8/vali-valitail?var-datasource=$datasource&var-cluster=$cluster&var-namespace=default"
+      "url": "/plutono/d/739c15a23c04c6ace0d03f6e14ba26e8/vali-valitail?var-datasource=$datasource&var-cluster=$cluster&var-namespace=default"
     },
     {
       "icon": "dashboard",
@@ -68,7 +68,7 @@
       "targetBlank": true,
       "title": "BigTable Backup",
       "type": "link",
-      "url": "/grafana/d/da5ce918801d6d9f775a8c7e9f9f339a/vali-bigtable-backup"
+      "url": "/plutono/d/da5ce918801d6d9f775a8c7e9f9f339a/vali-bigtable-backup"
     },
     {
       "icon": "dashboard",
@@ -77,7 +77,7 @@
       "targetBlank": true,
       "title": "Consul",
       "type": "link",
-      "url": "/grafana/d/836793349c8ce200baa98f045123d19b/consul?var-datasource=$datasource&var-job=$namespace%2Fconsul"
+      "url": "/plutono/d/836793349c8ce200baa98f045123d19b/consul?var-datasource=$datasource&var-job=$namespace%2Fconsul"
     }
   ],
   "panels": [

@@ -1,8 +1,8 @@
 # Directories in this file are referenced from the root of the project not this folder
 # This file is intended to be called from the root like so:
-# docker build -t grafana/vali -f cmd/vali/Dockerfile.debug .
+# docker build -t ghcr.io/credativ/vali -f cmd/vali/Dockerfile.debug .
 
-FROM grafana/vali-build-image as build
+FROM ghcr.io/credativ/vali-build-image as build
 ARG GOARCH="amd64"
 COPY . /src/vali
 WORKDIR /src/vali

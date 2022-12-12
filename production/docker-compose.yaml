@@ -20,7 +20,7 @@ services:
     networks:
       - vali
 
-  grafana:
+  plutono:
     image: ghcr.io/credativ/plutono:latest
     ports:
       - "3000:3000"

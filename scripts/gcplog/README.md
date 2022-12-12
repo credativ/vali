@@ -55,7 +55,7 @@ terraform apply \
 -var="credentials_file=./permissions.json" \
 -var="zone=us-central1-b" \
 -var="region=us-central1" \
--var="project=grafanalabs-dev" \
+-var="project=plutonolabs-dev" \
 -var="logname=cloud-logs"
 ```
 

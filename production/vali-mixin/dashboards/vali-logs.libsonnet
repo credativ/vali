@@ -1,7 +1,7 @@
 local valiLogs = (import './dashboard-vali-logs.json');
 
 {
-  grafanaDashboards+: {
+  plutonoDashboards+: {
     local dashboards = self,
 
     'vali-logs.json': {

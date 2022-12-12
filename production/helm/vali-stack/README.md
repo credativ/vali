@@ -45,22 +45,22 @@ $ helm upgrade --install vali vali/vali-stack \
     --set fluent-bit.enabled=true,valitail.enabled=false
 ```
 
-## Deploy Grafana to your cluster
+## Deploy Plutono to your cluster
 
-The chart vali-stack contains a pre-configured Grafana, simply use `--set grafana.enabled=true`
+The chart vali-stack contains a pre-configured Plutono, simply use `--set plutono.enabled=true`
 
-To get the admin password for the Grafana pod, run the following command:
+To get the admin password for the Plutono pod, run the following command:
 
 ```bash
-$ kubectl get secret --namespace <YOUR-NAMESPACE> vali-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+$ kubectl get secret --namespace <YOUR-NAMESPACE> vali-plutono -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
-To access the Grafana UI, run the following command:
+To access the Plutono UI, run the following command:
 
 ```bash
-$ kubectl port-forward --namespace <YOUR-NAMESPACE> service/vali-grafana 3000:80
+$ kubectl port-forward --namespace <YOUR-NAMESPACE> service/vali-plutono 3000:80
 ```
 
 Navigate to http://localhost:3000 and login with `admin` and the password output above.
-Then follow the [instructions for adding the vali datasource](/docs/getting-started/grafana.md), using the URL `http://vali:3100/`.
+Then follow the [instructions for adding the vali datasource](/docs/getting-started/plutono.md), using the URL `http://vali:3100/`.
 

@@ -33,20 +33,20 @@ level=info ts=2019-12-12T13:00:02.417Z caller=head.go:596 component=tsdb msg="he
 level=info ts=2019-12-12T13:00:02.291Z caller=head.go:596 component=tsdb msg="head GC completed" duration=126.278558ms
 level=info ts=2019-12-12T13:00:02.048Z caller=compact.go:496 component=tsdb msg="write block" mint=1576144800000 maxt=1576152000000 ulid=01DVX33N5W86CWJJVRPAVXJRWJ duration=1.987867109s
 level=info ts=2019-12-12T13:00:01.914Z caller=compact.go:496 component=tsdb msg="write block" mint=1576144800000 maxt=1576152000000 ulid=01DVX33N5SMVPB1TMD9J1M8GGK duration=1.856432758s
-level=info ts=2019-12-12T12:58:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-12T12:52:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-12T12:58:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-12T12:52:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-12T11:00:05.320Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=1031 last=1033 duration=2.999621843s
 level=info ts=2019-12-12T11:00:05.315Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=1031 last=1033 duration=2.962560692s
 level=info ts=2019-12-12T11:00:02.352Z caller=head.go:596 component=tsdb msg="head GC completed" duration=131.600701ms
 level=info ts=2019-12-12T11:00:02.321Z caller=head.go:596 component=tsdb msg="head GC completed" duration=134.547131ms
 level=info ts=2019-12-12T11:00:01.975Z caller=compact.go:496 component=tsdb msg="write block" mint=1576137600000 maxt=1576144800000 ulid=01DVWW7XY69Y4YT09HR0RSR8KY duration=1.905948839s
 level=info ts=2019-12-12T11:00:01.889Z caller=compact.go:496 component=tsdb msg="write block" mint=1576137600000 maxt=1576144800000 ulid=01DVWW7XXX75GHA6ZDTD170CSZ duration=1.828298188s
-level=info ts=2019-12-12T10:55:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-12T10:49:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-12T10:33:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-12T10:25:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-12T10:21:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-12T10:14:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-12T10:55:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-12T10:49:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-12T10:33:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-12T10:25:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-12T10:21:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-12T10:14:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-12T09:00:16.465Z caller=compact.go:441 component=tsdb msg="compact blocks" count=3 mint=1576065600000 maxt=1576130400000 ulid=01DVWNCFJRNW4RP8C56D4QNRXH sources="[01DVVC60FYTRXZ9457XT10Y7AH 01DVW0S6A5HFTYBYD34SGAZJSR 01DVWNCC9SYJDQP0Y2RXK8XJC9]" duration=7.289011992s
 level=info ts=2019-12-12T09:00:15.812Z caller=compact.go:441 component=tsdb msg="compact blocks" count=3 mint=1576065600000 maxt=1576130400000 ulid=01DVWNCF9JNSMSKZHW8STXQARA sources="[01DVVC60DBGMXD5DXR6Y5XWNXF 01DVW0S67R7JFBFTFWMNVS8YR3 01DVWNCC599NDRZWRRSZF4XGHF]" duration=6.930550254s
 level=info ts=2019-12-12T09:00:08.717Z caller=compact.go:441 component=tsdb msg="compact blocks" count=3 mint=1576108800000 maxt=1576130400000 ulid=01DVWNCC9SYJDQP0Y2RXK8XJC9 sources="[01DVW0S0XW63CVRA3EPRSC8NWQ 01DVW7MR5W18322RVFY6WM9GR2 01DVWEGFDW0C09KSCRQ2F8DGN3]" duration=2.900180235s
@@ -57,10 +57,10 @@ level=info ts=2019-12-12T09:00:02.606Z caller=head.go:596 component=tsdb msg="he
 level=info ts=2019-12-12T09:00:02.461Z caller=head.go:596 component=tsdb msg="head GC completed" duration=127.770206ms
 level=info ts=2019-12-12T09:00:01.995Z caller=compact.go:496 component=tsdb msg="write block" mint=1576130400000 maxt=1576137600000 ulid=01DVWNC6NWY1A60AZV3Z6DGS65 duration=1.934602237s
 level=info ts=2019-12-12T09:00:01.960Z caller=compact.go:496 component=tsdb msg="write block" mint=1576130400000 maxt=1576137600000 ulid=01DVWNC6NSPJRCSBZ4QD3SXS66 duration=1.902822647s
-level=info ts=2019-12-12T08:59:54.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-12T08:54:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-12T08:12:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-12T08:05:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-12T08:59:54.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-12T08:54:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-12T08:12:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-12T08:05:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-12T07:00:05.421Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=1025 last=1027 duration=3.037037204s
 level=info ts=2019-12-12T07:00:05.263Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=1025 last=1027 duration=2.984857831s
 level=info ts=2019-12-12T07:00:02.383Z caller=head.go:596 component=tsdb msg="head GC completed" duration=126.79721ms
@@ -73,10 +73,10 @@ level=info ts=2019-12-12T05:00:02.309Z caller=head.go:596 component=tsdb msg="he
 level=info ts=2019-12-12T05:00:02.289Z caller=head.go:596 component=tsdb msg="head GC completed" duration=145.150847ms
 level=info ts=2019-12-12T05:00:01.939Z caller=compact.go:496 component=tsdb msg="write block" mint=1576116000000 maxt=1576123200000 ulid=01DVW7MR5ZN3K38ZHBJ243HDZJ duration=1.875204968s
 level=info ts=2019-12-12T05:00:01.813Z caller=compact.go:496 component=tsdb msg="write block" mint=1576116000000 maxt=1576123200000 ulid=01DVW7MR5W18322RVFY6WM9GR2 duration=1.753345795s
-level=info ts=2019-12-12T04:38:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-12T04:33:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-12T04:00:54.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-12T03:56:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-12T04:38:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-12T04:33:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-12T04:00:54.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-12T03:56:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-12T03:00:08.433Z caller=compact.go:441 component=tsdb msg="compact blocks" count=3 mint=1576087200000 maxt=1576108800000 ulid=01DVW0S6A5HFTYBYD34SGAZJSR sources="[01DVVC5V5WESMMH77FZVCJ80Q8 01DVVK1JDWNVFGWS4JPY2K4CAS 01DVVSX9NWR5V8SSJAPKQ2TCTH]" duration=2.860812672s
 level=info ts=2019-12-12T03:00:08.279Z caller=compact.go:441 component=tsdb msg="compact blocks" count=3 mint=1576087200000 maxt=1576108800000 ulid=01DVW0S67R7JFBFTFWMNVS8YR3 sources="[01DVVC5V6145SMRFE0WR0P3YTQ 01DVVK1JE1SSYY4EKS4HAT4SK3 01DVVSX9NRE3DWK67A2J17BE0T]" duration=2.782760638s
 level=info ts=2019-12-12T03:00:05.372Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=1019 last=1021 duration=2.990754756s
@@ -85,8 +85,8 @@ level=info ts=2019-12-12T03:00:02.381Z caller=head.go:596 component=tsdb msg="he
 level=info ts=2019-12-12T03:00:02.282Z caller=head.go:596 component=tsdb msg="head GC completed" duration=133.138336ms
 level=info ts=2019-12-12T03:00:01.987Z caller=compact.go:496 component=tsdb msg="write block" mint=1576108800000 maxt=1576116000000 ulid=01DVW0S0XW63CVRA3EPRSC8NWQ duration=1.927367458s
 level=info ts=2019-12-12T03:00:01.906Z caller=compact.go:496 component=tsdb msg="write block" mint=1576108800000 maxt=1576116000000 ulid=01DVW0S0XS1SQQQK3CQYCHN9HV duration=1.84874308s
-level=info ts=2019-12-12T02:39:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-12T02:33:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-12T02:39:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-12T02:33:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-12T01:00:05.500Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=1016 last=1018 duration=3.027246961s
 level=info ts=2019-12-12T01:00:05.265Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=1016 last=1018 duration=2.989822576s
 level=info ts=2019-12-12T01:00:02.473Z caller=head.go:596 component=tsdb msg="head GC completed" duration=124.134851ms
@@ -113,8 +113,8 @@ level=info ts=2019-12-11T19:00:02.244Z caller=head.go:596 component=tsdb msg="he
 level=info ts=2019-12-11T19:00:02.219Z caller=head.go:596 component=tsdb msg="head GC completed" duration=127.466308ms
 level=info ts=2019-12-11T19:00:01.888Z caller=compact.go:496 component=tsdb msg="write block" mint=1576080000000 maxt=1576087200000 ulid=01DVV5A3XRVMTB2E7V3MZ6RGCA duration=1.832443683s
 level=info ts=2019-12-11T19:00:01.845Z caller=compact.go:496 component=tsdb msg="write block" mint=1576080000000 maxt=1576087200000 ulid=01DVV5A3XWVRTNS7G7BBDQ9G2W duration=1.784935995s
-level=info ts=2019-12-11T18:31:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T18:24:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T18:31:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T18:24:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-11T17:00:05.233Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=1004 last=1006 duration=3.008189996s
 level=info ts=2019-12-11T17:00:05.223Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=1004 last=1006 duration=2.97892s
 level=info ts=2019-12-11T17:00:02.244Z caller=head.go:596 component=tsdb msg="head GC completed" duration=132.385042ms
@@ -131,38 +131,38 @@ level=info ts=2019-12-11T15:00:02.498Z caller=head.go:596 component=tsdb msg="he
 level=info ts=2019-12-11T15:00:02.461Z caller=head.go:596 component=tsdb msg="head GC completed" duration=129.961097ms
 level=info ts=2019-12-11T15:00:02.022Z caller=compact.go:496 component=tsdb msg="write block" mint=1576065600000 maxt=1576072800000 ulid=01DVTQJNDRV9NDCK9H2BCH04R0 duration=1.96598488s
 level=info ts=2019-12-11T15:00:01.933Z caller=compact.go:496 component=tsdb msg="write block" mint=1576065600000 maxt=1576072800000 ulid=01DVTQJNDXSY7N5V60ZX7X1C3J duration=1.871872199s
-level=info ts=2019-12-11T14:15:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T14:07:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T13:18:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T13:12:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T14:15:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T14:07:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T13:18:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T13:12:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-11T13:00:05.395Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=998 last=1000 duration=3.010358861s
 level=info ts=2019-12-11T13:00:05.249Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=998 last=1000 duration=3.032196282s
 level=info ts=2019-12-11T13:00:02.385Z caller=head.go:596 component=tsdb msg="head GC completed" duration=131.568186ms
 level=info ts=2019-12-11T13:00:02.217Z caller=head.go:596 component=tsdb msg="head GC completed" duration=136.017788ms
 level=info ts=2019-12-11T13:00:02.021Z caller=compact.go:496 component=tsdb msg="write block" mint=1576058400000 maxt=1576065600000 ulid=01DVTGPY5XGARMV8B8VBWQ23W3 duration=1.959903s
 level=info ts=2019-12-11T13:00:01.865Z caller=compact.go:496 component=tsdb msg="write block" mint=1576058400000 maxt=1576065600000 ulid=01DVTGPY5WTBSSEQ37JQ2VPCTQ duration=1.805149859s
-level=info ts=2019-12-11T11:46:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T11:39:44.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T11:35:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T11:26:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T11:15:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T11:06:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T11:01:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T11:46:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T11:39:44.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T11:35:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T11:26:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T11:15:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T11:06:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T11:01:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
 level=info ts=2019-12-11T11:00:05.591Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=995 last=997 duration=3.063684941s
 level=info ts=2019-12-11T11:00:05.297Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=995 last=997 duration=3.051047495s
 level=info ts=2019-12-11T11:00:02.527Z caller=head.go:596 component=tsdb msg="head GC completed" duration=131.530749ms
 level=info ts=2019-12-11T11:00:02.246Z caller=head.go:596 component=tsdb msg="head GC completed" duration=123.08975ms
 level=info ts=2019-12-11T11:00:02.096Z caller=compact.go:496 component=tsdb msg="write block" mint=1576051200000 maxt=1576058400000 ulid=01DVT9V6Y21E8YXRKNGA9RPB7D duration=2.029825916s
 level=info ts=2019-12-11T11:00:01.819Z caller=compact.go:496 component=tsdb msg="write block" mint=1576051200000 maxt=1576058400000 ulid=01DVT9V6XW9ENV15NHKR20T9B4 duration=1.7583013s
-level=info ts=2019-12-11T10:54:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T10:46:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T10:39:44.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T10:34:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T10:26:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T10:18:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T10:12:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T09:56:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T09:48:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T10:54:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T10:46:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T10:39:44.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T10:34:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T10:26:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T10:18:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T10:12:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T09:56:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T09:48:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-11T09:00:08.553Z caller=compact.go:441 component=tsdb msg="compact blocks" count=3 mint=1576022400000 maxt=1576044000000 ulid=01DVT2ZN4RB65KG77XPHPNVSAM sources="[01DVSEC9XXK1J3B0186KYQECZT 01DVSN815STR0D0B8245RWNF13 01DVSW3RDRKTJVEZWGYE07XBXE]" duration=2.896352595s
 level=info ts=2019-12-11T09:00:08.407Z caller=compact.go:441 component=tsdb msg="compact blocks" count=3 mint=1576022400000 maxt=1576044000000 ulid=01DVT2ZN0DMXXJJDHKS0M8JWMS sources="[01DVSEC9XW0W8V42SPRR0YMM0X 01DVSN815W8YTW3DPQTJVRNTS4 01DVSW3RDWE1WHSM8AEW0ARA3S]" duration=2.890101974s
 level=info ts=2019-12-11T09:00:05.444Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=992 last=994 duration=3.058184317s
@@ -177,29 +177,29 @@ level=info ts=2019-12-11T07:00:02.427Z caller=head.go:596 component=tsdb msg="he
 level=info ts=2019-12-11T07:00:02.293Z caller=head.go:596 component=tsdb msg="head GC completed" duration=121.051415ms
 level=info ts=2019-12-11T07:00:02.056Z caller=compact.go:496 component=tsdb msg="write block" mint=1576036800000 maxt=1576044000000 ulid=01DVSW3RDWE1WHSM8AEW0ARA3S duration=1.995603695s
 level=info ts=2019-12-11T07:00:01.941Z caller=compact.go:496 component=tsdb msg="write block" mint=1576036800000 maxt=1576044000000 ulid=01DVSW3RDRKTJVEZWGYE07XBXE duration=1.885680378s
-level=info ts=2019-12-11T06:20:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T06:14:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T05:02:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=5 to=4
-level=info ts=2019-12-11T05:01:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=5
+level=info ts=2019-12-11T06:20:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T06:14:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T05:02:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=5 to=4
+level=info ts=2019-12-11T05:01:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=5
 level=info ts=2019-12-11T05:00:05.488Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=986 last=988 duration=3.043360624s
 level=info ts=2019-12-11T05:00:05.288Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=986 last=988 duration=2.998209654s
 level=info ts=2019-12-11T05:00:02.445Z caller=head.go:596 component=tsdb msg="head GC completed" duration=130.642245ms
 level=info ts=2019-12-11T05:00:02.290Z caller=head.go:596 component=tsdb msg="head GC completed" duration=128.363621ms
 level=info ts=2019-12-11T05:00:02.066Z caller=compact.go:496 component=tsdb msg="write block" mint=1576029600000 maxt=1576036800000 ulid=01DVSN815STR0D0B8245RWNF13 duration=2.008689142s
 level=info ts=2019-12-11T05:00:01.938Z caller=compact.go:496 component=tsdb msg="write block" mint=1576029600000 maxt=1576036800000 ulid=01DVSN815W8YTW3DPQTJVRNTS4 duration=1.877943808s
-level=info ts=2019-12-11T04:55:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T04:35:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T04:28:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T04:15:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T04:07:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T04:03:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T03:57:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T03:52:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T03:43:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T03:32:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T03:24:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T03:19:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T03:12:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T04:55:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T04:35:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T04:28:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T04:15:24.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T04:07:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T04:03:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T03:57:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T03:52:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T03:43:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T03:32:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T03:24:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T03:19:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T03:12:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-11T03:00:08.325Z caller=compact.go:441 component=tsdb msg="compact blocks" count=3 mint=1576000800000 maxt=1576022400000 ulid=01DVSECF6Q4JXFDGMFQB3J1Z9E sources="[01DVRSS45W7DXE05RGBYGH58PY 01DVS0MVDWGK47AZ3HY5GQEMK4 01DVS7GJNW7BF3R6KK7GW291R0]" duration=2.861556831s
 level=info ts=2019-12-11T03:00:08.255Z caller=compact.go:441 component=tsdb msg="compact blocks" count=3 mint=1576000800000 maxt=1576022400000 ulid=01DVSECF6J4NZRNHABZ2MSG7V7 sources="[01DVRSS4632MEB6SYC6SB7DTGE 01DVS0MVDR5Z67QJD6T94CXHRA 01DVS7GJNSYRFT48H9CDRP82YV]" duration=2.796902205s
 level=info ts=2019-12-11T03:00:05.253Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=983 last=985 duration=3.004398083s
@@ -208,22 +208,22 @@ level=info ts=2019-12-11T03:00:02.248Z caller=head.go:596 component=tsdb msg="he
 level=info ts=2019-12-11T03:00:02.221Z caller=head.go:596 component=tsdb msg="head GC completed" duration=132.662929ms
 level=info ts=2019-12-11T03:00:01.903Z caller=compact.go:496 component=tsdb msg="write block" mint=1576022400000 maxt=1576029600000 ulid=01DVSEC9XW0W8V42SPRR0YMM0X duration=1.842688968s
 level=info ts=2019-12-11T03:00:01.847Z caller=compact.go:496 component=tsdb msg="write block" mint=1576022400000 maxt=1576029600000 ulid=01DVSEC9XXK1J3B0186KYQECZT duration=1.78558499s
-level=info ts=2019-12-11T02:18:44.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=5 to=4
-level=info ts=2019-12-11T02:18:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=5
-level=info ts=2019-12-11T02:11:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
-level=info ts=2019-12-11T01:59:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-11T01:52:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T02:18:44.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=5 to=4
+level=info ts=2019-12-11T02:18:04.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=5
+level=info ts=2019-12-11T02:11:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-11T01:59:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-11T01:52:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-11T01:00:05.272Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=980 last=982 duration=3.025045534s
 level=info ts=2019-12-11T01:00:05.189Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=980 last=982 duration=2.992866718s
 level=info ts=2019-12-11T01:00:02.247Z caller=head.go:596 component=tsdb msg="head GC completed" duration=123.561834ms
 level=info ts=2019-12-11T01:00:02.196Z caller=head.go:596 component=tsdb msg="head GC completed" duration=108.589195ms
 level=info ts=2019-12-11T01:00:01.905Z caller=compact.go:496 component=tsdb msg="write block" mint=1576015200000 maxt=1576022400000 ulid=01DVS7GJNW7BF3R6KK7GW291R0 duration=1.844635186s
 level=info ts=2019-12-11T01:00:01.866Z caller=compact.go:496 component=tsdb msg="write block" mint=1576015200000 maxt=1576022400000 ulid=01DVS7GJNSYRFT48H9CDRP82YV duration=1.809175377s
-level=info ts=2019-12-11T00:31:25.063Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=7 to=5
-level=info ts=2019-12-11T00:30:25.063Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=10 to=7
-level=info ts=2019-12-11T00:29:55.063Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=14 to=10
-level=info ts=2019-12-11T00:29:25.064Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=85 to=14
-level=info ts=2019-12-11T00:29:15.063Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=5 to=85
+level=info ts=2019-12-11T00:31:25.063Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=7 to=5
+level=info ts=2019-12-11T00:30:25.063Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=10 to=7
+level=info ts=2019-12-11T00:29:55.063Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=14 to=10
+level=info ts=2019-12-11T00:29:25.064Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=85 to=14
+level=info ts=2019-12-11T00:29:15.063Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=5 to=85
 level=info ts=2019-12-10T23:00:05.385Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=977 last=979 duration=3.157877457s
 level=info ts=2019-12-10T23:00:05.136Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=977 last=979 duration=3.013728541s
 level=info ts=2019-12-10T23:00:02.227Z caller=head.go:596 component=tsdb msg="head GC completed" duration=133.349607ms
@@ -240,8 +240,8 @@ level=info ts=2019-12-10T21:00:02.330Z caller=head.go:596 component=tsdb msg="he
 level=info ts=2019-12-10T21:00:02.249Z caller=head.go:596 component=tsdb msg="head GC completed" duration=108.272575ms
 level=info ts=2019-12-10T21:00:01.804Z caller=compact.go:496 component=tsdb msg="write block" mint=1576000800000 maxt=1576008000000 ulid=01DVRSS45W7DXE05RGBYGH58PY duration=1.743999568s
 level=info ts=2019-12-10T21:00:01.774Z caller=compact.go:496 component=tsdb msg="write block" mint=1576000800000 maxt=1576008000000 ulid=01DVRSS4632MEB6SYC6SB7DTGE duration=1.706876662s
-level=info ts=2019-12-10T20:35:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=3 to=4
-level=info ts=2019-12-10T20:29:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops-us-east4.grafana.net/api/prom/push msg="Remote storage resharding" from=4 to=3
+level=info ts=2019-12-10T20:35:34.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=3 to=4
+level=info ts=2019-12-10T20:29:14.793Z caller=queue_manager.go:559 component=remote queue=1:https://ops.example.com/api/prom/push msg="Remote storage resharding" from=4 to=3
 level=info ts=2019-12-10T19:00:06.012Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=971 last=973 duration=3.248527735s
 level=info ts=2019-12-10T19:00:05.641Z caller=head.go:666 component=tsdb msg="WAL checkpoint complete" first=971 last=973 duration=3.1047498s
 level=info ts=2019-12-10T19:00:02.763Z caller=head.go:596 component=tsdb msg="head GC completed" duration=210.397069ms

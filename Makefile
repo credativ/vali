@@ -42,7 +42,7 @@ BUILD_IN_CONTAINER ?= true
 BUILD_IMAGE_VERSION := 0.12.0
 
 # Docker image info
-IMAGE_PREFIX ?= grafana
+IMAGE_PREFIX ?= ghrc.io/credativ
 
 IMAGE_TAG := $(shell ./tools/image-tag)
 
@@ -282,8 +282,8 @@ clean:
 	rm -rf .cache
 	rm -rf cmd/docker-driver/rootfs
 	rm -rf dist/
-	rm -rf cmd/fluent-bit/out_grafana_vali.h
-	rm -rf cmd/fluent-bit/out_grafana_vali.so
+	rm -rf cmd/fluent-bit/out_plutono_vali.h
+	rm -rf cmd/fluent-bit/out_plutono_vali.so
 	rm -rf cmd/migrate/migrate
 	go clean $(MOD_FLAG) ./...
 
@@ -345,7 +345,7 @@ endif
 #################
 
 # optionally set the tag or the arch suffix (-arm64)
-VALI_DOCKER_DRIVER ?= "grafana/vali-docker-driver"
+VALI_DOCKER_DRIVER ?= "ghcr.io/credativ/vali-docker-driver"
 PLUGIN_TAG ?= $(IMAGE_TAG)
 PLUGIN_ARCH ?=
 
@@ -380,7 +380,7 @@ docker-driver-clean:
 # fluent-bit plugin #
 #####################
 fluent-bit-plugin:
-	go build $(DYN_GO_FLAGS) -buildmode=c-shared -o cmd/fluent-bit/out_grafana_vali.so ./cmd/fluent-bit/
+	go build $(DYN_GO_FLAGS) -buildmode=c-shared -o cmd/fluent-bit/out_plutono_vali.so ./cmd/fluent-bit/
 
 fluent-bit-image:
 	$(SUDO) docker build -t $(IMAGE_PREFIX)/fluent-bit-plugin-vali:$(IMAGE_TAG) -f cmd/fluent-bit/Dockerfile .
@@ -455,7 +455,7 @@ print-images:
 	$(info $(patsubst %,%:$(IMAGE_TAG),$(IMAGE_NAMES)))
 	@echo > /dev/null
 
-IMAGE_NAMES := grafana/vali ghcr.io/credativ/valitail grafana/vali-canary
+IMAGE_NAMES := ghcr.io/credativ/vali ghcr.io/credativ/valitail ghcr.io/credativ/vali-canary
 
 # push(app, optional tag)
 # pushes the app, optionally tagging it differently before

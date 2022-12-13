@@ -259,7 +259,7 @@ publish: dist
 ########
 
 lint:
-	GO111MODULE=on GOGC=10 golangci-lint run -v $(GOLANGCI_ARG)
+	GO111MODULE=on GOGC=10 golangci-lint run -v --timeout 30m $(GOLANGCI_ARG)
 	faillint -paths "sync/atomic=go.uber.org/atomic" ./...
 
 ########

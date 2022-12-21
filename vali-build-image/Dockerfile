@@ -15,12 +15,6 @@ RUN apk add --no-cache curl && \
 FROM alpine:edge as docker
 RUN apk add --no-cache docker-cli
 
-# TODO this should be fixed to download and extract the specific release binary from github as we do for golangci and helm above
-# however we need a commit which hasn't been released yet: https://github.com/drone/drone-cli/commit/1fad337d74ca0ecf420993d9d2d7229a1c99f054
-# Read the comment below regarding GO111MODULE=on and why it is necessary
-FROM golang:1.15.3 as drone
-RUN GO111MODULE=on go get github.com/drone/drone-cli/drone@1fad337d74ca0ecf420993d9d2d7229a1c99f054
-
 # Install faillint used to lint go imports in CI.
 # This collisions with the version of go tools used in the base image, thus we install it in its own image and copy it over.
 # Error:
@@ -41,7 +35,6 @@ RUN apt-get update && \
 COPY --from=docker /usr/bin/docker /usr/bin/docker
 COPY --from=helm /usr/bin/helm /usr/bin/helm
 COPY --from=golangci /bin/golangci-lint /usr/local/bin
-COPY --from=drone /go/bin/drone /usr/bin/drone
 COPY --from=faillint /go/bin/faillint /usr/bin/faillint
 
 # Install some necessary dependencies.

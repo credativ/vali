@@ -242,7 +242,7 @@ publish: dist
 ########
 
 lint:
-	GO111MODULE=on GOGC=10 golangci-lint run -v --timeout 30m $(GOLANGCI_ARG)
+	GOGC=10 golangci-lint run -v --timeout 30m $(GOLANGCI_ARG)
 	faillint -paths "sync/atomic=go.uber.org/atomic" ./...
 
 ########
@@ -545,10 +545,10 @@ ifeq ($(BUILD_IN_CONTAINER),true)
 		-v $(shell pwd):/src/vali$(MOUNT_FLAGS) \
 		$(IMAGE_PREFIX)/vali-build-image:$(BUILD_IMAGE_VERSION) $@;
 else
-	GO111MODULE=on GOPROXY=https://proxy.golang.org go mod download
-	GO111MODULE=on GOPROXY=https://proxy.golang.org go mod verify
-	GO111MODULE=on GOPROXY=https://proxy.golang.org go mod tidy
-	GO111MODULE=on GOPROXY=https://proxy.golang.org go mod vendor
+	GOPROXY=https://proxy.golang.org go mod download
+	GOPROXY=https://proxy.golang.org go mod verify
+	GOPROXY=https://proxy.golang.org go mod tidy
+	GOPROXY=https://proxy.golang.org go mod vendor
 endif
 	@git diff --exit-code -- go.sum go.mod vendor/
 

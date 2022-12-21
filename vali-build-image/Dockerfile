@@ -21,7 +21,7 @@ RUN apk add --no-cache docker-cli
 #	github.com/fatih/faillint@v1.5.0 requires golang.org/x/tools@v0.0.0-20200207224406-61798d64f025
 #   (not golang.org/x/tools@v0.0.0-20190918214920-58d531046acd from golang.org/x/tools/cmd/goyacc@58d531046acdc757f177387bc1725bfa79895d69)
 FROM golang:1.19.4 as faillint
-RUN GO111MODULE=on go get github.com/fatih/faillint@v1.5.0
+RUN go install github.com/fatih/faillint@v1.5.0
 
 FROM golang:1.19.4-buster
 RUN apt-get update && \
@@ -38,20 +38,14 @@ COPY --from=golangci /bin/golangci-lint /usr/local/bin
 COPY --from=faillint /go/bin/faillint /usr/bin/faillint
 
 # Install some necessary dependencies.
-# Forcing GO111MODULE=on is required to specify dependencies at specific versions using the go mod notation.
-# If we don't force this, Go is going to default to GOPATH mode as we do not have an active project or go.mod
-# file for it to detect and switch to Go Modules automatically.
-# It's possible this can be revisited in newer versions of Go if the behavior around GOPATH vs GO111MODULES changes
-RUN GO111MODULE=on go get \
-    github.com/golang/protobuf/protoc-gen-go@v1.3.0 \
-    github.com/gogo/protobuf/protoc-gen-gogoslick@v1.2.1 \
-    github.com/gogo/protobuf/gogoproto@v1.2.1 \
-    github.com/go-delve/delve/cmd/dlv@v1.3.2 \
+RUN go install github.com/golang/protobuf/protoc-gen-go@v1.3.0 && \
+    go install github.com/gogo/protobuf/protoc-gen-gogoslick@v1.2.1 && \
+    go install github.com/go-delve/delve/cmd/dlv@v1.3.2 && \
     # Due to the lack of a proper release tag, we use the commit hash of
     # https://github.com/golang/tools/releases v0.1.7
-    golang.org/x/tools/cmd/goyacc@58d531046acdc757f177387bc1725bfa79895d69 \
-    github.com/mitchellh/gox \
-    github.com/tcnksm/ghr@v0.13 && \
+    go install golang.org/x/tools/cmd/goyacc@58d531046acdc757f177387bc1725bfa79895d69 && \
+    go install github.com/mitchellh/gox@v1.0.1 && \
+    go install github.com/tcnksm/ghr@v0.13 && \
     rm -rf /go/pkg /go/src
 ENV GOCACHE=/go/cache
 

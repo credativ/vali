@@ -29,12 +29,9 @@ jobs:
 
       - name: Install Go dependencies
         run: |
-          cd /tmp
-          GO111MODULE=on go get \
-            github.com/golang/protobuf/protoc-gen-go@v1.3.0 \
-            github.com/gogo/protobuf/protoc-gen-gogoslick@v1.2.1 \
-            github.com/gogo/protobuf/gogoproto@v1.2.1 \
-            github.com/fatih/faillint@v1.5.0
+          go install github.com/golang/protobuf/protoc-gen-go@v1.3.0
+          go install github.com/gogo/protobuf/protoc-gen-gogoslick@v1.2.1
+          go install github.com/fatih/faillint@v1.5.0
 
       - name: Test
         run: make BUILD_IN_CONTAINER=false test

@@ -20,10 +20,10 @@ RUN apk add --no-cache docker-cli
 # Error:
 #	github.com/fatih/faillint@v1.5.0 requires golang.org/x/tools@v0.0.0-20200207224406-61798d64f025
 #   (not golang.org/x/tools@v0.0.0-20190918214920-58d531046acd from golang.org/x/tools/cmd/goyacc@58d531046acdc757f177387bc1725bfa79895d69)
-FROM golang:1.15.3 as faillint
+FROM golang:1.19.4 as faillint
 RUN GO111MODULE=on go get github.com/fatih/faillint@v1.5.0
 
-FROM golang:1.15.3-buster
+FROM golang:1.19.4-buster
 RUN apt-get update && \
     apt-get install -qy \
     musl gnupg \

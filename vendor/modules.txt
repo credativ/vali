@@ -579,7 +579,7 @@ github.com/jonboulle/clockwork
 github.com/joncrlsn/dque
 # github.com/jpillora/backoff v1.0.0
 github.com/jpillora/backoff
-# github.com/json-iterator/go v1.1.10
+# github.com/json-iterator/go v1.1.12
 ## explicit
 github.com/json-iterator/go
 # github.com/jstemmer/go-junit-report v0.9.1
@@ -652,7 +652,7 @@ github.com/moby/term
 github.com/moby/term/windows
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
 github.com/modern-go/concurrent
-# github.com/modern-go/reflect2 v1.0.1
+# github.com/modern-go/reflect2 v1.0.2
 ## explicit
 github.com/modern-go/reflect2
 # github.com/morikuni/aec v1.0.0

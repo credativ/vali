@@ -1,6 +1,6 @@
 <a href="https://goreportcard.com/report/github.com/credativ/vali"><img src="https://goreportcard.com/badge/github.com/credativ/vali" alt="Go Report Card" /></a>
 
-# Vali: like Prometheus, but for logs.
+# Vali: like Prometheus, but for logs
 
 Vali is a fork of [Loki](https://github.com/grafana/loki/) 2.2.1 under the Apache 2.0 License.
 It is currently limited to maintenance and security updates.
@@ -24,6 +24,19 @@ A Vali-based logging stack consists of 3 components:
 
 Vali is like Prometheus, but for logs: we prefer a multidimensional label-based approach to indexing, and want a single-binary, easy to operate system with no dependencies.
 Vali differs from Prometheus by focusing on logs instead of metrics, and delivering logs via push, instead of pull.
+
+
+## About this fork
+
+Assuming that you want to switch from using Loki to Vali, you may need to change the name of images, executables, configurations files, their paths, and in some cases configuration items.
+
+- The container image path changes from `[docker.io/]grafana/loki` to `ghcr.io/credativ/vali:<version>`. Use version `main` for the latest development snapshot.
+- The container image path for promtail changes from `[docker.io/]grafana/promtail` to `ghcr.io/credativ/valitail:<version>`.
+- Occurences of `loki` in any letter case are replaced by `vali` in the same case.
+- Occurences of `grafana` in any letter case are replaced by `plutono` in the same case.
+- Occurences of `promtail` in any letter case are replaced by `valitail` in the same case. (This includes the executable and image names.)
+
+Vali is not compatible with Grafana due to internal renaming. See [Plutono](https://github.com/credativ/plutono) for the accompanying fork of Grafana.
 
 
 ### Building from source

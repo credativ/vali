@@ -71,15 +71,6 @@ DYN_DEBUG_GO_FLAGS := -gcflags "all=-N -l" -ldflags "$(GO_LDFLAGS)" -tags netgo 
 # Docker mount flag, ignored on native docker host. see (https://docs.docker.com/docker-for-mac/osxfs-caching/#delegated)
 MOUNT_FLAGS := :delegated
 
-NETGO_CHECK = @strings $@ | grep cgo_stub\\\.go >/dev/null || { \
-       rm $@; \
-       echo "\nYour go standard library was built without the 'netgo' build tag."; \
-       echo "To fix that, run"; \
-       echo "    sudo go clean -i net"; \
-       echo "    sudo go install -tags netgo std"; \
-       false; \
-}
-
 # Protobuf files
 PROTO_DEFS := $(shell find . $(DONT_FIND) -type f -name '*.proto' -print)
 PROTO_GOS := $(patsubst %.proto,%.pb.go,$(PROTO_DEFS))
@@ -155,7 +146,6 @@ logcli-image:
 
 cmd/logcli/logcli: $(APP_GO_FILES) cmd/logcli/main.go
 	CGO_ENABLED=0 go build $(GO_FLAGS) -o $@ ./$(@D)
-	$(NETGO_CHECK)
 
 ########
 # Vali #
@@ -166,11 +156,9 @@ vali-debug: protos yacc cmd/vali/vali-debug
 
 cmd/vali/vali: $(APP_GO_FILES) cmd/vali/main.go
 	CGO_ENABLED=0 go build $(GO_FLAGS) -o $@ ./$(@D)
-	$(NETGO_CHECK)
 
 cmd/vali/vali-debug: $(APP_GO_FILES) cmd/vali/main.go
 	CGO_ENABLED=0 go build $(DEBUG_GO_FLAGS) -o $@ ./$(@D)
-	$(NETGO_CHECK)
 
 ###############
 # Vali-Canary #
@@ -180,7 +168,6 @@ vali-canary: protos yacc cmd/vali-canary/vali-canary
 
 cmd/vali-canary/vali-canary: $(APP_GO_FILES) cmd/vali-canary/main.go
 	CGO_ENABLED=0 go build $(GO_FLAGS) -o $@ ./$(@D)
-	$(NETGO_CHECK)
 
 #################
 # Vali-QueryTee #
@@ -188,7 +175,6 @@ cmd/vali-canary/vali-canary: $(APP_GO_FILES) cmd/vali-canary/main.go
 
 vali-querytee: $(APP_GO_FILES) cmd/querytee/main.go
 	CGO_ENABLED=0 go build $(GO_FLAGS) -o ./cmd/querytee/$@ ./cmd/querytee/
-	$(NETGO_CHECK)
 
 ############
 # Valitail #
@@ -220,11 +206,9 @@ $(VALITAIL_GENERATED_FILE): $(VALITAIL_UI_FILES)
 
 cmd/valitail/valitail: $(APP_GO_FILES) $(VALITAIL_GENERATED_FILE) cmd/valitail/main.go
 	CGO_ENABLED=$(VALITAIL_CGO) go build $(VALITAIL_GO_FLAGS) -o $@ ./$(@D)
-	$(NETGO_CHECK)
 
 cmd/valitail/valitail-debug: $(APP_GO_FILES) pkg/valitail/server/ui/assets_vfsdata.go cmd/valitail/main.go
 	CGO_ENABLED=$(VALITAIL_CGO) go build $(VALITAIL_DEBUG_GO_FLAGS) -o $@ ./$(@D)
-	$(NETGO_CHECK)
 
 ###############
 # Migrate #
@@ -234,7 +218,6 @@ migrate: cmd/migrate/migrate
 
 cmd/migrate/migrate: $(APP_GO_FILES) cmd/migrate/main.go
 	CGO_ENABLED=0 go build $(GO_FLAGS) -o $@ ./$(@D)
-	$(NETGO_CHECK)
 
 #############
 # Releasing #
@@ -361,7 +344,6 @@ docker-driver: docker-driver-clean
 
 cmd/docker-driver/docker-driver: $(APP_GO_FILES)
 	CGO_ENABLED=0 go build $(GO_FLAGS) -o $@ ./$(@D)
-	$(NETGO_CHECK)
 
 docker-driver-push: docker-driver
 	docker plugin push $(VALI_DOCKER_DRIVER):$(PLUGIN_TAG)$(PLUGIN_ARCH)

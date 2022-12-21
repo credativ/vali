@@ -30,6 +30,7 @@ Vali differs from Prometheus by focusing on logs instead of metrics, and deliver
 
 Assuming that you want to switch from using Loki to Vali, you may need to change the name of images, executables, configurations files, their paths, and in some cases configuration items.
 
+- The container image path changes from `[docker.io/]grafana/loki` to `ghcr.io/credativ/vali:<version>`. Use version `main` for the latest development snapshot.
 - Occurences of `loki` in any letter case are replaced by `vali` in the same case.
 - Occurences of `grafana` in any letter case are replaced by `plutono` in the same case.
 - Occurences of `promtail` in any letter case are replaced by `valitail` in the same case. (This includes the executable and image names.)

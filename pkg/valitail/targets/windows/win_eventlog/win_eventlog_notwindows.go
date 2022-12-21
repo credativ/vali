@@ -19,8 +19,10 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+//go:build !windows
 // +build !windows
 
-//revive:disable-next-line:var-naming
 // Package win_eventlog Input plugin to collect Windows Event Log messages
+//
+//revive:disable-next-line:var-naming
 package win_eventlog

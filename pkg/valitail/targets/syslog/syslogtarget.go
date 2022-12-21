@@ -116,6 +116,7 @@ func (t *SyslogTarget) acceptConnections() {
 				return
 			}
 
+			// nolint:staticcheck
 			if ne, ok := err.(net.Error); ok && ne.Temporary() {
 				level.Warn(l).Log("msg", "failed to accept syslog connection", "err", err, "num_retries", backoff.NumRetries())
 				backoff.Wait()

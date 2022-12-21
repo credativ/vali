@@ -43,7 +43,7 @@ var (
 	chunkStore = getLocalStore()
 )
 
-//go test -bench=. -benchmem -memprofile memprofile.out -cpuprofile profile.out
+// go test -bench=. -benchmem -memprofile memprofile.out -cpuprofile profile.out
 func Benchmark_store_SelectLogsRegexBackward(b *testing.B) {
 	benchmarkStoreQuery(b, &logproto.QueryRequest{
 		Selector:  `{foo="bar"} |~ "fuzz"`,

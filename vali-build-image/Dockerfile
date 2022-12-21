@@ -10,7 +10,7 @@ RUN apk add --no-cache curl && \
 FROM alpine as golangci
 RUN apk add --no-cache curl && \
     cd / && \
-    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.32.2
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.50.1
 
 FROM alpine:edge as docker
 RUN apk add --no-cache docker-cli
@@ -21,7 +21,7 @@ RUN apk add --no-cache docker-cli
 #	github.com/fatih/faillint@v1.5.0 requires golang.org/x/tools@v0.0.0-20200207224406-61798d64f025
 #   (not golang.org/x/tools@v0.0.0-20190918214920-58d531046acd from golang.org/x/tools/cmd/goyacc@58d531046acdc757f177387bc1725bfa79895d69)
 FROM golang:1.19.4 as faillint
-RUN go install github.com/fatih/faillint@v1.5.0
+RUN go install github.com/fatih/faillint@v1.11.0
 
 FROM golang:1.19.4-buster
 RUN apt-get update && \

@@ -1,3 +1,9 @@
+## 2.2.2 (2023/01/10)
+
+Initial release of rebranding to Vali.
+
+Note that this includes API incompatible changes (see the README).
+
 ## 2.2.1 (2021/04/05)
 
 2.2.1 fixes several important bugs, it is recommended everyone running 2.2.0 upgrade to 2.2.1

@@ -1,4 +1,4 @@
-FROM golang:1.15.3 as build
+FROM golang:1.19.4 as build
 # TOUCH_PROTOS signifies if we should touch the compiled proto files and thus not regenerate them.
 # This is helpful when file system timestamps can't be trusted with make
 ARG TOUCH_PROTOS
@@ -6,7 +6,7 @@ COPY . /src/vali
 WORKDIR /src/vali
 RUN make clean && (if [ "${TOUCH_PROTOS}" ]; then make touch-protos; fi) && make BUILD_IN_CONTAINER=false vali
 
-FROM alpine:3.9
+FROM alpine:3.17
 
 RUN apk add --no-cache ca-certificates libcap
 
@@ -20,7 +20,7 @@ RUN mkdir -p /vali/rules && \
     chown -R vali:vali /etc/vali /vali
 
 # See https://github.com/grafana/loki/issues/1928
-RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
+RUN if ! -e /etc/nsswitch.conf; then echo 'hosts: files dns' > /etc/nsswitch.conf; fi
 
 USER vali
 EXPOSE 3100

@@ -98,7 +98,7 @@ func categorizedUsage(fs *flag.FlagSet) func() {
 			if name == "" {
 				continue
 			}
-			fmt.Fprintf(fs.Output(), " %s:\n", strings.Title(name))
+			fmt.Fprintf(fs.Output(), " %s:\n", strings.Title(name)) // nolint:staticcheck
 			for _, u := range categories[name] {
 				fmt.Fprintln(fs.Output(), u)
 			}

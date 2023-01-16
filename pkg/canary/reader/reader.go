@@ -403,7 +403,7 @@ func (r *Reader) closeAndReconnect() {
 			err := c.WriteControl(websocket.PongMessage, []byte(message), time.Now().Add(time.Second))
 			if err == websocket.ErrCloseSent {
 				return nil
-			} else if e, ok := err.(net.Error); ok && e.Temporary() {
+			} else if e, ok := err.(net.Error); ok && e.Temporary() { // nolint:staticcheck
 				return nil
 			}
 			return err

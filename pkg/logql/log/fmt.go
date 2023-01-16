@@ -31,7 +31,7 @@ var (
 		// Example: .mylabel | lower | substring 0 5
 		"lower":      strings.ToLower,
 		"upper":      strings.ToUpper,
-		"title":      strings.Title,
+		"title":      strings.Title, // nolint:staticcheck
 		"trunc":      trunc,
 		"substr":     substring,
 		"contains":   contains,

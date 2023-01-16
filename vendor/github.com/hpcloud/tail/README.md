@@ -1,5 +1,5 @@
 
-**NOTE**: This fork is currently being maintained for use in the valitail agent of the [Vali](https://github.com/credativ/vali) project.
+**NOTE**: This fork is currently being maintained for use in the promtail agent of the [Loki](https://github.com/grafana/loki) project.
 
 Use outside of that context is not tested or supported.
 

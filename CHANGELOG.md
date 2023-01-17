@@ -1,3 +1,8 @@
+## 2.2.3 (2023/01/17)
+
+* Upgrade Go to 1.19
+* Build images for arm64 in addition to amd64
+
 ## 2.2.2 (2023/01/10)
 
 Initial release of rebranding to Vali.

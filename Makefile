@@ -42,7 +42,7 @@ BUILD_IN_CONTAINER ?= true
 BUILD_IMAGE_VERSION := 0.12.0
 
 # Docker image info
-IMAGE_PREFIX ?= ghrc.io/credativ
+IMAGE_PREFIX ?= ghcr.io/credativ
 
 IMAGE_TAG := $(shell ./tools/image-tag)
 

@@ -1831,6 +1831,7 @@ func TestStepEvaluator_Error(t *testing.T) {
 		},
 	}
 
+	//nolint:govet // Fixing loopclosure breaks test
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()

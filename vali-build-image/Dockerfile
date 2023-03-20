@@ -10,7 +10,7 @@ RUN apk add --no-cache curl && \
 FROM alpine as golangci
 RUN apk add --no-cache curl && \
     cd / && \
-    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.50.1
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.52.0
 
 FROM alpine:edge as docker
 RUN apk add --no-cache docker-cli

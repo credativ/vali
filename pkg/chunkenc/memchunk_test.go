@@ -64,6 +64,7 @@ func TestBlocksInclusive(t *testing.T) {
 
 func TestBlock(t *testing.T) {
 	for _, enc := range testEncoding {
+		enc := enc
 		t.Run(enc.String(), func(t *testing.T) {
 			t.Parallel()
 
@@ -214,6 +215,7 @@ func TestReadFormatV1(t *testing.T) {
 func TestRoundtripV2(t *testing.T) {
 	for _, enc := range testEncoding {
 		for _, version := range []byte{chunkFormatV2, chunkFormatV3} {
+			version := version
 			t.Run(enc.String(), func(t *testing.T) {
 				t.Parallel()
 
@@ -269,6 +271,7 @@ func TestRoundtripV2(t *testing.T) {
 
 func TestRoundtripV3(t *testing.T) {
 	for _, enc := range testEncoding {
+		enc := enc
 		t.Run(enc.String(), func(t *testing.T) {
 			t.Parallel()
 
@@ -293,6 +296,7 @@ func TestRoundtripV3(t *testing.T) {
 
 func TestSerialization(t *testing.T) {
 	for _, enc := range testEncoding {
+		enc := enc
 		t.Run(enc.String(), func(t *testing.T) {
 			t.Parallel()
 
@@ -342,6 +346,7 @@ func TestSerialization(t *testing.T) {
 
 func TestChunkFilling(t *testing.T) {
 	for _, enc := range testEncoding {
+		enc := enc
 		t.Run(enc.String(), func(t *testing.T) {
 			t.Parallel()
 
@@ -475,6 +480,7 @@ func TestMemChunk_AppendOutOfOrder(t *testing.T) {
 
 func TestChunkSize(t *testing.T) {
 	for _, enc := range testEncoding {
+		enc := enc
 		t.Run(enc.String(), func(t *testing.T) {
 			t.Parallel()
 			c := NewMemChunk(enc, testBlockSize, testTargetSize)
@@ -796,6 +802,7 @@ func TestMemChunk_IteratorBounds(t *testing.T) {
 		{time.Unix(0, 2), time.Unix(0, 3), logproto.BACKWARD, []bool{true, false}},
 		{time.Unix(0, 3), time.Unix(0, 3), logproto.BACKWARD, []bool{false}},
 	} {
+		//nolint:govet // Fixing loopclosure breaks test
 		t.Run(
 			fmt.Sprintf("mint:%d,maxt:%d,direction:%s", tt.mint.UnixNano(), tt.maxt.UnixNano(), tt.direction),
 			func(t *testing.T) {
@@ -826,6 +833,7 @@ func TestMemChunk_IteratorBounds(t *testing.T) {
 
 func TestMemchunkLongLine(t *testing.T) {
 	for _, enc := range testEncoding {
+		enc := enc
 		t.Run(enc.String(), func(t *testing.T) {
 			t.Parallel()
 

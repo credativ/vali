@@ -12,7 +12,7 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  build-and-push-vali:
+  build-and-push-vali-build-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read

@@ -39,7 +39,7 @@ IMAGE_NAMES := $(foreach dir,$(DOCKER_IMAGE_DIRS),$(patsubst %,$(IMAGE_PREFIX)%,
 # make BUILD_IN_CONTAINER=false target
 # or you can override this with an environment variable
 BUILD_IN_CONTAINER ?= true
-BUILD_IMAGE_VERSION := 0.12.0
+BUILD_IMAGE_VERSION := main
 
 # Docker image info
 IMAGE_PREFIX ?= ghcr.io/credativ
@@ -69,7 +69,7 @@ DYN_GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)" -tags netgo $(MOD_FLAG)
 DEBUG_GO_FLAGS     := -gcflags "all=-N -l" -ldflags "-extldflags \"-static\" $(GO_LDFLAGS)" -tags netgo $(MOD_FLAG)
 DYN_DEBUG_GO_FLAGS := -gcflags "all=-N -l" -ldflags "$(GO_LDFLAGS)" -tags netgo $(MOD_FLAG)
 # Docker mount flag, ignored on native docker host. see (https://docs.docker.com/docker-for-mac/osxfs-caching/#delegated)
-MOUNT_FLAGS := :delegated
+MOUNT_FLAGS := :delegated,z
 
 # Protobuf files
 PROTO_DEFS := $(shell find . $(DONT_FIND) -type f -name '*.proto' -print)

@@ -6,7 +6,7 @@ COPY . /src/vali
 WORKDIR /src/vali
 RUN make clean && (if [ "${TOUCH_PROTOS}" ]; then make touch-protos; fi) && make BUILD_IN_CONTAINER=false vali
 
-FROM alpine:3.17
+FROM alpine:3.18
 
 RUN apk add --no-cache ca-certificates libcap
 

@@ -1,3 +1,8 @@
+## 2.2.6 (2023/06/15)
+
+* Upgrade Go to 1.20.5
+* Upgrade Alpine to 3.18
+
 ## 2.2.5 (2023/04/05)
 
 * Upgrade Go to 1.20.3

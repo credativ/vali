@@ -11,7 +11,7 @@ FROM debian:bullseye-slim
 # tzdata required for the timestamp stage to work
 RUN apt-get update && \
   apt-get install -qy \
-  tzdata ca-certificates \
+  tzdata ca-certificates && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 COPY --from=build /src/vali/cmd/valitail/valitail /usr/bin/valitail
 COPY cmd/valitail/valitail-docker-config.yaml /etc/valitail/config.yml

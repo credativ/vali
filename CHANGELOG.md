@@ -1,3 +1,8 @@
+## 2.2.8 (2023/09/05)
+
+* Upgrade Go to 1.21.0
+* Upgrade valitail base image to Debian bullseye
+
 ## 2.2.7 (2023/08/03)
 
 * Release v2.2.7

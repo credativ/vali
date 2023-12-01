@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - "main"
+    tags:
+      - "v*"
+  pull_request:
+
+jobs:
+  logcli:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.21.3
+
+      - name: Install package dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make protobuf-compiler zip
+
+      - name: Install Go dependencies
+        run: |
+          go install github.com/golang/protobuf/protoc-gen-go@v1.3.0
+          go install github.com/gogo/protobuf/protoc-gen-gogoslick@v1.2.1
+
+      - name: Build logcli
+        run: make BUILD_IN_CONTAINER=false logcli
+
+      - name: Zip logcli
+        run: zip --junk-paths logcli_amd64.zip cmd/logcli/logcli
+
+      - name: Upload logcli as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: logcli_amd64
+          path: logcli_amd64.zip
+          retention-days: 3

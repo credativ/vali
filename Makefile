@@ -135,6 +135,8 @@ touch-protobuf-sources:
 		touch $$def; \
 	done
 
+generate: $(VALITAIL_GENERATED_FILE)
+
 ##########
 # Logcli #
 ##########

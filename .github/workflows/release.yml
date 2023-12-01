@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -32,15 +35,20 @@ jobs:
           go install github.com/golang/protobuf/protoc-gen-go@v1.3.0
           go install github.com/gogo/protobuf/protoc-gen-gogoslick@v1.2.1
 
+      - name: Pre-generate code
+        run: make BUILD_IN_CONTAINER=false generate
+
       - name: Build logcli
         run: make BUILD_IN_CONTAINER=false logcli
+        env:
+          GOARCH: ${{ matrix.arch }}
 
       - name: Zip logcli
-        run: zip --junk-paths logcli_amd64.zip cmd/logcli/logcli
+        run: zip --junk-paths logcli_${{ matrix.arch }}.zip cmd/logcli/logcli
 
       - name: Upload logcli as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: logcli_amd64
-          path: logcli_amd64.zip
+          name: logcli_${{ matrix.arch }}
+          path: logcli_${{ matrix.arch }}.zip
           retention-days: 3

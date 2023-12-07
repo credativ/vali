@@ -40,7 +40,7 @@ jobs:
         run: |
           cd /
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
-            | sudo sh -s v1.52.0
+            | sudo sh -s v1.55.2
 
       - name: Run Linter
         run: make lint

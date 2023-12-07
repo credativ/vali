@@ -74,18 +74,18 @@ func main() {
 	}
 
 	// Init the logger which will honor the log level set in cfg.Server
-	if reflect.DeepEqual(&config.ServerConfig.Config.LogLevel, &logging.Level{}) {
+	if reflect.DeepEqual(&config.Config.LogLevel, &logging.Level{}) {
 		fmt.Println("Invalid log level")
 		os.Exit(1)
 	}
-	util_log.InitLogger(&config.ServerConfig.Config)
+	util_log.InitLogger(&config.Config)
 
 	// Use Stderr instead of files for the klog.
 	klog.SetOutput(os.Stderr)
 
 	// Set the global debug variable in the stages package which is used to conditionally log
 	// debug messages which otherwise cause huge allocations processing log lines for log messages never printed
-	if config.ServerConfig.Config.LogLevel.String() == "debug" {
+	if config.Config.LogLevel.String() == "debug" {
 		stages.Debug = true
 	}
 

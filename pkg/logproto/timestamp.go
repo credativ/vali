@@ -15,6 +15,7 @@ const (
 	// Seconds field just after the latest valid Timestamp.
 	// This is time.Date(10000, 1, 1, 0, 0, 0, 0, time.UTC).Unix().
 	maxValidSeconds = 253402300800
+	TimestampLabel  = "timestamp: "
 )
 
 // validateTimestamp determines whether a Timestamp is valid.
@@ -32,13 +33,13 @@ func validateTimestamp(ts *types.Timestamp) error {
 		return errors.New("timestamp: nil Timestamp")
 	}
 	if ts.Seconds < minValidSeconds {
-		return errors.New("timestamp: " + formatTimestamp(ts) + " before 0001-01-01")
+		return errors.New(TimestampLabel + formatTimestamp(ts) + " before 0001-01-01")
 	}
 	if ts.Seconds >= maxValidSeconds {
-		return errors.New("timestamp: " + formatTimestamp(ts) + " after 10000-01-01")
+		return errors.New(TimestampLabel + formatTimestamp(ts) + " after 10000-01-01")
 	}
 	if ts.Nanos < 0 || ts.Nanos >= 1e9 {
-		return errors.New("timestamp: " + formatTimestamp(ts) + ": nanos not in range [0, 1e9)")
+		return errors.New(TimestampLabel + formatTimestamp(ts) + ": nanos not in range [0, 1e9)")
 	}
 	return nil
 }

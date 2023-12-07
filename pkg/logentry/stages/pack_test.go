@@ -17,6 +17,11 @@ import (
 	"github.com/credativ/vali/pkg/valitail/api"
 )
 
+const (
+	TestLine1            = "test line 1"
+	TestLine1ColonQuoted = ":\"test line 1\""
+)
+
 // Not all these are tested but are here to make sure the different types marshal without error
 var testPackYaml = `
 pipeline_stages:
@@ -128,7 +133,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "test line 1",
+						Line:      TestLine1,
 					},
 				},
 			},
@@ -140,7 +145,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "{\"" + logql_log.PackedEntryKey + "\":\"test line 1\"}",
+						Line:      "{\"" + logql_log.PackedEntryKey + "\"" + TestLine1ColonQuoted + "}",
 					},
 				},
 			},
@@ -160,7 +165,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "test line 1",
+						Line:      TestLine1,
 					},
 				},
 			},
@@ -171,7 +176,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "{\"foo\":\"bar\",\"" + logql_log.PackedEntryKey + "\":\"test line 1\"}",
+						Line:      "{\"foo\":\"bar\",\"" + logql_log.PackedEntryKey + "\"" + TestLine1ColonQuoted + "}",
 					},
 				},
 			},
@@ -191,7 +196,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "test line 1",
+						Line:      TestLine1,
 					},
 				},
 			},
@@ -200,7 +205,7 @@ func Test_packStage_Run(t *testing.T) {
 					Labels: model.LabelSet{},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "{\"bar\":\"baz\",\"foo\":\"bar\",\"" + logql_log.PackedEntryKey + "\":\"test line 1\"}",
+						Line:      "{\"bar\":\"baz\",\"foo\":\"bar\",\"" + logql_log.PackedEntryKey + "\"" + TestLine1ColonQuoted + "}",
 					},
 				},
 			},
@@ -223,7 +228,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "test line 1",
+						Line:      TestLine1,
 					},
 				},
 			},
@@ -234,7 +239,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "{\"extr1\":\"etr1val\",\"foo\":\"bar\",\"" + logql_log.PackedEntryKey + "\":\"test line 1\"}",
+						Line:      "{\"extr1\":\"etr1val\",\"foo\":\"bar\",\"" + logql_log.PackedEntryKey + "\"" + TestLine1ColonQuoted + "}",
 					},
 				},
 			},
@@ -257,7 +262,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "test line 1",
+						Line:      TestLine1,
 					},
 				},
 			},
@@ -268,7 +273,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "{\"foo\":\"bar\",\"" + logql_log.PackedEntryKey + "\":\"test line 1\"}",
+						Line:      "{\"foo\":\"bar\",\"" + logql_log.PackedEntryKey + "\"" + TestLine1ColonQuoted + "}",
 					},
 				},
 			},
@@ -291,7 +296,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "test line 1",
+						Line:      TestLine1,
 					},
 				},
 			},
@@ -302,7 +307,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "{\"ex\\\"tr2\":\"\\\"fd\\\"\",\"foo\":\"bar\",\"" + logql_log.PackedEntryKey + "\":\"test line 1\"}",
+						Line:      "{\"ex\\\"tr2\":\"\\\"fd\\\"\",\"foo\":\"bar\",\"" + logql_log.PackedEntryKey + "\"" + TestLine1ColonQuoted + "}",
 					},
 				},
 			},
@@ -322,7 +327,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0),
-						Line:      "test line 1",
+						Line:      TestLine1,
 					},
 				},
 			},
@@ -334,7 +339,7 @@ func Test_packStage_Run(t *testing.T) {
 					},
 					Entry: logproto.Entry{
 						Timestamp: time.Unix(1, 0), // Ignored in test execution below
-						Line:      "{\"" + logql_log.PackedEntryKey + "\":\"test line 1\"}",
+						Line:      "{\"" + logql_log.PackedEntryKey + "\"" + TestLine1ColonQuoted + "}",
 					},
 				},
 			},

@@ -135,7 +135,7 @@ func TestPipelineWithMissingKey_Metrics(t *testing.T) {
 	}
 	Debug = true
 	processEntries(pl, newEntry(nil, nil, testMetricLogLineWithMissingKey, time.Now()))
-	expectedLog := "level=debug msg=\"failed to convert extracted value to string, can't perform value comparison\" metric=bvali_count err=\"can't convert <nil> to string\""
+	expectedLog := "level=debug msg=\"failed to convert extracted value to string, can't perform value comparison\" metric=vali_count err=\"can't convert <nil> to string\""
 	if !(strings.Contains(buf.String(), expectedLog)) {
 		t.Errorf("\nexpected: %s\n+actual: %s", expectedLog, buf.String())
 	}

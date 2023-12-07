@@ -22,6 +22,11 @@ import (
 	"github.com/credativ/vali/pkg/valitail/targets/testutils"
 )
 
+const (
+	TmpDirPath            = "/tmp/"
+	PositionsFileNameRoot = "/positions.yml"
+)
+
 type mockJournalReader struct {
 	config sdjournal.JournalReaderConfig
 	t      *testing.T
@@ -68,8 +73,8 @@ func TestJournalTarget(t *testing.T) {
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFileName := dirName + "/positions.yml"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFileName := dirName + PositionsFileNameRoot
 
 	// Set the sync period to a really long value, to guarantee the sync timer
 	// never runs, this way we know everything saved was done through channel
@@ -118,8 +123,8 @@ func TestJournalTarget_JSON(t *testing.T) {
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFileName := dirName + "/positions.yml"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFileName := dirName + PositionsFileNameRoot
 
 	// Set the sync period to a really long value, to guarantee the sync timer
 	// never runs, this way we know everything saved was done through channel
@@ -178,8 +183,8 @@ func TestJournalTarget_Since(t *testing.T) {
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFileName := dirName + "/positions.yml"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFileName := dirName + PositionsFileNameRoot
 
 	// Set the sync period to a really long value, to guarantee the sync timer
 	// never runs, this way we know everything saved was done through channel
@@ -212,8 +217,8 @@ func TestJournalTarget_Cursor_TooOld(t *testing.T) {
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFileName := dirName + "/positions.yml"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFileName := dirName + PositionsFileNameRoot
 
 	// Set the sync period to a really long value, to guarantee the sync timer
 	// never runs, this way we know everything saved was done through channel
@@ -252,8 +257,8 @@ func TestJournalTarget_Cursor_NotTooOld(t *testing.T) {
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFileName := dirName + "/positions.yml"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFileName := dirName + PositionsFileNameRoot
 
 	// Set the sync period to a really long value, to guarantee the sync timer
 	// never runs, this way we know everything saved was done through channel

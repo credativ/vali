@@ -27,6 +27,7 @@ const (
 	ErrMetricsStageInvalidType = "invalid metric type '%s', metric type must be one of 'counter', 'gauge', or 'histogram'"
 	ErrInvalidIdleDur          = "max_idle_duration could not be parsed as a time.Duration: '%s'"
 	ErrSubSecIdleDur           = "max_idle_duration less than 1s not allowed"
+	ErrValueToStringConversion = "failed to convert extracted value to string"
 )
 
 // MetricConfig is a single metrics configuration.
@@ -185,8 +186,8 @@ func (m *metricStage) recordCounter(name string, counter *metric.Counters, label
 		stringVal, err := getString(v)
 		if err != nil {
 			if Debug {
-				level.Debug(m.logger).Log("msg", "failed to convert extracted value to string, "+
-					"can't perform value comparison", "metric", name, "err",
+				level.Debug(m.logger).Log("msg", ErrValueToStringConversion+
+					", can't perform value comparison", "metric", name, "err",
 					fmt.Sprintf("can't convert %v to string", reflect.TypeOf(v)))
 			}
 			return
@@ -218,7 +219,7 @@ func (m *metricStage) recordGauge(name string, gauge *metric.Gauges, labels mode
 		stringVal, err := getString(v)
 		if err != nil {
 			if Debug {
-				level.Debug(m.logger).Log("msg", "failed to convert extracted value to string, "+
+				level.Debug(m.logger).Log("msg", ErrValueToStringConversion+
 					"can't perform value comparison", "metric", name, "err",
 					fmt.Sprintf("can't convert %v to string", reflect.TypeOf(v)))
 			}
@@ -271,7 +272,7 @@ func (m *metricStage) recordHistogram(name string, histogram *metric.Histograms,
 		stringVal, err := getString(v)
 		if err != nil {
 			if Debug {
-				level.Debug(m.logger).Log("msg", "failed to convert extracted value to string, "+
+				level.Debug(m.logger).Log("msg", ErrValueToStringConversion+
 					"can't perform value comparison", "metric", name, "err",
 					fmt.Sprintf("can't convert %v to string", reflect.TypeOf(v)))
 			}

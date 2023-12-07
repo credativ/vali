@@ -17,14 +17,21 @@ import (
 	"github.com/credativ/vali/pkg/valitail/targets/testutils"
 )
 
+const (
+	TmpDirPath            = "/tmp/"
+	PositionsFileNameRoot = "/positions.yml"
+	LogFileNameRoot       = "/test.log"
+	LogFileWildcard       = "/*.log"
+)
+
 func TestLongPositionsSyncDelayStillSavesCorrectPosition(t *testing.T) {
 	w := log.NewSyncWriter(os.Stderr)
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFileName := dirName + "/positions.yml"
-	logFile := dirName + "/test.log"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFileName := dirName + PositionsFileNameRoot
+	logFile := dirName + LogFileNameRoot
 
 	err := os.MkdirAll(dirName, 0750)
 	if err != nil {
@@ -110,8 +117,8 @@ func TestWatchEntireDirectory(t *testing.T) {
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFileName := dirName + "/positions.yml"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFileName := dirName + PositionsFileNameRoot
 	logFileDir := dirName + "/logdir/"
 
 	err := os.MkdirAll(dirName, 0750)
@@ -202,9 +209,9 @@ func TestFileRolls(t *testing.T) {
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFile := dirName + "/positions.yml"
-	logFile := dirName + "/test.log"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFile := dirName + PositionsFileNameRoot
+	logFile := dirName + LogFileNameRoot
 
 	err := os.MkdirAll(dirName, 0750)
 	if err != nil {
@@ -231,7 +238,7 @@ func TestFileRolls(t *testing.T) {
 	}
 
 	metrics := NewMetrics(nil)
-	target, err := NewFileTarget(metrics, logger, client, positions, dirName+"/*.log", nil, nil, &Config{
+	target, err := NewFileTarget(metrics, logger, client, positions, dirName+LogFileWildcard, nil, nil, &Config{
 		SyncPeriod: 10 * time.Second,
 	})
 	if err != nil {
@@ -299,9 +306,9 @@ func TestResumesWhereLeftOff(t *testing.T) {
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFileName := dirName + "/positions.yml"
-	logFile := dirName + "/test.log"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFileName := dirName + PositionsFileNameRoot
+	logFile := dirName + LogFileNameRoot
 
 	err := os.MkdirAll(dirName, 0750)
 	if err != nil {
@@ -328,7 +335,7 @@ func TestResumesWhereLeftOff(t *testing.T) {
 	}
 
 	metrics := NewMetrics(nil)
-	target, err := NewFileTarget(metrics, logger, client, ps, dirName+"/*.log", nil, nil, &Config{
+	target, err := NewFileTarget(metrics, logger, client, ps, dirName+LogFileWildcard, nil, nil, &Config{
 		SyncPeriod: 10 * time.Second,
 	})
 	if err != nil {
@@ -362,7 +369,7 @@ func TestResumesWhereLeftOff(t *testing.T) {
 	}
 
 	// Create a new target, keep the same client so we can track what was sent through the handler.
-	target2, err := NewFileTarget(metrics, logger, client, ps2, dirName+"/*.log", nil, nil, &Config{
+	target2, err := NewFileTarget(metrics, logger, client, ps2, dirName+LogFileWildcard, nil, nil, &Config{
 		SyncPeriod: 10 * time.Second,
 	})
 	if err != nil {
@@ -406,9 +413,9 @@ func TestGlobWithMultipleFiles(t *testing.T) {
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFileName := dirName + "/positions.yml"
-	logFile1 := dirName + "/test.log"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFileName := dirName + PositionsFileNameRoot
+	logFile1 := dirName + LogFileNameRoot
 	logFile2 := dirName + "/dirt.log"
 
 	err := os.MkdirAll(dirName, 0750)
@@ -436,7 +443,7 @@ func TestGlobWithMultipleFiles(t *testing.T) {
 	}
 
 	metrics := NewMetrics(nil)
-	target, err := NewFileTarget(metrics, logger, client, ps, dirName+"/*.log", nil, nil, &Config{
+	target, err := NewFileTarget(metrics, logger, client, ps, dirName+LogFileWildcard, nil, nil, &Config{
 		SyncPeriod: 10 * time.Second,
 	})
 	if err != nil {
@@ -507,8 +514,8 @@ func TestFileTargetSync(t *testing.T) {
 	logger := log.NewLogfmtLogger(w)
 
 	testutils.InitRandom()
-	dirName := "/tmp/" + testutils.RandName()
-	positionsFileName := dirName + "/positions.yml"
+	dirName := TmpDirPath + testutils.RandName()
+	positionsFileName := dirName + PositionsFileNameRoot
 	logDir1 := dirName + "/log1"
 	logDir1File1 := logDir1 + "/test1.log"
 	logDir1File2 := logDir1 + "/test2.log"
@@ -533,7 +540,7 @@ func TestFileTargetSync(t *testing.T) {
 	defer client.Stop()
 
 	metrics := NewMetrics(nil)
-	target, err := NewFileTarget(metrics, logger, client, ps, logDir1+"/*.log", nil, nil, &Config{
+	target, err := NewFileTarget(metrics, logger, client, ps, logDir1+LogFileWildcard, nil, nil, &Config{
 		SyncPeriod: 10 * time.Second,
 	})
 	if err != nil {

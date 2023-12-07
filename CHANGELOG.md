@@ -1,4 +1,10 @@
-## 2.2.10 (2023-11-07)
+## 2.2.12 (2023-12-07)
+
+* Upgrade Go to 1.21.5
+* Upgrade Alpine to 3.19
+* Include LogCLI binary
+
+## 2.2.11 (2023-11-07)
 
 * Upgrade Go to 1.21.3
 

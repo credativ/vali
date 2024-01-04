@@ -20,7 +20,7 @@ RUN apk add --no-cache docker-cli
 # Error:
 #	github.com/fatih/faillint@v1.5.0 requires golang.org/x/tools@v0.0.0-20200207224406-61798d64f025
 #   (not golang.org/x/tools@v0.0.0-20190918214920-58d531046acd from golang.org/x/tools/cmd/goyacc@58d531046acdc757f177387bc1725bfa79895d69)
-FROM docker.io/library/golang:1.21.5 as faillint
+FROM docker.io/library/golang:1.21.5-alpine3.19 as faillint
 RUN go install github.com/fatih/faillint@v1.11.0
 
 FROM docker.io/library/golang:1.21.5-bullseye

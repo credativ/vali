@@ -1,4 +1,4 @@
-FROM golang:1.21.5-alpine3.19 as build
+FROM golang:1.21.5 as build
 COPY . /src/vali
 WORKDIR /src/vali
 RUN make clean && make BUILD_IN_CONTAINER=false fluent-bit-plugin

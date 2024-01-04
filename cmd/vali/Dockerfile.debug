@@ -6,7 +6,7 @@ FROM ghcr.io/credativ/vali-build-image as build
 ARG GOARCH="amd64"
 COPY . /src/vali
 WORKDIR /src/vali
-RUN apk add --no-cache make
+RUN apk add --no-cache make bash
 RUN make clean && make BUILD_IN_CONTAINER=false vali-debug
 
 FROM       alpine:3.19

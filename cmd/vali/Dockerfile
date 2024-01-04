@@ -4,7 +4,7 @@ FROM golang:1.21.5-alpine3.19 as build
 ARG TOUCH_PROTOS
 COPY . /src/vali
 WORKDIR /src/vali
-RUN apk add --no-cache make bash
+RUN apk add --no-cache make
 RUN make clean && (if [ "${TOUCH_PROTOS}" ]; then make touch-protos; fi) && make BUILD_IN_CONTAINER=false vali
 
 FROM alpine:3.19

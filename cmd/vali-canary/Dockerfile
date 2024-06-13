@@ -6,7 +6,7 @@ COPY . /src/vali
 WORKDIR /src/vali
 RUN make clean && (if [ "${TOUCH_PROTOS}" ]; then make touch-protos; fi) && make BUILD_IN_CONTAINER=false vali-canary
 
-FROM alpine:3.20
+FROM alpine:3.20.0
 RUN apk add --update --no-cache ca-certificates
 COPY --from=build /src/vali/cmd/vali-canary/vali-canary /usr/bin/vali-canary
 ENTRYPOINT [ "/usr/bin/vali-canary" ]

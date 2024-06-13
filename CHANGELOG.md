@@ -1,7 +1,8 @@
 ## 2.2.16 (2024-06-13)
 
 * Upgrade Go to 1.22.4
-* Upgrade Alpine to 3.20
+* Upgrade Alpine to 3.20.0
+* Upgrade valitail base image to Debian bookworm
 
 ## 2.2.15 (2024-05-17)
 

@@ -1,3 +1,8 @@
+## 2.2.17 (2024-07-04)
+
+* Upgrade Go to 1.22.5
+* Upgrade Alpine to 3.20.1
+
 ## 2.2.16 (2024-06-13)
 
 * Upgrade Go to 1.22.4

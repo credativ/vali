@@ -206,7 +206,7 @@ func (rt limitedRoundTripper) RoundTrip(r *http.Request) (*http.Response, error)
 	}
 	userid, err := user.ExtractOrgID(ctx)
 	if err != nil {
-		return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+		return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 	}
 
 	parallelism := rt.limits.MaxQueryParallelism(userid)
@@ -255,7 +255,7 @@ func (rt limitedRoundTripper) do(ctx context.Context, r queryrange.Request) (que
 	}
 
 	if err := user.InjectOrgIDIntoHTTPRequest(ctx, request); err != nil {
-		return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+		return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 	}
 
 	response, err := rt.next.RoundTrip(request)

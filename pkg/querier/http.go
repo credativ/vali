@@ -38,7 +38,7 @@ func (q *Querier) RangeQueryHandler(w http.ResponseWriter, r *http.Request) {
 
 	request, err := loghttp.ParseRangeQuery(r)
 	if err != nil {
-		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, err.Error()), w)
+		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error()), w)
 		return
 	}
 
@@ -78,7 +78,7 @@ func (q *Querier) InstantQueryHandler(w http.ResponseWriter, r *http.Request) {
 
 	request, err := loghttp.ParseInstantQuery(r)
 	if err != nil {
-		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, err.Error()), w)
+		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error()), w)
 		return
 	}
 
@@ -118,12 +118,12 @@ func (q *Querier) LogQueryHandler(w http.ResponseWriter, r *http.Request) {
 
 	request, err := loghttp.ParseRangeQuery(r)
 	if err != nil {
-		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, err.Error()), w)
+		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error()), w)
 		return
 	}
 	request.Query, err = parseRegexQuery(r)
 	if err != nil {
-		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, err.Error()), w)
+		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error()), w)
 		return
 	}
 
@@ -172,7 +172,7 @@ func (q *Querier) LogQueryHandler(w http.ResponseWriter, r *http.Request) {
 func (q *Querier) LabelHandler(w http.ResponseWriter, r *http.Request) {
 	req, err := loghttp.ParseLabelQuery(r)
 	if err != nil {
-		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, err.Error()), w)
+		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error()), w)
 		return
 	}
 
@@ -202,13 +202,13 @@ func (q *Querier) TailHandler(w http.ResponseWriter, r *http.Request) {
 
 	req, err := loghttp.ParseTailQuery(r)
 	if err != nil {
-		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, err.Error()), w)
+		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error()), w)
 		return
 	}
 
 	req.Query, err = parseRegexQuery(r)
 	if err != nil {
-		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, err.Error()), w)
+		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error()), w)
 		return
 	}
 
@@ -309,7 +309,7 @@ func (q *Querier) TailHandler(w http.ResponseWriter, r *http.Request) {
 func (q *Querier) SeriesHandler(w http.ResponseWriter, r *http.Request) {
 	req, err := loghttp.ParseSeriesQuery(r)
 	if err != nil {
-		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, err.Error()), w)
+		serverutil.WriteError(httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error()), w)
 		return
 	}
 
@@ -348,7 +348,7 @@ func parseRegexQuery(httpRequest *http.Request) (string, error) {
 func (q *Querier) validateEntriesLimits(ctx context.Context, query string, limit uint32) error {
 	userID, err := user.ExtractOrgID(ctx)
 	if err != nil {
-		return httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+		return httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 	}
 
 	expr, err := logql.ParseExpr(query)

@@ -107,18 +107,18 @@ func newRoundTripper(next, log, metric, series, labels http.RoundTripper, limits
 func (r roundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	err := req.ParseForm()
 	if err != nil {
-		return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+		return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 	}
 
 	switch op := getOperation(req.URL.Path); op {
 	case QueryRangeOp:
 		rangeQuery, err := loghttp.ParseRangeQuery(req)
 		if err != nil {
-			return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+			return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 		}
 		expr, err := logql.ParseExpr(rangeQuery.Query)
 		if err != nil {
-			return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+			return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 		}
 		switch e := expr.(type) {
 		case logql.SampleExpr:
@@ -126,7 +126,7 @@ func (r roundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 		case logql.LogSelectorExpr:
 			expr, err := transformRegexQuery(req, e)
 			if err != nil {
-				return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+				return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 			}
 			if err := validateLimits(req, rangeQuery.Limit, r.limits); err != nil {
 				return nil, err
@@ -142,13 +142,13 @@ func (r roundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	case SeriesOp:
 		_, err := loghttp.ParseSeriesQuery(req)
 		if err != nil {
-			return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+			return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 		}
 		return r.series.RoundTrip(req)
 	case LabelNamesOp:
 		_, err := loghttp.ParseLabelQuery(req)
 		if err != nil {
-			return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+			return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 		}
 		return r.labels.RoundTrip(req)
 	default:
@@ -179,7 +179,7 @@ func transformRegexQuery(req *http.Request, expr logql.LogSelectorExpr) (logql.L
 func validateLimits(req *http.Request, reqLimit uint32, limits Limits) error {
 	userID, err := user.ExtractOrgID(req.Context())
 	if err != nil {
-		return httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+		return httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 	}
 
 	maxEntriesLimit := limits.MaxEntriesLimitPerQuery(userID)

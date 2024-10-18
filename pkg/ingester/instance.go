@@ -233,7 +233,7 @@ func (i *instance) getOrCreateStream(pushReqStream logproto.Stream, lock bool, r
 				"stream", pushReqStream.Labels,
 			)
 		}
-		return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+		return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 	}
 	fp := i.getHashForLabels(labels)
 

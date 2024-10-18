@@ -63,7 +63,7 @@ func TestMaxReturnedStreamsErrors(t *testing.T) {
 			}
 
 			fmt.Fprintf(&expected, "total ignored: %d out of %d", numLogs, numLogs)
-			expectErr := httpgrpc.Errorf(http.StatusBadRequest, expected.String())
+			expectErr := httpgrpc.Errorf(http.StatusBadRequest, "%s", expected.String())
 
 			_, err = s.Push(context.Background(), newLines, recordPool.GetRecord())
 			require.Error(t, err)

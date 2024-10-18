@@ -73,3 +73,5 @@ issues:
   exclude:
     - Error return value of .*log\.Logger\)\.Log\x60 is not checked
     - Error return value of .*.Log.* is not checked
+    - '"io/ioutil" has been deprecated'
+    - rand.Seed has been deprecated

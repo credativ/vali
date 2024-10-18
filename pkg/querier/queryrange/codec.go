@@ -151,14 +151,14 @@ func (*ValiLabelNamesRequest) GetCachingOptions() (res queryrange.CachingOptions
 
 func (codec) DecodeRequest(_ context.Context, r *http.Request) (queryrange.Request, error) {
 	if err := r.ParseForm(); err != nil {
-		return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+		return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 	}
 
 	switch op := getOperation(r.URL.Path); op {
 	case QueryRangeOp:
 		req, err := loghttp.ParseRangeQuery(r)
 		if err != nil {
-			return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+			return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 		}
 		return &ValiRequest{
 			Query:     req.Query,
@@ -174,7 +174,7 @@ func (codec) DecodeRequest(_ context.Context, r *http.Request) (queryrange.Reque
 	case SeriesOp:
 		req, err := loghttp.ParseSeriesQuery(r)
 		if err != nil {
-			return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+			return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 		}
 		return &ValiSeriesRequest{
 			Match:   req.Groups,
@@ -185,7 +185,7 @@ func (codec) DecodeRequest(_ context.Context, r *http.Request) (queryrange.Reque
 	case LabelNamesOp:
 		req, err := loghttp.ParseLabelQuery(r)
 		if err != nil {
-			return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+			return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 		}
 		return &ValiLabelNamesRequest{
 			StartTs: *req.Start,
@@ -193,7 +193,7 @@ func (codec) DecodeRequest(_ context.Context, r *http.Request) (queryrange.Reque
 			Path:    r.URL.Path,
 		}, nil
 	default:
-		return nil, httpgrpc.Errorf(http.StatusBadRequest, fmt.Sprintf("unknown request path: %s", r.URL.Path))
+		return nil, httpgrpc.Errorf(http.StatusBadRequest, "unknown request path: %s", r.URL.Path)
 	}
 
 }
@@ -273,7 +273,7 @@ func (codec) EncodeRequest(ctx context.Context, r queryrange.Request) (*http.Req
 func (codec) DecodeResponse(ctx context.Context, r *http.Response, req queryrange.Request) (queryrange.Response, error) {
 	if r.StatusCode/100 != 2 {
 		body, _ := ioutil.ReadAll(r.Body)
-		return nil, httpgrpc.Errorf(r.StatusCode, string(body))
+		return nil, httpgrpc.Errorf(r.StatusCode, "%s", string(body))
 	}
 
 	sp, _ := opentracing.StartSpanFromContext(ctx, "codec.DecodeResponse")

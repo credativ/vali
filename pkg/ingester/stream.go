@@ -269,7 +269,7 @@ func (s *stream) Push(
 
 			fmt.Fprintf(&buf, "total ignored: %d out of %d", len(failedEntriesWithError), len(entries))
 
-			return bytesAdded, httpgrpc.Errorf(http.StatusBadRequest, buf.String())
+			return bytesAdded, httpgrpc.Errorf(http.StatusBadRequest, "%s", buf.String())
 		}
 		return bytesAdded, lastEntryWithErr.e
 	}

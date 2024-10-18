@@ -161,7 +161,7 @@ func (h *splitByInterval) loop(ctx context.Context, ch <-chan *valiResult, next 
 func (h *splitByInterval) Do(ctx context.Context, r queryrange.Request) (queryrange.Response, error) {
 	userid, err := user.ExtractOrgID(ctx)
 	if err != nil {
-		return nil, httpgrpc.Errorf(http.StatusBadRequest, err.Error())
+		return nil, httpgrpc.Errorf(http.StatusBadRequest, "%s", err.Error())
 	}
 
 	interval := h.limits.QuerySplitDuration(userid)

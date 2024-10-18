@@ -290,6 +290,7 @@ func (q *query) evalSample(ctx context.Context, expr SampleExpr) (promql_parser.
 	return result, stepEvaluator.Error()
 }
 
+// nolint: unparam
 func (q *query) evalLiteral(_ context.Context, expr *literalExpr) (promql_parser.Value, error) {
 	s := promql.Scalar{
 		T: q.params.Start().UnixNano() / int64(time.Millisecond),

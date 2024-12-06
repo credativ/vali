@@ -1,4 +1,4 @@
-FROM golang:1.23.2-bookworm as build
+FROM golang:1.23.4-bookworm as build
 # TOUCH_PROTOS signifies if we should touch the compiled proto files and thus not regenerate them.
 # This is helpful when file system timestamps can't be trusted with make
 ARG TOUCH_PROTOS

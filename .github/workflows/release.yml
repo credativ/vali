@@ -47,7 +47,7 @@ jobs:
         run: zip --junk-paths logcli_${{ matrix.arch }}.zip cmd/logcli/logcli
 
       - name: Upload logcli as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: logcli_${{ matrix.arch }}
           path: logcli_${{ matrix.arch }}.zip
@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
 

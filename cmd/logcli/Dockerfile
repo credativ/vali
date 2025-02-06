@@ -1,11 +1,11 @@
-FROM golang:1.23.4 as build
+FROM golang:1.23.6 as build
 
 ARG TOUCH_PROTOS
 COPY . /src/vali
 WORKDIR /src/vali
 RUN make clean && (if [ "${TOUCH_PROTOS}" ]; then make touch-protos; fi) && make BUILD_IN_CONTAINER=false logcli
 
-FROM alpine:3.21.0
+FROM alpine:3.21.2
 
 RUN apk add --no-cache ca-certificates
 

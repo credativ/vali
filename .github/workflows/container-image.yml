@@ -13,7 +13,7 @@ env:
 
 jobs:
   build-and-push-vali:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write
@@ -55,7 +55,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
   build-and-push-valitail:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write

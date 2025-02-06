@@ -10,7 +10,7 @@ on:
 
 jobs:
   logcli:
-    runs-on: ubuntu-22-04
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
     strategy:
@@ -54,7 +54,7 @@ jobs:
           retention-days: 3
 
   release:
-    runs-on: ubuntu-22-04
+    runs-on: ubuntu-22.04
     needs: logcli
     if: startsWith(github.event.ref, 'refs/tags/v')
     permissions:

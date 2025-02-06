@@ -10,7 +10,7 @@ on:
 
 jobs:
   logcli:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu22-04
     permissions:
       contents: read
     strategy:
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.23.4
+          go-version: 1.23.6
 
       - name: Install package dependencies
         run: |
@@ -54,7 +54,7 @@ jobs:
           retention-days: 3
 
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu22-04
     needs: logcli
     if: startsWith(github.event.ref, 'refs/tags/v')
     permissions:

@@ -9,7 +9,7 @@ COPY . /src/vali
 WORKDIR /src/vali
 RUN make clean && make BUILD_IN_CONTAINER=false cmd/docker-driver/docker-driver
 
-FROM alpine:3.21.2
+FROM alpine:3.21.3
 RUN apk add --update --no-cache ca-certificates tzdata
 COPY --from=build /src/vali/cmd/docker-driver/docker-driver /bin/docker-driver
 WORKDIR /bin/

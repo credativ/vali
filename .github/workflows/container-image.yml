@@ -8,90 +8,30 @@ on:
       - "v*"
   pull_request:
 
-env:
-  REGISTRY: ghcr.io
+permissions:
+  contents: read
+  packages: write
 
 jobs:
-  build-and-push-vali:
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: read
-      packages: write
-    env:
-      IMAGE_NAME: vali
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+  vali:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      image-name: vali
+      dockerfile: cmd/vali/Dockerfile
+      build-args: |
+        TOUCH_PROTOS=1
 
-      - name: Log in to the container registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+  valitail:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      image-name: valitail
+      dockerfile: cmd/valitail/Dockerfile
+      build-args: |
+        TOUCH_PROTOS=1
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: cmd/vali/Dockerfile
-          build-args: |
-            TOUCH_PROTOS=1
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
-
-  build-and-push-valitail:
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: read
-      packages: write
-    env:
-      IMAGE_NAME: valitail
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Log in to the container registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: cmd/valitail/Dockerfile
-          build-args: |
-            TOUCH_PROTOS=1
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
+  vali-build-image:
+    uses: ./.github/workflows/build-image.yml
+    with:
+      image-name: vali-build-image
+      dockerfile: vali-build-image/Dockerfile
+      context: vali-build-image

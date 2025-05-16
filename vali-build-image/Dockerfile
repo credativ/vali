@@ -40,7 +40,7 @@ COPY --from=faillint /go/bin/faillint /usr/bin/faillint
 # Install some necessary dependencies.
 RUN go install github.com/golang/protobuf/protoc-gen-go@v1.3.0 && \
     go install github.com/gogo/protobuf/protoc-gen-gogoslick@v1.2.1 && \
-    go install github.com/go-delve/delve/cmd/dlv@v1.3.2 && \
+    go install github.com/go-delve/delve/cmd/dlv@v1.24.2 && \
     # Due to the lack of a proper release tag, we use the commit hash of
     # https://github.com/golang/tools/releases v0.1.7
     go install golang.org/x/tools/cmd/goyacc@58d531046acdc757f177387bc1725bfa79895d69 && \

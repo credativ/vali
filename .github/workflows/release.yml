@@ -10,12 +10,16 @@ on:
 
 jobs:
   logcli:
-    runs-on: ubuntu-22.04
     permissions:
       contents: read
     strategy:
       matrix:
-        arch: [amd64, arm64]
+        build:
+          - arch: amd64
+            runner: ubuntu-22.04
+          - arch: arm64
+            runner: ubuntu-22.04-arm
+    runs-on: ${{ matrix.build.runner }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -40,17 +44,15 @@ jobs:
 
       - name: Build logcli
         run: make BUILD_IN_CONTAINER=false logcli
-        env:
-          GOARCH: ${{ matrix.arch }}
 
       - name: Zip logcli
-        run: zip --junk-paths logcli_${{ matrix.arch }}.zip cmd/logcli/logcli
+        run: zip --junk-paths logcli_${{ matrix.build.arch }}.zip cmd/logcli/logcli
 
       - name: Upload logcli as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: logcli_${{ matrix.arch }}
-          path: logcli_${{ matrix.arch }}.zip
+          name: logcli_${{ matrix.build.arch }}
+          path: logcli_${{ matrix.build.arch }}.zip
           retention-days: 3
 
   release:

@@ -1,4 +1,4 @@
-FROM golang:1.24.5 as build
+FROM golang:1.25.0 as build
 COPY . /src/vali
 WORKDIR /src/vali
 RUN make clean && make BUILD_IN_CONTAINER=false migrate

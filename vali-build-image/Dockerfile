@@ -1,4 +1,4 @@
-FROM alpine as helm
+FROM alpine AS helm
 ARG HELM_VER="v3.2.3"
 
 RUN apk add --no-cache curl && \
@@ -7,12 +7,12 @@ RUN apk add --no-cache curl && \
     mv /tmp/linux-amd64/helm /usr/bin/helm && \
     rm -rf /tmp/linux-amd64 /tmp/helm-$HELM_VER.tgz
 
-FROM alpine as golangci
+FROM alpine AS golangci
 RUN apk add --no-cache curl && \
     cd / && \
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.52.0
 
-FROM alpine:edge as docker
+FROM alpine:edge AS docker
 RUN apk add --no-cache docker-cli
 
 # Install faillint used to lint go imports in CI.
@@ -20,7 +20,7 @@ RUN apk add --no-cache docker-cli
 # Error:
 #	github.com/fatih/faillint@v1.5.0 requires golang.org/x/tools@v0.0.0-20200207224406-61798d64f025
 #   (not golang.org/x/tools@v0.0.0-20190918214920-58d531046acd from golang.org/x/tools/cmd/goyacc@58d531046acdc757f177387bc1725bfa79895d69)
-FROM docker.io/library/golang:1.25.0 as faillint
+FROM docker.io/library/golang:1.25.0 AS faillint
 RUN go install github.com/fatih/faillint@v1.15.0
 
 FROM docker.io/library/golang:1.25.0-bookworm

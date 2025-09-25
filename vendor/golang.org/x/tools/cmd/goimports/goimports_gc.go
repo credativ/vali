@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build gc
+//go:build gc
 
 package main
 
@@ -18,8 +18,8 @@ func doTrace() func() {
 		bw, flush := bufferedFileWriter(*traceProfile)
 		trace.Start(bw)
 		return func() {
-			flush()
 			trace.Stop()
+			flush()
 		}
 	}
 	return func() {}

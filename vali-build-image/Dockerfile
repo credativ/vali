@@ -23,7 +23,7 @@ RUN apk add --no-cache docker-cli
 FROM docker.io/library/golang:1.25.1 AS faillint
 RUN go install github.com/fatih/faillint@v1.15.0
 
-FROM docker.io/library/golang:1.25.1-bookworm
+FROM docker.io/library/golang:1.25.1-trixie
 RUN apt-get update && \
     apt-get install -qy \
     musl gnupg \

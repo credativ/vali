@@ -2,6 +2,7 @@
 
 * Upgrade Go to 1.25.1
 * Upgrade valitail base image to Debian Trixie 
+* Update grpc to 1.33.3
 
 ## 2.2.26 (2025-08-29)
 

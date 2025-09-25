@@ -1,3 +1,8 @@
+## 2.2.27 (2025-09-25)
+
+* Upgrade Go to 1.25.1
+* Update valitail base image to Debian Trixie
+
 ## 2.2.26 (2025-08-29)
 
 * Upgrade Go to 1.25.0

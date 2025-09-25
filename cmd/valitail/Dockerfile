@@ -1,4 +1,4 @@
-FROM golang:1.25.0-bookworm as build
+FROM golang:1.25.1-trixie as build
 # TOUCH_PROTOS signifies if we should touch the compiled proto files and thus not regenerate them.
 # This is helpful when file system timestamps can't be trusted with make
 ARG TOUCH_PROTOS
@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -qy libsystemd-dev
 RUN make clean && (if [ "${TOUCH_PROTOS}" ]; then make touch-protos; fi) && make BUILD_IN_CONTAINER=false valitail
 
 # Valitail requires debian as the base image to support systemd journal reading
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 # tzdata required for the timestamp stage to work
 RUN apt-get update && \
   apt-get install -qy \

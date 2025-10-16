@@ -1,4 +1,4 @@
-FROM golang:1.25.1-trixie as build
+FROM golang:1.25.3-trixie as build
 # TOUCH_PROTOS signifies if we should touch the compiled proto files and thus not regenerate them.
 # This is helpful when file system timestamps can't be trusted with make
 ARG TOUCH_PROTOS

@@ -2,6 +2,8 @@
 
 * Upgrade Go to 1.25.3
 * Upgrade Alpine to 3.22.2
+* Update dependency golang.org/x/net to fix #49
+* Update dependency google.golang.org/grpc to fix #49
 
 ## 2.2.27 (2025-09-25)
 

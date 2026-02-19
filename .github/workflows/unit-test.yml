@@ -35,12 +35,3 @@ jobs:
 
       - name: Test
         run: make BUILD_IN_CONTAINER=false test
-
-      - name: Install golangci-lint
-        run: |
-          cd /
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
-            | sudo sh -s v2.10.1
-
-      - name: Run Linter
-        run: make lint

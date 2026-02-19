@@ -249,8 +249,8 @@ publish: dist
 ########
 
 lint:
-	GOGC=10 golangci-lint run -v --timeout 30m --concurrency 2 --disable staticcheck
-	GOGC=10 golangci-lint run -v --timeout 30m --enable staticcheck --concurrency 1
+	GOGC=10 golangci-lint run -v --timeout 60m --concurrency 2 --disable staticcheck
+	GOGC=10 golangci-lint run -v --timeout 60m --enable staticcheck --concurrency 1
 	faillint -paths "sync/atomic=go.uber.org/atomic" ./...
 
 ########

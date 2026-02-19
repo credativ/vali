@@ -239,18 +239,16 @@ dist: clean
 publish: dist
 	./tools/release
 
-# --- CHANGES APPLIED ---
-# 1) Linter must NOT run in vendor mode (causes OOM in Go >=1.24)
-# 2) Limit concurrency to prevent CI memory kill
-# 3) Run staticcheck serially
-
 ########
 # Lint #
 ########
 
+LINT_PKGS := $(shell go list ./... | grep -v /vendor/)
+
 lint:
-	GOGC=10 golangci-lint run -v --timeout 60m --concurrency 2 --disable staticcheck
-	GOGC=10 golangci-lint run -v --timeout 60m --enable staticcheck --concurrency 1
+	@echo "Linting packages in batches..."
+	@echo "$(LINT_PKGS)" | xargs -n 25 -P 1 golangci-lint run -v --timeout 10m --disable staticcheck
+	@echo "$(LINT_PKGS)" | xargs -n 10 -P 1 golangci-lint run -v --timeout 10m --enable staticcheck --concurrency 1
 	faillint -paths "sync/atomic=go.uber.org/atomic" ./...
 
 ########

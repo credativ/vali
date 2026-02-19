@@ -1,3 +1,8 @@
+## 2.2.31 (2026-02-19)
+
+* Upgrade Go to 1.26.0
+* Upgrade Alpine to 3.23.3
+
 ## 2.2.30 (2025-12-18)
 
 * Upgrade Go to 1.25.5

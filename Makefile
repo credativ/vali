@@ -244,7 +244,7 @@ publish: dist
 ########
 
 lint:
-	GOGC=10 golangci-lint run -v --timeout 60m
+	GOGC=10 golangci-lint run -v --timeout 60m $(GOLANGCI_ARG)
 	faillint -paths "sync/atomic=go.uber.org/atomic" ./...
 
 ########

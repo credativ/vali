@@ -24,7 +24,7 @@ ifeq ($(strip $(GOMOD)),) # Is empty?
 	GOLANGCI_ARG=
 else
 	MOD_FLAG=-mod=$(GOMOD)
-	GOLANGCI_ARG=
+	GOLANGCI_ARG=--modules-download-mode=$(GOMOD)
 endif
 
 #############

@@ -1,11 +1,11 @@
-FROM golang:1.26.2 as build
+FROM golang:1.26.3 as build
 
 ARG TOUCH_PROTOS
 COPY . /src/vali
 WORKDIR /src/vali
 RUN make clean && make BUILD_IN_CONTAINER=false vali-querytee
 
-FROM alpine:3.23.4
+FROM alpine:3.21.7
 RUN apk add --update --no-cache ca-certificates
 COPY --from=build /src/vali/cmd/querytee/vali-querytee /usr/bin/querytee
 ENTRYPOINT [ "/usr/bin/querytee" ]

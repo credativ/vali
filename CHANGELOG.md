@@ -1,3 +1,8 @@
+## 2.2.34 (2026-06-12)
+
+* Upgrade Alpine to 3.24.0
+* Upgrade Go to 1.26.4
+
 ## 2.2.33 (2026-05-15)
 
 * Upgrade to Go 1.26.3

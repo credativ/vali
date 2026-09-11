@@ -1,4 +1,4 @@
-FROM golang:1.26.6 as build
+FROM golang:1.27.1 as build
 
 ARG TOUCH_PROTOS
 COPY . /src/vali

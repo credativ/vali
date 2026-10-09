@@ -1,3 +1,8 @@
+## 2.2.38 (2026-10-09)
+
+* Upgrade Alpine to 3.24.2
+* Upgrade Go to 1.27.2
+
 ## 2.2.37 (2026-09-11)
 
 * Upgrade Go to 1.27.1

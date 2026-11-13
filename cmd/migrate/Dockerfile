@@ -1,9 +1,9 @@
-FROM golang:1.27.2 as build
+FROM golang:1.27.4 as build
 COPY . /src/vali
 WORKDIR /src/vali
 RUN make clean && make BUILD_IN_CONTAINER=false migrate
 
-FROM alpine:3.24.2
+FROM alpine:3.24.4
 RUN apk add --update --no-cache ca-certificates
 COPY --from=build /src/vali/cmd/migrate/migrate /usr/bin/migrate
 #ENTRYPOINT [ "/usr/bin/migrate" ]
